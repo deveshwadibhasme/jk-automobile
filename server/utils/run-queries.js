@@ -1,0 +1,11 @@
+import fs from 'fs'
+
+export async function runQueries(connection) {
+    const sql = fs.readFileSync(`./model/admin.model.sql`, 'utf8');
+
+    const queries = sql.split(';').filter(query => query.trim() !== '');
+    for (const query of queries) {
+        await connection.query(query);
+    }
+
+}
