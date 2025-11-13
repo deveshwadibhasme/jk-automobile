@@ -3,6 +3,8 @@ import cors from 'cors';
 import pool from "./config/connect-db.js";
 import { runQueries } from "./utils/run-queries.js";
 
+import authRoute from "./routes/auth.routes.js";
+
 
 const app = express();
 
@@ -13,12 +15,14 @@ app.use(express.urlencoded({ extended: true }))
 
 try {
     const connection = await pool.getConnection();
-    await runQueries(connection);
+    // await runQueries(connection);
     console.log("Database Connected");
-    connection.release(); 
+    connection.release();
 } catch (err) {
     console.error("Error in Database connection:", err);
 }
+
+app.use('/auth', authRoute)
 
 
 app.get('/', (req, res) => {
@@ -28,5 +32,5 @@ app.get('/', (req, res) => {
 
 
 app.listen(3000, () => {
-    console.log(`Server Running on: https://localhost:3000/`);
+    console.log(`Server Running on: http://localhost:3000/`);
 })
