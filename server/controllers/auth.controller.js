@@ -38,9 +38,9 @@ const userSignUp = async (req, res) => {
 }
 
 const verifyUserAndRegister = async (req, res) => {
-    const { name, email, mobile, password, otp } = req.body
+    const { name, email, mobile_no, password, otp } = req.body
 
-    if (!name && !email && !mobile && !password && !otp) return res.status(400).json({ message: 'All Field are mandatory' })
+    if (!name && !email && !mobile_no && !password && !otp) return res.status(400).json({ message: 'All Field are mandatory' })
 
 
     try {
@@ -48,12 +48,13 @@ const verifyUserAndRegister = async (req, res) => {
             await pool.query(`SELECT email, otp FROM otp_store WHERE email = ? AND otp = ? AND NOW() < expire_at`, [email, otp])
 
         if (rows.length <= 0) {
-            return res.status(400).json({ message: 'Invalid or expired OTP' });
+            await pool.query('delete from otp_store where email = ?', [email])
+            return res.status(400).json({ message: 'Invalid or expired OTP. Verify Email Again' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10)
 
-        await pool.query('insert into user (name, email, mobile_no, password) values(?,?,?,?)', [name, email, mobile, hashedPassword])
+        await pool.query('insert into user (name, email, mobile_no, password) values(?,?,?,?)', [name, email, mobile_no, hashedPassword])
 
         await pool.query('delete from otp_store where email = ?', [email])
 
@@ -78,7 +79,7 @@ const userLogIn = async (req, res) => {
         const validPassword = bcrypt.compare(password, existing[0].password)
         if (!validPassword) return res.status(401).json({ message: 'Enter Valid Credentials' })
 
-        const token = jwt.sign({ email: existing[0].email, name: existing[0].name }, process.env.JWT_SECRET)
+        const token = jwt.sign({ email: existing[0].email, name: existing[0].name }, process.env.JWT_SECRET, { expiresIn: '2h' })
 
         res.status(200).json({ message: 'Login Succesfully', token: token })
 

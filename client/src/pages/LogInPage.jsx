@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import bgImage from '../assets/car-bg.avif'
+import { Link } from "react-router-dom";
 
 const LogInPage = () => {
   const [formData, setFormData] = useState({
@@ -73,8 +74,8 @@ const LogInPage = () => {
         </div>
 
         {/* Login Section */}
-        <div className="flex justify-center items-center p-10  backdrop-blur-md">
-          <div className="bg-white/20 border border-white/30 p-10 rounded-xl w-full max-w-sm">
+        <div className="flex justify-center items-center p-10 max-w-3xl backdrop-blur-md">
+          <div className="bg-white/20 border border-white/30 p-10 rounded-xl w-full max-w-2xl">
             <h3 className="text-3xl font-bold">Welcome Back</h3>
             <p className="text-gray-300 mb-6">Sign in to access your account</p>
 
@@ -153,9 +154,9 @@ const LogInPage = () => {
             <div className="text-center border-t border-gray-500 mt-6 pt-6">
               <p>
                 Don't have an account?{" "}
-                <a href="#signup" className="text-orange-400 hover:underline">
+                <Link to="/registration" className="text-orange-400 hover:underline">
                   Create Account
-                </a>
+                </Link>
               </p>
             </div>
           </div>
