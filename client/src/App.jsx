@@ -1,16 +1,23 @@
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom"; // Outlet will render nested routes
 
-import './App.css'
-import LogInPage from './pages/LogInPage'
-import RegistrationPage from './pages/RegistrationPage'
+import "./App.css";
+import { useAuth } from "./context/AuthContext";
 
-function App() {
-    
+const App = () => {
+  const { token , logOut } = useAuth();
+
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
 
   return (
-    <>
-     <LogInPage/>
-    </>
-  )
-}
+    <div>
+      <h1>Welcome to the Dashboard</h1>
+      <button onClick={()=>logOut()}>Log Out</button>
+      <Outlet />
+    </div>
+  );
+};
 
-export default App
+export default App;

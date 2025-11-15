@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import bgImage from "../assets/car-bg.avif";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+
 
 const RegistrationPage = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +15,7 @@ const RegistrationPage = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [showPassword2, setShowPassword2] = useState(false);
+  const { loginAction } = useAuth();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -24,6 +26,7 @@ const RegistrationPage = () => {
   };
 
   const handleOTP = () => {
+
     axios.post(
         "http://localhost:3000/auth/user/sign-up",
         { email: formData.email },
@@ -37,8 +40,8 @@ const RegistrationPage = () => {
         alert(response.data.message);
       })
       .catch((error) => {
-        console.error("Error sending OTP:", error);
-        alert(error.response.data.message);
+        console.error("Error sending OTP:", error.response ? error.response.data : error.message);
+        alert(error.response?.data?.message || "Failed to send OTP. Please try again.");
       });
   };
 
@@ -54,11 +57,12 @@ const RegistrationPage = () => {
         }
       )
       .then((response) => {
-        alert(response.data.message); 
+        alert("Registration successful!");
+        loginAction(response.data);
       })
       .catch((error) => {
-        console.error("Error sending OTP:", error);
-        alert(error.response.data.message);
+        console.error("Error during registration:", error.response ? error.response.data : error.message);
+        alert(error.response?.data?.message || "Registration failed. Please check your details.");
       });
   };
 
@@ -125,7 +129,7 @@ const RegistrationPage = () => {
             <input
               type="text"
               name="name"
-              value={formData.fullName}
+              value={formData.name}
               onChange={handleChange}
               placeholder="Enter your full name"
               className="w-full mt-2 px-4 py-3 border rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none"
