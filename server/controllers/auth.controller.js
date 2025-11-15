@@ -74,10 +74,10 @@ const userLogIn = async (req, res) => {
 
     try {
         const [existing] = await pool.query('select * from user where email = ?', [email])
-        if (!existing) return res.status(401).json({ message: 'Enter Valid Credentials' })
+        if (!existing.length > 0) return res.status(401).json({ message: 'Enter Valid Credentials' })
 
-        const validPassword = bcrypt.compare(password, existing[0].password)
-        if (!validPassword) return res.status(401).json({ message: 'Enter Valid Credentials' })
+        const validPassword = await bcrypt.compare(password, existing[0].password)
+        console.log(validPassword);        if (!validPassword) { return res.status(404).json({ message: 'Enter Valid Credentials' }) }
 
         const token = jwt.sign({ email: existing[0].email, name: existing[0].name }, process.env.JWT_SECRET, { expiresIn: '2h' })
 
