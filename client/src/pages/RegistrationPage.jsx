@@ -17,6 +17,9 @@ const RegistrationPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { loginAction } = useAuth();
 
+  const LOCAL_URL = 'http://localhost:3000'
+  const PUBLIC_URL = 'https://jk-automobile.onrender.com'
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -28,7 +31,7 @@ const RegistrationPage = () => {
   const handleOTP = () => {
 
     axios.post(
-        "http://localhost:3000/auth/user/sign-up",
+        `${PUBLIC_URL}/auth/user/sign-up`,
         { email: formData.email },
         {
           headers: {

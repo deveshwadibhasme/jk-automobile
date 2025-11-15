@@ -12,7 +12,8 @@ const LogInPage = () => {
     password: "",
     rememberMe: false,
   });
-  
+  const LOCAL_URL = 'http://localhost:3000'
+  const PUBLIC_URL = 'https://jk-automobile.onrender.com'
   
   const [showPassword, setShowPassword] = useState(false);
   
@@ -28,7 +29,7 @@ const LogInPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3000/auth/user/log-in", formData, {
+    .post(`${PUBLIC_URL}/auth/user/log-in`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
