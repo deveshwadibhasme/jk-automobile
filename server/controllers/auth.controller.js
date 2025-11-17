@@ -1,5 +1,6 @@
 import pool from "../config/connect-db.js"
 import { sendMail } from "../config/email.config.js"
+import { toMysqlDatetime } from "../utils/mysql-date.js";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
@@ -19,6 +20,7 @@ const userSignUp = async (req, res) => {
 
     try {
         const otp = generateOtp()
+        const expire_at = toMysqlDatetime(new Date(Date.now() + (5 * 60 * 1000)))
 
         await sendMail({
             to: email,
@@ -26,8 +28,8 @@ const userSignUp = async (req, res) => {
             html: `Your OTP for registration J.K. Automobile is ${otp}`,
         })
 
-        await pool.query('insert into otp_store (email,otp) values (?,?)', [email, otp])
-
+        await pool.query('insert into otp_store (email,otp,expire_at) values (?,?,?)', [email, otp, expire_at])
+        
         return res.status(200).json({ message: 'OTP Sent to Your Email' })
 
     } catch (error) {
@@ -44,11 +46,17 @@ const verifyUserAndRegister = async (req, res) => {
 
 
     try {
-        const [rows] =
-            await pool.query(`SELECT email, otp FROM otp_store WHERE email = ? AND otp = ? AND NOW() < expire_at`, [email, otp])
+        const nowMysql = toMysqlDatetime(new Date());
 
-        if (rows.length <= 0) {
-            await pool.query('delete from otp_store where email = ?', [email])
+        const [rows] = await pool.query(
+            `SELECT email, otp 
+            FROM otp_store 
+            WHERE email = ? AND otp = ? AND ? < expire_at`,
+            [email, otp, nowMysql]
+        );
+
+        if (rows.length === 0) {
+            await pool.query('DELETE FROM otp_store WHERE email = ?', [email]);
             return res.status(400).json({ message: 'Invalid or expired OTP. Verify Email Again' });
         }
 
