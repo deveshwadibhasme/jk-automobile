@@ -51,7 +51,7 @@ const RegistrationPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
      axios.post(
-        "http://localhost:3000/auth/user/verify-and-register",
+        `${PUBLIC_URL}/auth/user/verify-and-register`,
         formData,
         {
           headers: {
