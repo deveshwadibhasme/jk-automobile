@@ -1,14 +1,10 @@
-import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
+import { Resend } from "resend";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: process.env.EMAIL_ID,
-        pass: process.env.APP_PASS,
-    },
-});
+const resend = new Resend(process.env.APP_PASS);
 
-export default transporter;
+export const sendMail = async (payload) => {
+  await resend.emails.send({ from: "J.K. Automobile <no-reply@sell4anything.com>", ...payload });
+};

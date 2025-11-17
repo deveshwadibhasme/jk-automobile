@@ -1,5 +1,5 @@
 import pool from "../config/connect-db.js"
-import transporter from "../config/email.config.js"
+import { sendMail } from "../config/email.config.js"
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
@@ -20,10 +20,10 @@ const userSignUp = async (req, res) => {
     try {
         const otp = generateOtp()
 
-        await transporter.sendMail({
-            subject: 'OTP for Verification',
+        await sendMail({
             to: email,
-            html: `Your OTP for registration J.K. Automobile is ${otp}`
+            subject: "OTP for Verification",
+            html: `Your OTP for registration J.K. Automobile is ${otp}`,
         })
 
         await pool.query('insert into otp_store (email,otp) values (?,?)', [email, otp])
@@ -77,7 +77,7 @@ const userLogIn = async (req, res) => {
         if (!existing.length > 0) return res.status(401).json({ message: 'Enter Valid Credentials' })
 
         const validPassword = await bcrypt.compare(password, existing[0].password)
-        
+
         if (!validPassword) { return res.status(404).json({ message: 'Enter Valid Credentials' }) }
 
         const token = jwt.sign({ email: existing[0].email, name: existing[0].name }, process.env.JWT_SECRET, { expiresIn: '2h' })
