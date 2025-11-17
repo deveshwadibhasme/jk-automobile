@@ -1,5 +1,3 @@
-
-
 create table if not exists car_list (
     id int PRIMARY key AUTO_INCREMENT,
     brand VARCHAR(100) not null ,
@@ -10,5 +8,5 @@ create table if not exists car_list (
     block_number VARCHAR(100),
     file_type ENUM('Eeprom','Flash','Full'),
     admin_id INT NOT NULL,
-    FOREIGN KEY (admin_id) REFERENCES admin(id)
+    CONSTRAINT fk_admin_id FOREIGN KEY (admin_id) REFERENCES admin(id)
 );
