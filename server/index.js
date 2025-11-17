@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }))
 
 try {
     const connection = await pool.getConnection();
-    // await runQueries(connection);
+    await runQueries(connection);
     console.log("Database Connected");
     connection.release();
 } catch (err) {

@@ -1,4 +1,4 @@
-use jk_automobile;
+-- use jk_automobile;
 
 create table if not exists admin (
     id int PRIMARY key auto_increment,

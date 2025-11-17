@@ -1,4 +1,4 @@
-use jk_automobile;
+-- use jk_automobile;
 
 create table if not exists user (
     id int PRIMARY key auto_increment,
@@ -10,13 +10,11 @@ create table if not exists user (
     status ENUM('active', 'inactive') DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-ALTER TABLE user
-MODIFY COLUMN address TEXT NULL;
+-- ALTER TABLE user
+-- MODIFY COLUMN address TEXT NULL;
 
-alter table user
-add COLUMN city VARCHAR(50) null;
+-- alter table user
+-- add COLUMN city VARCHAR(50) null;
 
-alter table user
-add COLUMN pincode VARCHAR(10) null;
-
-
+-- alter table user
+-- add COLUMN pincode VARCHAR(10) null;

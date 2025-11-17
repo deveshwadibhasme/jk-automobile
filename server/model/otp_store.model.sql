@@ -1,4 +1,4 @@
-use jk_automobile;
+-- use jk_automobile;
 
 create table if not exists otp_store (
     email VARCHAR(40) PRIMARY KEY UNIQUE,
