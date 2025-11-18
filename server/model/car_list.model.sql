@@ -7,6 +7,10 @@ create table if not exists car_list (
     memory VARCHAR(100),
     block_number VARCHAR(100),
     file_type ENUM('Eeprom','Flash','Full'),
-    admin_id INT NOT NULL,
+    admin_id INT,
     CONSTRAINT fk_admin_id FOREIGN KEY (admin_id) REFERENCES admin(id)
 );
+
+-- ALTER TABLE car_list
+-- ADD COLUMN admin_id INT,
+-- ADD CONSTRAINT fk_admin_id FOREIGN KEY (admin_id) REFERENCES admin(id);

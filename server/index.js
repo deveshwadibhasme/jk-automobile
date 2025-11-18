@@ -4,6 +4,7 @@ import pool from "./config/connect-db.js";
 import { runQueries } from "./utils/run-queries.js";
 
 import authRoute from "./routes/auth.routes.js";
+import dataRoute from "./routes/data.routes.js";
 
 
 const app = express();
@@ -23,6 +24,8 @@ try {
 }
 
 app.use('/auth', authRoute)
+app.use('/data', dataRoute)
+
 
 
 app.get('/', (req, res) => {
