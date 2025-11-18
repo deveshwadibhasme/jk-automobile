@@ -1,6 +1,6 @@
 import pool from "../config/connect-db.js"
 import { sendMail } from "../config/email.config.js"
-import { toMysqlDatetime } from "../utils/mysql-date.js";
+import { nowIST, toMysqlDatetime } from "../utils/mysql-date.js";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
@@ -20,7 +20,7 @@ const userSignUp = async (req, res) => {
 
     try {
         const otp = generateOtp()
-        const expire_at = toMysqlDatetime(new Date(Date.now() + (5 * 60 * 1000)))
+        const expire_at = nowIST()
 
         await sendMail({
             to: email,
@@ -29,7 +29,7 @@ const userSignUp = async (req, res) => {
         })
 
         await pool.query('insert into otp_store (email,otp,expire_at) values (?,?,?)', [email, otp, expire_at])
-        
+
         return res.status(200).json({ message: 'OTP Sent to Your Email' })
 
     } catch (error) {
@@ -46,16 +46,18 @@ const verifyUserAndRegister = async (req, res) => {
 
 
     try {
-        const nowMysql = toMysqlDatetime(new Date());
-
         const [rows] = await pool.query(
-            `SELECT email, otp 
-            FROM otp_store 
-            WHERE email = ? AND otp = ? AND ? < expire_at`,
-            [email, otp, nowMysql]
+            "SELECT otp, expire_at FROM otp_store WHERE email = ?",
+            [email]
         );
 
-        if (rows.length === 0) {
+        if (!rows.length) throw new Error("Not found");
+
+        const nowUTC = new Date();
+        const expired = nowUTC > new Date(rows[0].expire_at);
+
+
+        if (expired) {
             await pool.query('DELETE FROM otp_store WHERE email = ?', [email]);
             return res.status(400).json({ message: 'Invalid or expired OTP. Verify Email Again' });
         }
@@ -98,4 +100,50 @@ const userLogIn = async (req, res) => {
     }
 }
 
-export { userLogIn, userSignUp, verifyUserAndRegister }
+const adminLogIn = async (req, res) => {
+    const { email, password } = req.body
+
+    if (!email && !password) return res.status(401).json({ message: 'All Field are mandatory' })
+
+    try {
+        const [existing] = await pool.query('select * from admin where email = ?', [email])
+        if (!existing.length > 0) return res.status(401).json({ message: 'Enter Valid Credentials' })
+
+        const validPassword = await bcrypt.compare(password, existing[0].password)
+
+        if (!validPassword) { return res.status(404).json({ message: 'Enter Valid Credentials' }) }
+
+        const token = jwt.sign({ email: existing[0].email, name: existing[0].name }, process.env.JWT_SECRET, { expiresIn: '2h' })
+
+        res.status(200).json({ message: 'Welcome Admin', token: token, role: 'admin' })
+
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ message: 'Server Error', error: error })
+    }
+}
+
+const adminRegister = async (req, res) => {
+    const { name, email, password } = req.body
+
+    if (!name && !email && !password) return res.status(400).json({ message: 'All Field are mandatory' })
+
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10)
+
+        await pool.query('insert into admin (name, email, password) values(?,?,?)', [name, email, hashedPassword])
+
+
+        return res.status(200).json({ message: 'Registration Successfull' })
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error', error: error })
+    }
+
+}
+
+
+
+export { userLogIn, userSignUp, verifyUserAndRegister, adminLogIn, adminRegister }
