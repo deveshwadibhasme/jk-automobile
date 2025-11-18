@@ -6,15 +6,16 @@ import RegistrationPage from "./pages/RegistrationPage.jsx";
 import LogInPage from "./pages/LogInPage.jsx";
 import App from "./App.jsx";
 import RootLayout from "./RootLayout.jsx";
+import FirmwareTable from "./pages/Dashboard.jsx";
 
 
 const router = createBrowserRouter([
   {
-    element: <RootLayout />, //
+    element: <RootLayout />, 
     children: [
       {
-        path: "/",
-        element: <App />,
+        path: "/dashboard",
+        element: <FirmwareTable />,
       },
       {
         path: "/login",

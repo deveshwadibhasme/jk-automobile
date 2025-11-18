@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext(null);
 
-// Create a custom hook for consuming the context
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === null) {
@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }) => {
     const storedToken = localStorage.getItem("token");
     if (storedToken && !token) {
       setToken(storedToken);
-      // In a real app, you would also fetch user data here using the token
     }
   }, []);
 
@@ -29,7 +28,7 @@ export const AuthProvider = ({ children }) => {
     setToken(data.token);
     setUser(data.user);
     localStorage.setItem("token", data.token);
-    navigate("/");
+    navigate("/dashboard");
   };
 
   const logOut = () => {

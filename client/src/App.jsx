@@ -1,22 +1,23 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom"; // Outlet will render nested routes
+import { Navigate, Outlet } from "react-router-dom"; 
 
 import "./App.css";
 import { useAuth } from "./context/AuthContext";
 
+import Header from './components/layout/Header'
+
 const App = () => {
-  const { token , logOut } = useAuth();
+  const { token, logOut } = useAuth();
 
   if (!token) {
     return <Navigate to="/login" />;
   }
 
   return (
-    <div>
-      <h1>Welcome to the Dashboard</h1>
-      <button onClick={()=>logOut()}>Log Out</button>
-      <Outlet />
-    </div>
+    <>
+      {/* <Header />
+      <Outlet /> */}
+    </>
   );
 };
 
