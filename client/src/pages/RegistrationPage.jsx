@@ -20,6 +20,9 @@ const RegistrationPage = () => {
   const LOCAL_URL = 'http://localhost:3000'
   const PUBLIC_URL = 'https://jk-automobile.onrender.com'
 
+  const url = location.origin !== 'http://localhost:5173/' ? LOCAL_URL : PUBLIC_URL
+
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -31,7 +34,7 @@ const RegistrationPage = () => {
   const handleOTP = () => {
 
     axios.post(
-        `${LOCAL_URL}/auth/user/sign-up`,
+        `${url}/auth/user/sign-up`,
         { email: formData.email },
         {
           headers: {
@@ -51,7 +54,7 @@ const RegistrationPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
      axios.post(
-        `${LOCAL_URL}/auth/user/verify-and-register`,
+        `${url}/auth/user/verify-and-register`,
         formData,
         {
           headers: {

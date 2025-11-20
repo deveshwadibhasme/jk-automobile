@@ -7,9 +7,12 @@ const FirmwareTable = () => {
   const LOCAL_URL = "http://localhost:3000";
   const PUBLIC_URL = "https://jk-automobile.onrender.com";
 
+  const url =
+    location.origin !== "http://localhost:5173/" ? LOCAL_URL : PUBLIC_URL;
+
   useEffect(() => {
     function fetchData() {
-      axios.get(`${LOCAL_URL}/data/get-car-data`).then((result) => {
+      axios.get(`${url}/data/get-car-data`).then((result) => {
         setData(result.data.result);
       });
     }
@@ -112,8 +115,7 @@ const FirmwareTable = () => {
         appliedFilters.brand === "All Brands" ||
         appliedFilters.brand === item.brand;
       const matchesYear =
-        appliedFilters.year === "All Years" || 
-        appliedFilters.year == item.year;
+        appliedFilters.year === "All Years" || appliedFilters.year == item.year;
       const matchesModule =
         appliedFilters.module === "All Modules" ||
         appliedFilters.module === item.module;
@@ -129,7 +131,7 @@ const FirmwareTable = () => {
         matchesFile
       );
     });
-  })()
+  })();
 
   const handleApplyFilters = () => setAppliedFilters({ ...tempFilters });
 
