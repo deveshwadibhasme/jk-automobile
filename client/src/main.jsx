@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     element: <RootLayout />, 
     children: [
       {
-        path: "/dashboard",
+        path: "/",
         element: <FirmwareTable />,
       },
       {

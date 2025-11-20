@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 
-
 const LogInPage = () => {
   const { loginAction } = useAuth();
   const [formData, setFormData] = useState({
@@ -12,11 +11,11 @@ const LogInPage = () => {
     password: "",
     rememberMe: false,
   });
-  const LOCAL_URL = 'http://localhost:3000'
-  const PUBLIC_URL = 'https://jk-automobile.onrender.com'
-  
+  const LOCAL_URL = "http://localhost:3000";
+  const PUBLIC_URL = "https://jk-automobile.onrender.com";
+
   const [showPassword, setShowPassword] = useState(false);
-  
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -29,12 +28,13 @@ const LogInPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-    .post(`${PUBLIC_URL}/auth/user/log-in`, formData, {
+      .post(`${LOCAL_URL}/auth/user/log-in`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
       })
       .then((response) => {
+        setLoading(true);
         alert(response.data.message);
         loginAction(response.data);
       })
@@ -47,6 +47,9 @@ const LogInPage = () => {
           error.response?.data?.message ||
             "Login failed. Please check your credentials."
         );
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -56,7 +59,6 @@ const LogInPage = () => {
       bg-black/60 bg-blend-darken max-w-screen bg-cover"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-
       <div className="px-10 py-5 border-b border-gray-700">
         <h1 className="text-3xl font-bold tracking-wider">J.K Automobile</h1>
         <p className="text-sm text-gray-300 tracking-wide">Motors Group</p>
@@ -167,7 +169,7 @@ const LogInPage = () => {
                 className="py-3 rounded-lg bg-linear-to-r from-orange-500 to-orange-400 font-semibold
                            hover:-translate-y-1 transition shadow-lg"
               >
-                Sign in
+                {!loading ? "Sign in" : "Signing...."}
               </button>
 
               <div className="text-center">

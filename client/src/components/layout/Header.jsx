@@ -11,10 +11,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import logo from "/jk-logo.png";
 
 const Header = () => {
-  const { token, logOut } = useAuth();
-  const navigate = useNavigate()
+  const { token, logOut, name } = useAuth();
+  const navigate = useNavigate();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -22,31 +23,27 @@ const Header = () => {
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   const handleLogin = () => {
-    if(token){
-        logOut()
-    }
-    else{
-      navigate('/login')
+    if (token) {
+      logOut();
+    } else {
+      navigate("/login");
     }
   };
   const handleRegister = () => {
-    navigate('/registration')
+    navigate("/registration");
   };
 
   return (
     <>
-      <header className="w-full bg-[#3d4468] text-white">
+      <header className="w-full bg-[#3d4468] text-white z-10 relative">
         <div className="max-w-[1400px] mx-auto flex justify-between items-center px-5 py-4 border-b border-[#333]">
           {/* Logo */}
-          <div className="flex items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-md bg-linear-to-br from-blue-500 to-blue-800 flex items-center justify-center text-lg">
-                🚗
-              </div>
-              <span className="text-sm md:text-base font-bold whitespace-nowrap">
-                World Unique Auto Base
-              </span>
-            </div>
+          <div className="flex items-center w-32 h-10">
+            <img
+              src={logo}
+              className="w-full h-full"
+              alt=""
+            />
           </div>
 
           <nav className="hidden md:flex gap-5 text-gray-300">
@@ -75,6 +72,7 @@ const Header = () => {
           <div className="hidden md:flex items-center gap-5">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
+                  <span className="text-sm font-bold"> {name && ('Welcome, ' + name.split(" ")[0])}</span>
                 <div className="w-8 h-8 rounded-full bg-linear-to-br from-gray-400 to-gray-600 flex items-center justify-center text-sm">
                   <FontAwesomeIcon icon={faUser} />
                 </div>
@@ -84,7 +82,7 @@ const Header = () => {
                   onClick={handleLogin}
                 >
                   <FontAwesomeIcon icon={faSignInAlt} />
-                  {!token ? 'Log in' : 'Log Out'}
+                  {!token ? "Log in" : "Log Out"}
                 </button>
               </div>
 
@@ -117,7 +115,7 @@ const Header = () => {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="bg-[#1a1a1a] border-t border-[#333] md:hidden">
+          <div className="w-full h-full bg-gray-600 text-white z-10 relative block md:hidden">
             <nav className="flex flex-col p-5 gap-3">
               <div
                 className="flex items-center gap-3 text-gray-300 px-4 py-3 rounded-md hover:bg-[#2d2d2d] hover:text-white transition"

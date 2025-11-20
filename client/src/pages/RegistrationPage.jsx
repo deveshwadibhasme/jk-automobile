@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import bgImage from "../assets/car-bg.avif";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 
@@ -15,7 +15,7 @@ const RegistrationPage = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const { loginAction } = useAuth();
+  const { navigate } = useNavigate();
 
   const LOCAL_URL = 'http://localhost:3000'
   const PUBLIC_URL = 'https://jk-automobile.onrender.com'
@@ -31,7 +31,7 @@ const RegistrationPage = () => {
   const handleOTP = () => {
 
     axios.post(
-        `${PUBLIC_URL}/auth/user/sign-up`,
+        `${LOCAL_URL}/auth/user/sign-up`,
         { email: formData.email },
         {
           headers: {
@@ -51,7 +51,7 @@ const RegistrationPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
      axios.post(
-        `${PUBLIC_URL}/auth/user/verify-and-register`,
+        `${LOCAL_URL}/auth/user/verify-and-register`,
         formData,
         {
           headers: {
@@ -61,7 +61,7 @@ const RegistrationPage = () => {
       )
       .then((response) => {
         alert("Registration successful!");
-        loginAction(response.data);
+        navigate('/login')
       })
       .catch((error) => {
         console.error("Error during registration:", error.response ? error.response.data : error.message);

@@ -1,7 +1,22 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Header from "../components/layout/Header";
+import axios from "axios";
 
 const FirmwareTable = () => {
+  const [data, setData] = useState();
+  const LOCAL_URL = "http://localhost:3000";
+  const PUBLIC_URL = "https://jk-automobile.onrender.com";
+
+  useEffect(() => {
+    function fetchData() {
+      axios.get(`${LOCAL_URL}/data/get-car-data`).then((result) => {
+        setData(result.data.result);
+      });
+    }
+    handleApplyFilters();
+    fetchData();
+  }, []);
+
   const initialData = [
     {
       id: 45026,
@@ -75,19 +90,17 @@ const FirmwareTable = () => {
 
   const [appliedFilters, setAppliedFilters] = useState({ ...tempFilters });
 
-  const brands = ["All Brands", ...new Set(initialData.map((x) => x.brand))];
-  const years = [
-    "All Years",
-    ...new Set(initialData.map((x) => x.year.toString())),
-  ];
-  const modules = ["All Modules", ...new Set(initialData.map((x) => x.module))];
+  const brands = ["All Brands", ...new Set(data?.map((x) => x.brand))];
+  const years = ["All Years", ...new Set(data?.map((x) => x.year.toString()))];
+
+  const modules = ["All Modules", ...new Set(data?.map((x) => x.module))];
   const fileTypes = [
     "All File Types",
-    ...new Set(initialData.map((x) => x.fileType)),
+    ...new Set(data?.map((x) => x.file_type)),
   ];
 
-  const filteredData = useMemo(() => {
-    return initialData.filter((item) => {
+  const filteredData = (() => {
+    return data?.filter((item) => {
       const matchesSearch =
         appliedFilters.search === "" ||
         Object.values(item)
@@ -99,13 +112,14 @@ const FirmwareTable = () => {
         appliedFilters.brand === "All Brands" ||
         appliedFilters.brand === item.brand;
       const matchesYear =
-        appliedFilters.year === "All Years" || appliedFilters.year == item.year;
+        appliedFilters.year === "All Years" || 
+        appliedFilters.year == item.year;
       const matchesModule =
         appliedFilters.module === "All Modules" ||
         appliedFilters.module === item.module;
       const matchesFile =
         appliedFilters.fileType === "All File Types" ||
-        appliedFilters.fileType === item.fileType;
+        appliedFilters.fileType === item.file_type;
 
       return (
         matchesSearch &&
@@ -115,7 +129,7 @@ const FirmwareTable = () => {
         matchesFile
       );
     });
-  }, [appliedFilters]);
+  })()
 
   const handleApplyFilters = () => setAppliedFilters({ ...tempFilters });
 
@@ -135,7 +149,7 @@ const FirmwareTable = () => {
       full: "bg-blue-100 text-blue-800",
       chrome: "bg-red-100 text-red-800",
     };
-    return map[type.toLowerCase()] || "bg-gray-100 text-gray-800";
+    return map[type?.toLowerCase()] || "bg-gray-100 text-gray-800";
   };
 
   return (
@@ -146,7 +160,7 @@ const FirmwareTable = () => {
         <header className="mb-6">
           <h1 className="text-2xl font-bold">Total Records</h1>
           <div className="text-gray-500">
-            {filteredData.length} Firmware entries
+            {filteredData?.length} Firmware entries
           </div>
         </header>
 
@@ -155,9 +169,7 @@ const FirmwareTable = () => {
           {/* Search */}
           <div className="mb-4">
             <div className="relative max-w-xs">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">
-                Q
-              </span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold"></span>
               <input
                 type="text"
                 value={tempFilters.search}
@@ -237,7 +249,7 @@ const FirmwareTable = () => {
             </thead>
 
             <tbody>
-              {filteredData.map((item) => (
+              {filteredData?.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-100">
                   <td className="px-4 py-3 text-blue-600 font-bold">
                     {item.id}
@@ -249,7 +261,7 @@ const FirmwareTable = () => {
                   <td className="px-4 py-3">{item.memory}</td>
 
                   <td className="px-4 py-3">
-                    {item.blockNumber.split("\n").map((line, i) => (
+                    {item.block_number?.split("\n").map((line, i) => (
                       <div key={i}>{line}</div>
                     ))}
                   </td>
@@ -257,10 +269,10 @@ const FirmwareTable = () => {
                   <td className="px-4 py-3">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-semibold shadow ${badgeColor(
-                        item.fileType
+                        item.file_type
                       )}`}
                     >
-                      {item.fileType}
+                      {item.file_type}
                     </span>
                   </td>
                 </tr>
