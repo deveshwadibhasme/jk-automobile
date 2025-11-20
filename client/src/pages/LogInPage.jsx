@@ -15,7 +15,7 @@ const LogInPage = () => {
   const PUBLIC_URL = "https://jk-automobile.onrender.com";
 
   const url =
-    location.origin !== "http://localhost:5173/" ? LOCAL_URL : PUBLIC_URL;
+    location.origin === "http://localhost:5173/" ? LOCAL_URL : PUBLIC_URL;
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
