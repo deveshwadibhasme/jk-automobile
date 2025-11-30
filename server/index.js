@@ -24,7 +24,9 @@ try {
 }
 
 app.use('/auth', authRoute)
+
 app.use('/data', dataRoute)
+
 
 
 

@@ -13,7 +13,7 @@ const postCarList = async (req, res) => {
         const [adminRows] = await pool.query('select id from admin where email = ?', [admin.email])
         const adminId = adminRows[0].id
 
-        await pool.query('insert into car_list (brand, model, year, module, memory, block_number, file_type, admin_id) values(?,?,?,?,?,?,?,?)', [brand, model, year, module, memory, block_number, file_type, adminId])
+        await pool.query('insert into car_list (brand, model, year, module, memory, block_number, file_type, admin_id) values(?,?,?,?,?,?,?,?)', [brand.toLocaleLowerCase(), model, year, module, memory, block_number, file_type, adminId])
 
         res.status(201).json({ message: 'Car data posted successfully' });
     } catch (error) {
