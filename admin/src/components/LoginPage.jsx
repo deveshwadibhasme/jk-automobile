@@ -13,8 +13,7 @@ const LogInPage = () => {
   const LOCAL_URL = "http://localhost:3000";
   const PUBLIC_URL = "https://jk-automobile.onrender.com";
 
-  const url =
-    location.origin !== "http://localhost:5173/" ? LOCAL_URL : PUBLIC_URL;
+  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,7 +29,7 @@ const LogInPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`${url}/auth/admin/login`, formData, {
+      .post(`${LOCAL_URL}/auth/admin/login`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -59,7 +58,7 @@ const LogInPage = () => {
     <div
       className="min-h-screen text-white font-sans bg-center
       bg-black/60 bg-blend-darken max-w-screen bg-cover"
-    //   style={{ backgroundImage: `url(${})` }}
+      //   style={{ backgroundImage: `url(${})` }}
     >
       <div className="px-10 py-5 border-b border-gray-700">
         <h1 className="text-3xl font-bold tracking-wider">J.K Automobile</h1>
