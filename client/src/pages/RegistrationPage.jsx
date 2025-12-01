@@ -20,7 +20,7 @@ const RegistrationPage = () => {
   const LOCAL_URL = 'http://localhost:3000'
   const PUBLIC_URL = 'https://jk-automobile.onrender.com'
 
-  const url = location.origin !== 'http://localhost:5173/' ? LOCAL_URL : PUBLIC_URL
+  const url = location.origin === 'http://localhost:5173/' ? LOCAL_URL : PUBLIC_URL
 
 
   const handleChange = (e) => {
