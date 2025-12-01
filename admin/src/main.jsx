@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LogInPage from "./components/LoginPage.jsx";
 import { AuthProvider } from "./AuthContext.jsx";
+import CarList from "./components/CarList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,14 @@ const router = createBrowserRouter([
     element: (
       <AuthProvider>
         <LogInPage />
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/list",
+    element: (
+      <AuthProvider>
+        <CarList />
       </AuthProvider>
     ),
   },

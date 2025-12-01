@@ -198,7 +198,7 @@ const FirmwareTable = () => {
                 onChange={(e) =>
                   setTempFilters({ ...tempFilters, [key]: e.target.value })
                 }
-                className="border rounded px-3 py-2 min-w-[150px] focus:outline-none focus:ring focus:ring-blue-200"
+                className="border rounded px-3 capitalize py-2 min-w-[150px] focus:outline-none focus:ring focus:ring-blue-200"
               >
                 {list.map((x) => (
                   <option key={x}>{x}</option>
@@ -256,7 +256,7 @@ const FirmwareTable = () => {
                   <td className="px-4 py-3 text-blue-600 font-bold">
                     {item.id}
                   </td>
-                  <td className="px-4 py-3">{item.brand}</td>
+                  <td className="px-4 py-3 capitalize">{item.brand}</td>
                   <td className="px-4 py-3">{item.model}</td>
                   <td className="px-4 py-3">{item.year}</td>
                   <td className="px-4 py-3">{item.module}</td>

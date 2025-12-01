@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const FormToUpload = () => {
-  const { token } = useAuth();
+  const { token, logOut } = useAuth();
 
   const [formData, setFormData] = useState({
     brand: "",
@@ -30,14 +30,16 @@ const FormToUpload = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization":`Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
         }
       );
       alert(response.data.message);
     } catch (error) {
       console.error("Error uploading data:", error);
-      alert(error.response?.data?.message || "Failed to upload data or try to login");
+      alert(
+        error.response?.data?.message || "Failed to upload data or try to login"
+      );
     }
   };
 
@@ -53,20 +55,22 @@ const FormToUpload = () => {
     });
   };
 
-  return (
-    <div className="relative min-h-screen py-2 max-w-screen-2xl mx-auto bg-[#302e2e] overflow-hidden font-sans">
-      <div className="relative bg-white/90 backdrop-blur-md p-5 rounded-xl shadow-xl w-full max-w-5xl mx-auto">
-        <h2 className="text-3xl font-semibold text-center text-[#2c3e50] mb-2">
-          Vehicle Information Form
-        </h2>
-        <p className="text-center text-gray-600 text-lg mb-10">
-          Complete all fields with accurate automotive system details.
-        </p>
+  const navigate = useNavigate();
+  
+  const handleLog = () => {
+    if (token) {
+      navigate("/login");
+      logOut();
+    } else {
+      navigate("/login");
+    }
+  };
 
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {/* ID + Brand */}
+  return (
+    <div className="relative min-h-screen py-5 max-w-screen-2xl mx-auto bg-[#302e2e] overflow-hidden font-sans">
+      <div className="relative bg-white/90 backdrop-blur-md p-5 rounded-xl shadow-xl w-full max-w-5xl mx-auto">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div className="grid md:grid-cols-2 gap-6">
-            {/* <Input label="ID" name="id" value={formData.id} onChange={handleChange} placeholder="Enter unique ID" /> */}
             <Input
               label="Brand"
               name="brand"
@@ -74,9 +78,9 @@ const FormToUpload = () => {
               onChange={handleChange}
               placeholder="Enter brand name"
             />
+            <span>{!token ? "Log In First" : ""}</span>
           </div>
 
-          {/* Model + Year */}
           <div className="grid md:grid-cols-2 gap-6">
             <Input
               label="Model"
@@ -94,7 +98,6 @@ const FormToUpload = () => {
             />
           </div>
 
-          {/* Module + Memory */}
           <div className="grid md:grid-cols-2 gap-6">
             <Input
               label="Module"
@@ -112,7 +115,6 @@ const FormToUpload = () => {
             />
           </div>
 
-          {/* Block + File Type */}
           <div className="grid md:grid-cols-2 gap-6">
             <Input
               label="Block Number"
@@ -139,7 +141,6 @@ const FormToUpload = () => {
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center mt-10">
             <button
               type="submit"
@@ -155,6 +156,19 @@ const FormToUpload = () => {
             >
               Reset
             </button>
+            <Link
+              to={"/list"}
+              className="flex-1 max-w-[150px] text-center py-3 text-gray-800 font-semibold rounded-lg shadow-lg bg-transparent border-2 border-gray-400 hover:bg-gray-100 transition transform hover:scale-105"
+            >
+              Car List
+            </Link>
+            <button
+              type="button"
+              onClick={handleLog}
+              className="flex-1 max-w-[150px] text-center py-3 text-gray-800 font-semibold rounded-lg shadow-lg bg-transparent border-2 border-gray-400 hover:bg-gray-100 transition transform hover:scale-105"
+            >
+              Log In/Out
+            </button>
           </div>
         </form>
       </div>
@@ -162,9 +176,6 @@ const FormToUpload = () => {
   );
 };
 
-export default FormToUpload;
-
-// Reusable Components
 const Label = ({ title }) => (
   <label className="text-gray-700 font-semibold mb-2 block">{title}</label>
 );
@@ -180,3 +191,5 @@ const Input = ({ label, ...props }) => (
     />
   </div>
 );
+
+export default FormToUpload;
