@@ -10,7 +10,10 @@ const pool = mysql.createPool({
     port: 3306,
     user: process.env.SQL_USER,
     password: process.env.SQL_PASSWORD,
-    database: process.env.SQL_DATABASE
+    database: process.env.SQL_DATABASE,
+    ssl: {
+        minVersion: "TLSv1.2"
+    }
 })
 
 export default pool

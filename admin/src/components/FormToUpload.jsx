@@ -16,6 +16,11 @@ const FormToUpload = () => {
     file_type: "",
   });
 
+  const LOCAL_URL = "http://localhost:3000";
+  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
+
+  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -25,7 +30,7 @@ const FormToUpload = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/data/post-car-data",
+        `${url}/data/post-car-data`,
         formData,
         {
           headers: {

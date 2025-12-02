@@ -6,7 +6,7 @@ create table if not exists user (
     email VARCHAR(40),
     password VARCHAR(255) NOT null,
     mobile_no VARCHAR(10) NOT null UNIQUE,
-    address TEXT NOT null,
+    address TEXT NULL,
     status ENUM('active', 'inactive') DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

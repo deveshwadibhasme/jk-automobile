@@ -11,7 +11,7 @@ const LogInPage = () => {
     rememberMe: false,
   });
   const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-automobile.onrender.com";
+  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
 
   const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
@@ -29,7 +29,7 @@ const LogInPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`${LOCAL_URL}/auth/admin/login`, formData, {
+      .post(`${url}/auth/admin/login`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
