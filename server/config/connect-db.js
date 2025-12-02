@@ -12,7 +12,7 @@ const pool = mysql.createPool({
     password: process.env.SQL_PASSWORD,
     database: process.env.SQL_DATABASE,
     ssl: {
-        rejectUnauthorized: false
+        minVersion: "TLSv1.2"
     }
 })
 
