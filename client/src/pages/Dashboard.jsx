@@ -5,7 +5,7 @@ import axios from "axios";
 const FirmwareTable = () => {
   const [data, setData] = useState();
   const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-automobile.onrender.com";
+  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
 
   const url =
     location.origin === "http://localhost:5173/" ? LOCAL_URL : PUBLIC_URL;
