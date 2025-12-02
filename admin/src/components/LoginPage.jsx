@@ -29,7 +29,7 @@ const LogInPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`${LOCAL_URL}/auth/admin/login`, formData, {
+      .post(`${url}/auth/admin/login`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
