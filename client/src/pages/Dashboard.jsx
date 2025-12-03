@@ -1,87 +1,24 @@
 import React, { useState, useMemo, useEffect } from "react";
 import Header from "../components/layout/Header";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const FirmwareTable = () => {
   const [data, setData] = useState();
   const LOCAL_URL = "http://localhost:3000";
   const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
 
-  const url =
-    location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
+  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
   useEffect(() => {
     function fetchData() {
-      axios.get(`${url}/data/get-car-data`).then((result) => {
+      axios.get(`${url}/data/get-car-data/id`).then((result) => {
         setData(result.data.result);
       });
     }
     handleApplyFilters();
     fetchData();
   }, []);
-
-  const initialData = [
-    {
-      id: 45026,
-      brand: "Hyundai",
-      model: "Sonata",
-      year: 2014,
-      module: "Dash",
-      memory: "Nec 70F5356",
-      blockNumber: "94032-C2000",
-      fileType: "Eeprom",
-    },
-    {
-      id: 45025,
-      brand: "Honda",
-      model: "CR-V",
-      year: 2008,
-      module: "ECU",
-      memory: "SHT058",
-      blockNumber: "37820-KZA-J53\n37806-KZL-H510",
-      fileType: "Flash",
-    },
-    {
-      id: 45024,
-      brand: "Honda",
-      model: "CR-V",
-      year: 2009,
-      module: "TCM",
-      memory: "SHT053",
-      blockNumber: "28100-KZA-J55\n37806-KZL-M40",
-      fileType: "Flash",
-    },
-    {
-      id: 45023,
-      brand: "Nissan",
-      model: "Note E-Power",
-      year: 2017,
-      module: "SMS",
-      memory: "XC2356A",
-      blockNumber: "98200-SW00A\nA650M7473/20750\n645315PMM",
-      fileType: "Full",
-    },
-    {
-      id: 45022,
-      brand: "Kia",
-      model: "Centro BD",
-      year: 2022,
-      module: "Dash",
-      memory: "MSDS512",
-      blockNumber: "94043-H6870",
-      fileType: "Flash",
-    },
-    {
-      id: 45021,
-      brand: "Infiniti",
-      model: "OX70",
-      year: 2016,
-      module: "SSM",
-      memory: "95C66",
-      blockNumber: "Calsonic Kansel",
-      fileType: "Eeprom",
-    },
-  ];
 
   const [tempFilters, setTempFilters] = useState({
     search: "",
@@ -269,13 +206,14 @@ const FirmwareTable = () => {
                   </td>
 
                   <td className="px-4 py-3">
-                    <span
+                    <Link
+                      to={`/module-info/${item.id}`}
                       className={`px-3 py-1 rounded-full text-xs font-semibold shadow ${badgeColor(
                         item.file_type
                       )}`}
                     >
                       {item.file_type}
-                    </span>
+                    </Link>
                   </td>
                 </tr>
               ))}
@@ -288,3 +226,66 @@ const FirmwareTable = () => {
 };
 
 export default FirmwareTable;
+
+const initialData = [
+  {
+    id: 45026,
+    brand: "Hyundai",
+    model: "Sonata",
+    year: 2014,
+    module: "Dash",
+    memory: "Nec 70F5356",
+    blockNumber: "94032-C2000",
+    fileType: "Eeprom",
+  },
+  {
+    id: 45025,
+    brand: "Honda",
+    model: "CR-V",
+    year: 2008,
+    module: "ECU",
+    memory: "SHT058",
+    blockNumber: "37820-KZA-J53\n37806-KZL-H510",
+    fileType: "Flash",
+  },
+  {
+    id: 45024,
+    brand: "Honda",
+    model: "CR-V",
+    year: 2009,
+    module: "TCM",
+    memory: "SHT053",
+    blockNumber: "28100-KZA-J55\n37806-KZL-M40",
+    fileType: "Flash",
+  },
+  {
+    id: 45023,
+    brand: "Nissan",
+    model: "Note E-Power",
+    year: 2017,
+    module: "SMS",
+    memory: "XC2356A",
+    blockNumber: "98200-SW00A\nA650M7473/20750\n645315PMM",
+    fileType: "Full",
+  },
+  {
+    id: 45022,
+    brand: "Kia",
+    model: "Centro BD",
+    year: 2022,
+    module: "Dash",
+    memory: "MSDS512",
+    blockNumber: "94043-H6870",
+    fileType: "Flash",
+  },
+  {
+    id: 45021,
+    brand: "Infiniti",
+    model: "OX70",
+    year: 2016,
+    module: "SSM",
+    memory: "95C66",
+    blockNumber: "Calsonic Kansel",
+    fileType: "Eeprom",
+  },
+];

@@ -7,6 +7,7 @@ import LogInPage from "./pages/LogInPage.jsx";
 import App from "./App.jsx";
 import RootLayout from "./RootLayout.jsx";
 import FirmwareTable from "./pages/Dashboard.jsx";
+import ModuleInfo from "./pages/ModuleInfo.jsx";
 
 
 const router = createBrowserRouter([
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <FirmwareTable />,
+      },
+      {
+        path: "/module-info/:id",
+        element: <ModuleInfo />,
       },
       {
         path: "/login",
