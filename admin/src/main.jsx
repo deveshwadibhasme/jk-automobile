@@ -7,7 +7,7 @@ import LogInPage from "./components/LoginPage.jsx";
 import { AuthProvider } from "./AuthContext.jsx";
 import CarList from "./components/CarList.jsx";
 import EditForm from "./components/EditForm.jsx";
-import AddCarInfo from "./components/addCarInfo.jsx";
+import AddCarInfo from "./components/AddCarInfo.jsx";
 
 const router = createBrowserRouter([
   {
