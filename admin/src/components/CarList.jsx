@@ -1,21 +1,30 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { token } = useAuth();
+
+  const LOCAL_URL = "http://localhost:3000";
+  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
+
+  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/data/get-car-data"
-        );
+        const response = await axios.get(`${url}/data/get-car-data/id`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setCars(response.data.result);
       } catch (err) {
-        setError("Failed to fetch car data.");
+        setError("Failed to fetch car data Try to Log in.");
         console.error("Error fetching car data:", err);
       } finally {
         setLoading(false);
@@ -74,12 +83,15 @@ const CarList = () => {
                 <td className="py-3 px-4">{car.model}</td>
                 <td className="py-3 px-4">{car.file_type}</td>
                 <td className="py-3 px-4">
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs mr-2">
+                  <Link
+                    to={`/edit-form/${car.id}`}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs mr-2"
+                  >
                     Edit
-                  </button>
-                  <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs">
+                  </Link>
+                  <Link className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs">
                     Delete
-                  </button>
+                  </Link>
                 </td>
               </tr>
             ))}
