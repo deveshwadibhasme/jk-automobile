@@ -2,20 +2,29 @@ import imagekit from '../config/image-kit.js'
 
 const uploadFile = async (req, res) => {
     try {
-        if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ error: "No files uploaded" });
+        }
 
-        const fileExt = req.file.originalname.split(".").pop();
+        const uploadedFiles = [];
 
-        const fileName = req.file.originalname + '-' + Math.floor(Math.random() * 4000 + 1000) + "." + fileExt
+        for (const file of req.files) {
+            const fileExt = file.originalname.split(".").pop();
+            const fileName = file.originalname.split(".")[0] + '-' + Math.floor(Math.random() * 4000 + 1000) + "." + fileExt;
 
-        const uploaded = await imagekit.upload({
-            file: req.file.buffer,
-            fileName: fileName,
-            folder: "/jk-modules"
+            const uploaded = await imagekit.upload({
+                file: file.buffer,
+                fileName: fileName,
+                folder: "/jk-modules"
+            });
+            uploadedFiles.push({ file:uploaded, url:uploaded.url });
+        }
+
+        return res.json({
+            success: true,
+            message:"File Uploaded",
+            files: uploadedFiles
         });
-
-
-        return res.json({ success: true, url: uploaded.url, fileId : uploaded.fileId });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Upload failed" });
