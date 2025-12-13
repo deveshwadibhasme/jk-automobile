@@ -1,5 +1,5 @@
 import pool from "../config/connect-db.js";
-
+import imagekit from '../config/image-kit.js'
 
 const postCarList = async (req, res) => {
     const { brand, model, year, module, memory, block_number, file_type, admin_id } = req.body
@@ -61,7 +61,7 @@ const getCarList = async (req, res) => {
 
 const postModuleData = async (req, res) => {
     const { module_type,
-        photo_of_the_module,
+        module_photo,
         sticker_photo,
         km_miles,
         engine_type,
@@ -71,8 +71,16 @@ const postModuleData = async (req, res) => {
     try {
         const [carList] = await pool.query('select id from car_list where id = ?', [module_number])
         const carId = carList[0].id
+        const [images] = await pool.query('select * from img_store where car_id = ?', [module_number])
 
-        await pool.query('insert into car_info (module_type,photo_of_the_module,sticker_photo,km_miles,engine_type,transmission,module_number, car_id) values(?,?,?,?,?,?,?,?)', [module_type, photo_of_the_module, sticker_photo, km_miles, engine_type, transmission, module_number, carId])
+        if (!module_photo,
+            !sticker_photo) {
+            for (const image of images) {
+                await imagekit.deleteFile(image.fileId)
+            }
+        }
+
+        await pool.query('insert into car_info (module_type,module_photo,sticker_photo,km_miles,engine_type,transmission,module_number, car_id) values(?,?,?,?,?,?,?,?)', [module_type, module_photo, sticker_photo, km_miles, engine_type, transmission, module_number, carId])
 
         res.status(201).json({ message: 'Modules data posted successfully' });
     } catch (error) {
@@ -94,4 +102,24 @@ const getModuleData = async (req, res) => {
     }
 }
 
-export { postCarList, getCarList, editCarList, postModuleData, getModuleData }
+const deleteCarData = async (req, res) => {
+    const { id } = req.params
+    try {
+        const [images] = await pool.query('select * from img_store where car_id = ?', [id])
+
+        for (const image of images) {
+            await imagekit.deleteFile(image.file_id)
+        }
+
+        await pool.query('delete from car_info where car_id = ?', [id])
+        await pool.query('delete from img_store where car_id = ?', [id])
+        await pool.query('delete from car_list where id = ?', [id])
+
+        res.status(201).json({ message: 'Car data delete successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error', error: error });
+    }
+}
+
+export { postCarList, getCarList, editCarList, postModuleData, getModuleData, deleteCarData }

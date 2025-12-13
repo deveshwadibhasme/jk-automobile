@@ -51,15 +51,21 @@ const verifyUserAndRegister = async (req, res) => {
             [email]
         );
 
-        if (!rows.length) throw new Error("Not found");
+        if (!rows.length) {
+            return res.status(400).json({ message: 'Invalid or expired OTP. Verify Email Again' });
+
+        }
 
         const nowUTC = new Date();
-        const expired = nowUTC > new Date(rows[0].expire_at);
-
+        const expired = nowUTC > new Date(rows[0].expire_at + 'Z');
 
         if (expired) {
             await pool.query('DELETE FROM otp_store WHERE email = ?', [email]);
             return res.status(400).json({ message: 'Invalid or expired OTP. Verify Email Again' });
+        }
+
+        if (otp !== rows[0].otp) {
+            return res.status(400).json({ message: 'Invalid OTP. Please try again.' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10)

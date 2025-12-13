@@ -33,34 +33,34 @@ const ModuleInfo = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
               <p className="font-semibold text-gray-700">Module Type:</p>
-              <p className="text-gray-600 capitalize">{data[0].module_type}</p>
+              <p className="text-gray-600 capitalize">{data[0]?.module_type}</p>
             </div>
             <div>
               <p className="font-semibold text-gray-700">KM/Miles:</p>
-              <p className="text-gray-600">{data[0].km_miles}</p>
+              <p className="text-gray-600">{data[0]?.km_miles}</p>
             </div>
             <div>
               <p className="font-semibold text-gray-700">Engine Type:</p>
-              <p className="text-gray-600 capitalize">{data[0].engine_type}</p>
+              <p className="text-gray-600 capitalize">{data[0]?.engine_type}</p>
             </div>
             <div>
               <p className="font-semibold text-gray-700">Transmission:</p>
-              <p className="text-gray-600 capitalize">{data[0].transmission}</p>
+              <p className="text-gray-600 capitalize">{data[0]?.transmission}</p>
             </div>
             <div>
               <p className="font-semibold text-gray-700">Module Number:</p>
-              <p className="text-gray-600">{data[0].module_number}</p>
+              <p className="text-gray-600">{data[0]?.module_number}</p>
             </div>
           </div>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            {data[0].photo_of_the_module && (
+            {data[0].module_photo && (
               <div className="flex flex-col items-center">
                 <p className="font-semibold text-gray-700 mb-2">
                   Module Photo:
                 </p>
                 <img
                   className="w-64 h-64 object-contain border rounded-md shadow-sm"
-                  src={data[0].photo_of_the_module}
+                  src={data[0]?.module_photo}
                   alt="Module"
                 />
               </div>
@@ -72,7 +72,7 @@ const ModuleInfo = () => {
                 </p>
                 <img
                   className="w-64 h-64 object-contain border rounded-md shadow-sm"
-                  src={data[0].sticker_photo}
+                  src={data[0]?.sticker_photo}
                   alt="Sticker"
                 />
               </div>

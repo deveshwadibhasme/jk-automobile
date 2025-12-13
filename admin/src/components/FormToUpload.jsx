@@ -165,7 +165,7 @@ const FormToUpload = () => {
               to={"/list"}
               className="flex-1 max-w-[150px] text-center py-3 text-gray-800 font-semibold rounded-lg shadow-lg bg-transparent border-2 border-gray-400 hover:bg-gray-100 transition transform hover:scale-105"
             >
-              Car List
+              Vehicle List
             </Link>
             <button
               type="button"

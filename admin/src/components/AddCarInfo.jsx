@@ -11,7 +11,7 @@ const AddCarInfo = () => {
 
   const [formData, setFormData] = useState({
     module_type: moduleType,
-    photo_of_the_module: "",
+    module_photo: "",
     sticker_photo: "",
     km_miles: "",
     engine_type: "",
@@ -22,7 +22,10 @@ const AddCarInfo = () => {
   const [pictures, setPictures] = useState({ picture: [] });
 
   const pictureData = new FormData();
-  pictures.picture.forEach((file) => pictureData.append("file", file));
+  pictures.picture.forEach((file) => {
+    pictureData.append("file", file);
+  });
+  pictureData.append("car_id", idToPost)
 
   const LOCAL_URL = "http://localhost:3000";
   const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
@@ -69,16 +72,12 @@ const AddCarInfo = () => {
       );
       setFormData((prev) => ({
         ...prev,
-        photo_of_the_module: uploadResponse.data.files[0].url,
+        module_photo: uploadResponse.data.files[0].url,
         sticker_photo: uploadResponse.data.files[1].url,
       }));
       const postModuleResponse = await axios.post(
         `${url}/data/post-module-data`,
-        {
-          ...formData,
-          photo_of_the_module: uploadResponse.data.files[0].url,
-          sticker_photo: uploadResponse.data.files[1].url,
-        },
+        formData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -89,7 +88,7 @@ const AddCarInfo = () => {
       setFormData({
         file_type: "",
         module_type: "",
-        photo_of_the_module: "",
+        module_photo: "",
         sticker_photo: "",
         km_miles: "",
         engine_type: "",
@@ -110,7 +109,7 @@ const AddCarInfo = () => {
     setFormData({
       file_type: "",
       module_type: "",
-      photo_of_the_module: "",
+      module_photo: "",
       sticker_photo: "",
       km_miles: "",
       engine_type: "",

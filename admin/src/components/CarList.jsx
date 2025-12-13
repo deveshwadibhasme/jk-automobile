@@ -14,6 +14,20 @@ const CarList = () => {
 
   const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`${url}/data/delete-car-data/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert(response.result.message)
+    } catch (err) {
+      setError("Failed to fetch car data Try to Log in.");
+      console.error("Error fetching car data:", err);
+    }
+  };
+
   useEffect(() => {
     const fetchCars = async () => {
       try {
@@ -24,7 +38,6 @@ const CarList = () => {
         });
         setCars(response.data.result);
       } catch (err) {
-        setError("Failed to fetch car data Try to Log in.");
         console.error("Error fetching car data:", err);
       } finally {
         setLoading(false);
@@ -77,8 +90,7 @@ const CarList = () => {
                 key={car.id}
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
-                {" "}
-                {/* Assuming each car has a unique 'id' */}
+                {""}
                 <td className="py-3 px-4">{car.brand}</td>
                 <td className="py-3 px-4">{car.model}</td>
                 <td className="py-3 px-4">{car.file_type}</td>
@@ -89,9 +101,12 @@ const CarList = () => {
                   >
                     Edit
                   </Link>
-                  <Link className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs">
+                  <button
+                    onClick={() => handleDelete(car.id)}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs"
+                  >
                     Delete
-                  </Link>
+                  </button>
                 </td>
               </tr>
             ))}
