@@ -14,5 +14,5 @@ create table if not exists car_info (
     CONSTRAINT fk_car_list FOREIGN KEY (car_id) REFERENCES car_list(id)
 );
 
-alter table car_info 
-RENAME COLUMN photo_of_the_module to module_photo
+-- alter table car_info 
+-- RENAME COLUMN photo_of_the_module to module_photo

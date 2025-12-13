@@ -23,7 +23,7 @@ const uploadFile = async (req, res) => {
       const uploaded = await imagekit.upload({
         file: file.buffer,
         fileName: fileName,
-        folder: "/jk-modules"
+        folder: "/jk-modules/images"
       });
 
       await pool.query('insert into img_store (car_id,file_id,file_url) values (?,?,?)', [req.body.car_id, uploaded.fileId, uploaded.url])

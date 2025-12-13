@@ -73,14 +73,20 @@ const postModuleData = async (req, res) => {
         const carId = carList[0].id
         const [images] = await pool.query('select * from img_store where car_id = ?', [module_number])
 
-        if (!module_photo,
-            !sticker_photo) {
+        if (module_photo || sticker_photo) {
             for (const image of images) {
-                await imagekit.deleteFile(image.fileId)
+                if (image && image.file_id) {
+                    await imagekit.deleteFile(image.file_id)
+                }
             }
         }
 
-        await pool.query('insert into car_info (module_type,module_photo,sticker_photo,km_miles,engine_type,transmission,module_number, car_id) values(?,?,?,?,?,?,?,?)', [module_type, module_photo, sticker_photo, km_miles, engine_type, transmission, module_number, carId])
+        if (module_photo || sticker_photo) {
+            await pool.query('insert into car_info (module_type,module_photo,sticker_photo,km_miles,engine_type,transmission,module_number, car_id) values(?,?,?,?,?,?,?,?)', [module_type, module_photo, sticker_photo, km_miles, engine_type, transmission, module_number, carId])
+        }
+        else {
+            await pool.query('insert into car_info (module_type,km_miles,engine_type,transmission,module_number, car_id) values(?,?,?,?,?,?)', [module_type, km_miles, engine_type, transmission, module_number, carId])
+        }
 
         res.status(201).json({ message: 'Modules data posted successfully' });
     } catch (error) {
