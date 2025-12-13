@@ -8,7 +8,7 @@ export async function runQueries(connection) {
     //     await connection.query(query);
     // }
 
-    const models = ['admin', 'user', 'car_list', 'car_info', 'car_file', 'otp_store'];
+    const models = ['admin', 'user', 'car_list', 'car_info', 'car_file', 'otp_store','img_store'];
 
     for (const modelName of models) {
         const sql = fs.readFileSync(`./model/${modelName}.model.sql`, 'utf8');
