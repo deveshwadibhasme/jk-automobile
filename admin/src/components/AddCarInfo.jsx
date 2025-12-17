@@ -6,6 +6,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 const AddCarInfo = () => {
   const { token, logOut } = useAuth();
 
+  const LOCAL_URL = "http://localhost:3000";
+  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
+
+  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
+
   const idToPost = location.pathname.split("/")[2];
   const { moduleType } = useLocation().state;
 
@@ -19,62 +24,52 @@ const AddCarInfo = () => {
     module_number: idToPost,
   });
 
-  const [pictures, setPictures] = useState({ picture: [] });
-
-  const pictureData = new FormData();
-  pictures.picture.forEach((file) => {
-    pictureData.append("file", file);
+  const [files, setFiles] = useState({
+    module: null,
+    sticker: null,
+    zip: null,
   });
-  pictureData.append("car_id", idToPost)
 
-  const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
+  const FilesData = new FormData();
 
-  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
+  Object.values(files).forEach((file) => {
+    FilesData.append("file", file);
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // useEffect(() => {
-  //   const fetchCars = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${url}/data/get-car-data/${idToPost}`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-  //       const [data] = response.data.result;
-  //     } catch (err) {
-  //       setError("Failed to fetch car data Try to Log in.");
-  //       console.error("Error fetching car data:", err);
-  //     }
-  //   };
-  //   fetchCars();
-  // }, []);
+  const handleFile = (e, fileKey) => {
+    setFiles((prev) => {
+      const copy = { ...prev };
+      copy[fileKey] = e.target.files[0];
+      return copy;
+    });
+  };
+  FilesData.append("car_id", idToPost);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const uploadResponse = await axios.post(
-        `${url}/file/upload`,
-        pictureData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setFormData((prev) => ({
-        ...prev,
-        module_photo: uploadResponse.data.files[0].url,
-        sticker_photo: uploadResponse.data.files[1].url,
-      }));
+      if (files.module !== null) {
+        const uploadResponse = await axios.post(
+          `${url}/file/upload`,
+          FilesData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setFormData((prev) => ({
+          ...prev,
+          module_photo: uploadResponse.data.files[0].url,
+          sticker_photo: uploadResponse.data.files[1].url,
+        }));
+      }
       const postModuleResponse = await axios.post(
         `${url}/data/post-module-data`,
         formData,
@@ -96,7 +91,6 @@ const AddCarInfo = () => {
         module_number: "",
       });
       alert(postModuleResponse.data.message);
-      alert(response.data.message);
     } catch (error) {
       console.error("Error uploading data:", error);
       alert(
@@ -118,6 +112,35 @@ const AddCarInfo = () => {
     });
   };
 
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const response = await axios.get(
+          `${url}/data/get-module-data/${idToPost}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = response.data.result[0];
+        setFormData({
+          module_type: moduleType,
+          module_photo: "",
+          sticker_photo: "",
+          km_miles: data?.km_miles,
+          engine_type: data?.engine_type,
+          transmission: data?.transmission,
+          module_number: idToPost,
+        });
+      } catch (err) {
+        setError("Failed to fetch car data Try to Log in.");
+        console.error("Error fetching car data:", err);
+      }
+    };
+    fetchCars();
+  }, []);
+
   const navigate = useNavigate();
 
   const handleLog = () => {
@@ -129,8 +152,6 @@ const AddCarInfo = () => {
     }
   };
 
-  console.log(formData);
-
   return (
     <div className="relative min-h-screen py-5 max-w-screen-2xl mx-auto bg-[#302e2e] overflow-hidden font-sans">
       <div className="relative bg-white/90 backdrop-blur-md p-5 rounded-xl shadow-xl w-full max-w-5xl mx-auto">
@@ -141,13 +162,7 @@ const AddCarInfo = () => {
               accept=".png,.jpg,.jpeg,.svg,.webp,.avif"
               label="Module Photo"
               name="picture"
-              // value={pictures[0]}
-              onChange={(e) =>
-                setPictures((state) => ({
-                  ...state,
-                  picture: [...state.picture, e.target.files[0]],
-                }))
-              }
+              onChange={(e) => handleFile(e, "module")}
               placeholder="Photo of Module"
             />
             <Input
@@ -155,13 +170,7 @@ const AddCarInfo = () => {
               accept=".png,.jpg,.jpeg,.svg,.webp,.avif"
               label="Sticker Photo"
               name="picture"
-              // value={pictures[1]}
-              onChange={(e) =>
-                setPictures((state) => ({
-                  ...state,
-                  picture: [...state.picture, e.target.files[0]],
-                }))
-              }
+              onChange={(e) => handleFile(e, "sticker")}
               placeholder="Enter Sticker of Module"
             />
           </div>
@@ -175,12 +184,12 @@ const AddCarInfo = () => {
               placeholder="Enter module type"
             />
             <Input
-              disabled
+              // disabled
               type="file"
               accept=".zip,.bin,.rar"
-              label="Bin File (Disabled)"
+              label="Bin File ()"
               name="bin_file"
-              value={formData.bin_file}
+              onChange={(e) => handleFile(e, "zip")}
               placeholder="Enter Bin File"
             />
           </div>
