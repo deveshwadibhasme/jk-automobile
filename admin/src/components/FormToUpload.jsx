@@ -15,6 +15,7 @@ const FormToUpload = () => {
     block_number: "",
     file_type: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const LOCAL_URL = "http://localhost:3000";
   const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
@@ -27,19 +28,17 @@ const FormToUpload = () => {
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${url}/data/post-car-data`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.post(`${url}/data/post-car-data`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       alert(response.data.message);
+      setLoading(false)
     } catch (error) {
       console.error("Error uploading data:", error);
       alert(
@@ -61,7 +60,7 @@ const FormToUpload = () => {
   };
 
   const navigate = useNavigate();
-  
+
   const handleLog = () => {
     if (token) {
       navigate("/login");
@@ -151,7 +150,7 @@ const FormToUpload = () => {
               type="submit"
               className="flex-1 max-w-[150px] py-3 text-white font-semibold rounded-lg shadow-lg bg-linear-to-br from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 transition transform hover:scale-105"
             >
-              Upload
+              {!loading ? 'Upload' : 'Uploading...'} 
             </button>
 
             <button

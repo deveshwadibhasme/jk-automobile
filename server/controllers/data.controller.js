@@ -66,7 +66,7 @@ const postModuleData = async (req, res) => {
         km_miles,
         engine_type,
         transmission,
-        module_number } = req.body
+        module_number, note } = req.body
 
     try {
         const [carList] = await pool.query('select id from car_list where id = ?', [module_number])
@@ -74,35 +74,35 @@ const postModuleData = async (req, res) => {
 
         const carId = carList[0].id
 
-        if(module_photo && sticker_photo) {
+        if(module_photo && sticker_photo && carInfo.length === 0) {
             await pool.query(
                 `INSERT INTO car_info 
-         (module_type, module_photo, sticker_photo, km_miles, engine_type, transmission, module_number, car_id)
-         VALUES (?,?,?,?,?,?,?,?)`,
-                [module_type, module_photo, sticker_photo, km_miles, engine_type, transmission, module_number, carId]
+         (module_type, module_photo, sticker_photo, km_miles, engine_type, transmission, module_number, notes, car_id)
+         VALUES (?,?,?,?,?,?,?,?,?)`,
+                [module_type, module_photo, sticker_photo, km_miles, engine_type, transmission, module_number, note, carId]
             );
         }
         else if (module_photo && carInfo.length !== 0) {
             await pool.query(
                 `UPDATE car_info 
-         SET module_type = ?, module_photo = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ?
+         SET module_type = ?, module_photo = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ? notes  = ?
          WHERE car_id = ?`,
-                [module_type, module_photo, km_miles, engine_type, transmission, module_number, carId]
+                [module_type, module_photo, km_miles, engine_type, transmission, module_number, note, carId]
             );
         } else if (sticker_photo && carInfo.length !== 0) {
             await pool.query(
                 `UPDATE car_info 
-         SET module_type = ?, sticker_photo = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ?
+         SET module_type = ?, sticker_photo = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ? notes =?
          WHERE car_id = ?`,
-                [module_type, sticker_photo, km_miles, engine_type, transmission, module_number, carId]
+                [module_type, sticker_photo, km_miles, engine_type, transmission, module_number, note, carId]
             );
         }
         else if (carInfo.length !== 0) {
             await pool.query(
                 `UPDATE car_info 
-         SET module_type = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ?
+         SET module_type = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ? notes =?
          WHERE car_id = ?`,
-                [module_type, km_miles, engine_type, transmission, module_number, carId]
+                [module_type, km_miles, engine_type, transmission, module_number, note, carId]
             );
         }
         

@@ -19,15 +19,15 @@ create table if not exists file_store (
     CONSTRAINT Foreign Key (car_id) REFERENCES car_list(id)
 );
 
-alter table file_store
-rename COLUMN car_info_id to car_id;
+-- alter table file_store
+-- rename COLUMN car_info_id to car_id;
 
-ALTER TABLE file_store
-DROP FOREIGN KEY file_store_ibfk_1;
+-- ALTER TABLE file_store
+-- DROP FOREIGN KEY file_store_ibfk_1;
 
-ALTER TABLE file_store
-ADD CONSTRAINT fk_file_store_car
-FOREIGN KEY (car_id)
-REFERENCES car_list(id)
-ON DELETE CASCADE
-ON UPDATE CASCADE;
+-- ALTER TABLE file_store
+-- ADD CONSTRAINT fk_file_store_car
+-- FOREIGN KEY (car_id)
+-- REFERENCES car_list(id)
+-- ON DELETE CASCADE
+-- ON UPDATE CASCADE;

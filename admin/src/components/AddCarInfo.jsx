@@ -14,13 +14,17 @@ const AddCarInfo = () => {
   const idToPost = location.pathname.split("/")[2];
   const { moduleType } = useLocation().state;
 
+  const [preData, setPreData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
-    module_type: moduleType,
     module_photo: "",
     sticker_photo: "",
+    module_type: moduleType,
     km_miles: "",
     engine_type: "",
     transmission: "",
+    note: "",
     module_number: idToPost,
   });
 
@@ -51,8 +55,11 @@ const AddCarInfo = () => {
   FilesData.append("car_id", idToPost);
 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     try {
+      setLoading(true);
+      let formToUpload = { ...formData };
       if (files.module !== null) {
         const uploadResponse = await axios.post(
           `${url}/file/upload`,
@@ -64,15 +71,15 @@ const AddCarInfo = () => {
             },
           }
         );
-        setFormData((prev) => ({
-          ...prev,
+        formToUpload = {
+          ...formToUpload,
           module_photo: uploadResponse.data.files[0].url,
           sticker_photo: uploadResponse.data.files[1].url,
-        }));
+        };
       }
       const postModuleResponse = await axios.post(
         `${url}/data/post-module-data`,
-        formData,
+        formToUpload,
         {
           headers: {
             "Content-Type": "application/json",
@@ -91,6 +98,8 @@ const AddCarInfo = () => {
         module_number: "",
       });
       alert(postModuleResponse.data.message);
+      setLoading(false);
+      // location.reload()
     } catch (error) {
       console.error("Error uploading data:", error);
       alert(
@@ -124,15 +133,7 @@ const AddCarInfo = () => {
           }
         );
         const data = response.data.result[0];
-        setFormData({
-          module_type: moduleType,
-          module_photo: "",
-          sticker_photo: "",
-          km_miles: data?.km_miles,
-          engine_type: data?.engine_type,
-          transmission: data?.transmission,
-          module_number: idToPost,
-        });
+        setPreData(data);
       } catch (err) {
         setError("Failed to fetch car data Try to Log in.");
         console.error("Error fetching car data:", err);
@@ -140,6 +141,17 @@ const AddCarInfo = () => {
     };
     fetchCars();
   }, []);
+
+  useEffect(() => {
+    if (!preData) return;
+
+    setFormData((prev) => ({
+      ...prev,
+      km_miles: preData.km_miles ?? "",
+      engine_type: preData.engine_type ?? "",
+      transmission: preData.transmission ?? "",
+    }));
+  }, [preData]);
 
   const navigate = useNavigate();
 
@@ -228,15 +240,22 @@ const AddCarInfo = () => {
               placeholder="Enter module number"
             />
           </div>
-
-          {/* Add fields for sticker_photo and notes if needed */}
+          <div className="grid md:grid-cols-1 gap-6">
+            <Input
+              label="Note"
+              name="note"
+              value={formData.note}
+              onChange={handleChange}
+              placeholder="Enter Note"
+            />
+          </div>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center mt-10">
             <button
               type="submit"
               className="flex-1 max-w-[150px] py-3 text-white font-semibold rounded-lg shadow-lg bg-linear-to-br from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 transition transform hover:scale-105"
             >
-              Update
+              {loading ? "Updating.." : "Update"}
             </button>
 
             <button
