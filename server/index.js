@@ -30,7 +30,7 @@ app.use('/data', dataRoute)
 
 app.use('/file', uploadRoute)
 
-app.use('/bin-file', fileRoute)
+app.use('/bin', fileRoute)
 
 app.get('/', (req, res) => {
     res.send('<h1>J.K. Automobile Server by Resicode</h1>');

@@ -5,7 +5,7 @@ const router = express.Router()
 
 router.post('/post-file-data', postFileData)
 
-router.get('/get-files-data', getFileData)
+router.get('/get-file-data/:id', getFileData)
 
 router.post('/download-bin', downloadBin)
 
