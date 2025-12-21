@@ -16,3 +16,6 @@ create table if not exists car_info (
 
 -- alter table car_info 
 -- RENAME COLUMN photo_of_the_module to module_photo
+
+-- alter table car_info 
+-- add column price BIGINT;

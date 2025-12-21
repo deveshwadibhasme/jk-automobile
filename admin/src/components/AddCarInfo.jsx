@@ -25,6 +25,7 @@ const AddCarInfo = () => {
     engine_type: "",
     transmission: "",
     note: "",
+    price: "",
     module_number: idToPost,
   });
 
@@ -55,7 +56,6 @@ const AddCarInfo = () => {
   FilesData.append("car_id", idToPost);
 
   const handleSubmit = async (e) => {
-    
     e.preventDefault();
     try {
       setLoading(true);
@@ -150,6 +150,8 @@ const AddCarInfo = () => {
       km_miles: preData.km_miles ?? "",
       engine_type: preData.engine_type ?? "",
       transmission: preData.transmission ?? "",
+      price: preData.price ?? "",
+      note: preData.notes ?? "",
     }));
   }, [preData]);
 
@@ -240,13 +242,22 @@ const AddCarInfo = () => {
               placeholder="Enter module number"
             />
           </div>
-          <div className="grid md:grid-cols-1 gap-6">
+          <div className="grid md:grid-cols-2 gap-6">
             <Input
+              // type="textarea"
               label="Note"
               name="note"
               value={formData.note}
               onChange={handleChange}
               placeholder="Enter Note"
+            />
+            <Input
+              type="number"
+              label="Price of File"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              placeholder="Enter Price"
             />
           </div>
 

@@ -6,6 +6,7 @@ import { runQueries } from "./utils/run-queries.js";
 import authRoute from "./routes/auth.routes.js";
 import dataRoute from "./routes/data.routes.js";
 import uploadRoute from './routes/upload.route.js'
+import fileRoute from './routes/file.route.js'
 
 const app = express();
 
@@ -29,8 +30,10 @@ app.use('/data', dataRoute)
 
 app.use('/file', uploadRoute)
 
+app.use('/bin-file', fileRoute)
+
 app.get('/', (req, res) => {
-    res.send('<h1>Sat Saheb!!</h1>');
+    res.send('<h1>J.K. Automobile Server by Resicode</h1>');
 });
 
 

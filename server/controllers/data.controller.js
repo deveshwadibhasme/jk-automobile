@@ -66,46 +66,50 @@ const postModuleData = async (req, res) => {
         km_miles,
         engine_type,
         transmission,
-        module_number, note } = req.body
+        module_number, note, price } = req.body
 
     try {
         const [carList] = await pool.query('select id from car_list where id = ?', [module_number])
-        const [carInfo] = await pool.query('select * from car_info where car_id = ?', [module_number])
-
         const carId = carList[0].id
+        const [carInfo] = await pool.query('select * from car_info where car_id = ?', [module_number])
+        const [binFile] = await pool.query('select * from file_store where car_id = ?', [module_number])
 
-        if(module_photo && sticker_photo && carInfo.length === 0) {
+
+
+        if (module_photo && sticker_photo && carInfo.length === 0) {
             await pool.query(
                 `INSERT INTO car_info 
-         (module_type, module_photo, sticker_photo, km_miles, engine_type, transmission, module_number, notes, car_id)
-         VALUES (?,?,?,?,?,?,?,?,?)`,
-                [module_type, module_photo, sticker_photo, km_miles, engine_type, transmission, module_number, note, carId]
+         (module_type, module_photo, sticker_photo, km_miles, engine_type, transmission, module_number, notes, price car_id)
+         VALUES (?,?,?,?,?,?,?,?,?,?)`,
+                [module_type, module_photo, sticker_photo, km_miles, engine_type, transmission, module_number, note, price, carId]
             );
         }
         else if (module_photo && carInfo.length !== 0) {
             await pool.query(
                 `UPDATE car_info 
-         SET module_type = ?, module_photo = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ? notes  = ?
+         SET module_type = ?, module_photo = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ? , notes  = ?, price =  ?
          WHERE car_id = ?`,
-                [module_type, module_photo, km_miles, engine_type, transmission, module_number, note, carId]
+                [module_type, module_photo, km_miles, engine_type, transmission, module_number, note, price, carId]
             );
         } else if (sticker_photo && carInfo.length !== 0) {
             await pool.query(
                 `UPDATE car_info 
-         SET module_type = ?, sticker_photo = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ? notes =?
+         SET module_type = ?, sticker_photo = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ?, notes = ?, price = ?
          WHERE car_id = ?`,
-                [module_type, sticker_photo, km_miles, engine_type, transmission, module_number, note, carId]
+                [module_type, sticker_photo, km_miles, engine_type, transmission, module_number, note, price, carId]
             );
         }
         else if (carInfo.length !== 0) {
             await pool.query(
                 `UPDATE car_info 
-         SET module_type = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ? notes =?
+         SET module_type = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ?, notes = ?, price = ?
          WHERE car_id = ?`,
-                [module_type, km_miles, engine_type, transmission, module_number, note, carId]
+                [module_type, km_miles, engine_type, transmission, module_number, note, price, carId]
             );
         }
-        
+        if (binFile.length !== 0) {
+            await pool.query('update file_store set file_price = ?, file_number = ? where car_id = ?', [price, carId, carId])
+        }
 
         res.status(201).json({ message: 'Modules data posted successfully' });
     } catch (error) {
