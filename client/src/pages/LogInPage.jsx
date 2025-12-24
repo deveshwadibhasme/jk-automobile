@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import bgImage from "../assets/car-bg.avif";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 
 const LogInPage = () => {
   const { loginAction } = useAuth();
+  const location  = useLocation();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -14,8 +15,7 @@ const LogInPage = () => {
   const LOCAL_URL = "http://localhost:3000";
   const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
 
-  const url =
-    location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
+  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -39,7 +39,7 @@ const LogInPage = () => {
       .then((response) => {
         setLoading(true);
         alert(response.data.message);
-        loginAction(response.data);
+        loginAction(response.data, location.state);
       })
       .catch((error) => {
         console.error(

@@ -24,11 +24,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const loginAction = (data) => {
+  const loginAction = (data, state) => {
     setToken(data.token);
     setUser(data.user);
-    setName(data.username)
+    setName(data.username);
     localStorage.setItem("token", data.token);
+    if(state?.length > 0){
+      navigate(state.link)
+    }
+
     navigate("/");
   };
 

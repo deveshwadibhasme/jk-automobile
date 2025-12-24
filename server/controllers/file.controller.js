@@ -2,7 +2,7 @@ import pool from "../config/connect-db.js";
 
 
 const downloadBin = async (req,res) => {
-
+    
 }
 
 const getFileData = async (req,res) => {

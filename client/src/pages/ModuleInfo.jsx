@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import PaymentButton from "../components/PaymentButton";
 
 const ModuleInfo = () => {
   const [data, setData] = useState();
@@ -26,7 +27,6 @@ const ModuleInfo = () => {
     fetchData();
   }, []);
 
-  console.log(fileData);
 
   return (
     <div className="max-w-screen min-h-screen flex items-center justify-center bg-gray-100 p-4">
@@ -66,7 +66,7 @@ const ModuleInfo = () => {
             </div>
           </div>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            {data[0].module_photo && (
+            {data[0]?.module_photo && (
               <div className="flex flex-col items-center">
                 <p className="font-semibold text-gray-700 mb-2">
                   Module Photo:
@@ -78,7 +78,7 @@ const ModuleInfo = () => {
                 />
               </div>
             )}
-            {data[0].sticker_photo && (
+            {data[0]?.sticker_photo && (
               <div className="flex flex-col items-center">
                 <p className="font-semibold text-gray-700 mb-2">
                   Sticker Photo:
@@ -90,7 +90,7 @@ const ModuleInfo = () => {
                 />
               </div>
             )}
-            {fileData[0] && (
+            {fileData?.length > 0 && (
               <div className="flex flex-col items-center text-center">
                 <p className="font-semibold text-gray-700 mb-2">
                   File Information:
@@ -104,16 +104,11 @@ const ModuleInfo = () => {
                 <p className="rounded-xl p-1 my-1 px-3 bg-green-800 text-white">
                   File Price: Rs {fileData[0]?.file_price}
                 </p>
-                <button 
-                  className="mt-4 px-6 py-2 rounded-md text-white bg-linear-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105"
-                  onClick={() => alert("Payment functionality to be implemented with user login! under Development")}
-                >
-                  Pay Now
-                </button>
-                  {/* Add a pay button here, interactive only when user is logged in */}
-                  {/* You'll need to implement user authentication and state management for login */}
-                  {/* For demonstration, let's assume `isLoggedIn` is a state variable */}
-                  {/* <button
+                <PaymentButton module_id={fileData[0]?.id} />
+                {/* Add a pay button here, interactive only when user is logged in */}
+                {/* You'll need to implement user authentication and state management for login */}
+                {/* For demonstration, let's assume `isLoggedIn` is a state variable */}
+                {/* <button
                     className={`mt-4 px-6 py-2 rounded-md text-white ${
                       isLoggedIn
                         ? "bg-blue-600 hover:bg-blue-700"
