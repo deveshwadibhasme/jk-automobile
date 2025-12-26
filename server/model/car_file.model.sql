@@ -1,11 +1,29 @@
 -- use jk_automobile;
 create table if not exists car_file (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    car_file_id INT NOT NULL,
+    car_file_id VARCHAR(300),
     file_status VARCHAR(100),
     file_price VARCHAR(100),
-    CONSTRAINT fk_car_file_list FOREIGN KEY (car_file_id) REFERENCES car_list(id)
+    user_id int,
+    car_id int,
+    CONSTRAINT fk_car_file_list FOREIGN KEY (car_id) REFERENCES car_list (id),
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user (id)
 );
+
+-- alter table car_file
+-- MODIFY COLUMN file_status BOOLEAN DEFAULT false;
+
+-- alter table car_file
+-- drop FOREIGN key fk_car_file_list;
+
+-- alter table car_file
+-- MODIFY COLUMN car_file_id varchar(300);
+
+-- alter table car_file
+-- add COLUMN car_id int;
+
+-- alter table car_file
+-- add constraint fk_car_id FOREIGN KEY(car_id) REFERENCES car_list(id);
 
 create table if not exists file_store (
     id int PRIMARY KEY AUTO_INCREMENT,
@@ -16,8 +34,13 @@ create table if not exists file_store (
     archive_size VARCHAR(100),
     file_price VARCHAR(100),
     file_number VARCHAR(100),
-    CONSTRAINT Foreign Key (car_id) REFERENCES car_list(id)
+    CONSTRAINT fk_file_store_car Foreign Key (car_id) REFERENCES car_list (id)
 );
+
+-- alter table car_file
+-- add column user_id int;
+-- alter table car_file
+-- add CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user(id);
 
 -- alter table file_store
 -- rename COLUMN car_info_id to car_id;

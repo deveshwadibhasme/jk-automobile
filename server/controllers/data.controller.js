@@ -134,11 +134,11 @@ const getModuleData = async (req, res) => {
 const deleteCarData = async (req, res) => {
     const { id } = req.params
     try {
-        // const [images] = await pool.query('select * from img_store where car_id = ?', [id])
+        const [images] = await pool.query('select * from img_store where car_id = ?', [id])
 
-        // for (const image of images) {
-        //     await imagekit.deleteFile(image.file_id)
-        // }
+        for (const image of images) {
+            await imagekit.deleteFile(image.file_id)
+        }
 
         await pool.query('delete from car_info where car_id = ?', [id])
         await pool.query('delete from img_store where car_id = ?', [id])

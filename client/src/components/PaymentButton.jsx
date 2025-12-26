@@ -43,8 +43,8 @@ export default function PaymentButton({ module_id }) {
         }
       );
 
-      const order = await response.data
-      console.log(order);
+      const [order, userInfo] = await response.data;
+
       const options = {
         key: RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -59,25 +59,34 @@ export default function PaymentButton({ module_id }) {
             razorpay_signature: response.razorpay_signature,
           };
           try {
-            await axios.post(
-              `${url}/payment/verify-payment`,
-              JSON.stringify(body),
-              {
+            await axios
+              .post(`${url}/payment/verify-payment`, JSON.stringify(body), {
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: `Bearer ${token}`,
                 },
-              }
-            );
+              })
+              .then(async () => {
+                const response = await axios.get(
+                  `${url}/bin/download-bin/${userInfo.id}`,
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }
+                );
+                window.location.href = response.data.url;
+              });
             alert("Payment successful!");
           } catch (err) {
             alert("Payment failed: " + err.message);
           }
         },
         prefill: {
-          name: "John Doe",
-          email: "john@example.com",
-          contact: "9999999999",
+          name: userInfo.name,
+          email: userInfo.email,
+          contact: userInfo.mobile_no,
         },
         notes: {
           address: "Razorpay Corporate Office",
