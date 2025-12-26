@@ -66,9 +66,9 @@ export default function PaymentButton({ module_id }) {
                   Authorization: `Bearer ${token}`,
                 },
               })
-              .then(async () => {
+              .then(async (res) => {
                 const response = await axios.get(
-                  `${url}/bin/download-bin/${userInfo.id}`,
+                  `${url}/bin/download-bin/${userInfo.id}/${res.data.order}`,
                   {
                     headers: {
                       "Content-Type": "application/json",
@@ -80,7 +80,8 @@ export default function PaymentButton({ module_id }) {
               });
             alert("Payment successful!");
           } catch (err) {
-            alert("Payment failed: " + err.message);
+            // alert("Payment failed: " + err.message);
+            alert("Try to Login or comeback later");
           }
         },
         prefill: {

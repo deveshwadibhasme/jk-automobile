@@ -8,6 +8,6 @@ router.post('/post-file-data', postFileData)
 
 router.get('/get-file-data/:id', getFileData)
 
-router.get('/download-bin/:id', auth, downloadBin)
+router.get('/download-bin/:id/:order', auth, downloadBin)
 
 export default router

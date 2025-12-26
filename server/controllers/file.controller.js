@@ -4,23 +4,23 @@ import imagekit from '../config/image-kit.js'
 
 const downloadBin = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id, order } = req.params;
 
         const [carFile] = await pool.query('select car_id from car_file where user_id = ?', [id])
         const [file] = await pool.query('select file_url from file_store where car_id = ?', [carFile[0].car_id])
 
-        const [isPaid] = await pool.query('select id from transaction where user_id = ?', [id])
-        const [isDownload] = await pool.query('select file_status from car_file where user_id = ?', [id])
+        const [transaction] = await pool.query('select id from transaction where order_id = ?', [order])
+        // const [isDownload] = await pool.query('select file_status from car_file where user_id = ?', [id])
 
-        if (isPaid.length === 0) {
+        if (transaction.length === 0) {
             return res.status(500).json({ message: 'Payment Has Not Done Yet' });
         }
 
-        await pool.query('update car_file set file_status = ? where car_id = ?', [true, carFile[0].car_id])
+        // await pool.query('update car_file set file_status = ? where car_id = ?', [true, carFile[0].car_id])
 
-        if (isDownload[0].file_status) {
-            return res.status(500).json({ message: 'Payment Expired' });
-        }
+        // if (isDownload[0].file_status) {
+        //     return res.status(500).json({ message: 'Payment Expired' });
+        // }
 
         let filePath = '/' + file[0].file_url.split("/").slice(4, 7).join('/')
 

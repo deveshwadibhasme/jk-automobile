@@ -44,7 +44,7 @@ const verifyCheckOut = async (req, res) => {
         if (razorpay_signature === expectedSign) {
             await pool.query('update transaction set order_id = ? where user_id = ?', [razorpay_order_id, userId[0].id])
 
-            res.status(200).json({ type: 'success', message: 'Payment verified successfully' });
+            res.status(200).json({ type: 'success', message: 'Payment verified successfully', order: razorpay_order_id });
         } else {
             res.status(400).json({ error: 'Invalid payment signature' });
         }

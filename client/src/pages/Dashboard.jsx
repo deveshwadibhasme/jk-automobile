@@ -168,7 +168,7 @@ const FirmwareTable = () => {
             <thead className="bg-gray-100 sticky top-0">
               <tr>
                 {[
-                  "ID",
+                  "Sr. No",
                   "Brand",
                   "Model",
                   "Year",
@@ -188,11 +188,9 @@ const FirmwareTable = () => {
             </thead>
 
             <tbody>
-              {filteredData?.map((item) => (
+              {filteredData?.map((item, i) => (
                 <tr key={item.id} className="hover:bg-gray-100">
-                  <td className="px-4 py-3 text-blue-600 font-bold">
-                    {item.id}
-                  </td>
+                  <td className="px-4 py-3 text-blue-600 font-bold">{i + 1}</td>
                   <td className="px-4 py-3 capitalize">{item.brand}</td>
                   <td className="px-4 py-3">{item.model}</td>
                   <td className="px-4 py-3">{item.year}</td>
