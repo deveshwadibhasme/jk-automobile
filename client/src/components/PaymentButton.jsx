@@ -68,7 +68,7 @@ export default function PaymentButton({ module_id }) {
               })
               .then(async (res) => {
                 const response = await axios.get(
-                  `${url}/bin/download-bin/${userInfo.id}/${res.data.order}`,
+                  `${url}/bin/download-bin/${module_id}/${res.data.order}`,
                   {
                     headers: {
                       "Content-Type": "application/json",

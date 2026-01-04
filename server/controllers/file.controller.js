@@ -6,7 +6,7 @@ const downloadBin = async (req, res) => {
     try {
         const { id, order } = req.params;
 
-        const [carFile] = await pool.query('select car_id from car_file where user_id = ?', [id])
+        const [carFile] = await pool.query('select car_id from car_info where id = ?', [id])
         const [file] = await pool.query('select file_url from file_store where car_id = ?', [carFile[0].car_id])
 
         const [transaction] = await pool.query('select id from transaction where order_id = ?', [order])
