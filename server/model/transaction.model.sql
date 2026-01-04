@@ -1,12 +1,12 @@
-create table if not exists transaction (
-    id int PRIMARY key AUTO_INCREMENT,
-    order_id VARCHAR(250),
-    user_id int,
-    module_id int,
+CREATE TABLE IF NOT EXISTS `transaction` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    module_id INT,
     price VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTMAP,
-    constraint fk_user_transaction FOREIGN KEY (user_id) REFERENCES user (id)
-)
+    order_id VARCHAR(250),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_user_transaction FOREIGN KEY (user_id) REFERENCES user (id)
+);
 
 -- ALTER TABLE `transaction`
 -- ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
