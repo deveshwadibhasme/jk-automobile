@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 
 const LogInPage = () => {
   const { loginAction } = useAuth();
-  const location  = useLocation();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -63,8 +63,10 @@ const LogInPage = () => {
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       <div className="px-10 py-5 border-b border-gray-700">
-        <h1 className="text-3xl font-bold tracking-wider">J.K Automobile</h1>
-        <p className="text-sm text-gray-300 tracking-wide">Motors Group</p>
+        <h1 className="text-3xl font-bold tracking-wider">
+          J.K Electronics Work
+        </h1>
+        {/* <p className="text-sm text-gray-300 tracking-wide">Motors Group</p> */}
       </div>
 
       <div className="grid md:grid-cols-2 min-h-[calc(100vh-80px)] items-center">
@@ -88,19 +90,19 @@ const LogInPage = () => {
               <span className="text-sm text-gray-300">Premium Brands</span>
             </div>
 
-            <div className="text-center">
+            {/* <div className="text-center">
               <span className="text-3xl font-bold text-orange-500 block">
                 200+
               </span>
               <span className="text-sm text-gray-300">Global Locations</span>
-            </div>
+            </div> */}
 
-            <div className="text-center">
+            {/* <div className="text-center">
               <span className="text-3xl font-bold text-orange-500 block">
                 10K+
               </span>
               <span className="text-sm text-gray-300">Happy Clients</span>
-            </div>
+            </div> */}
           </div>
         </div>
 
