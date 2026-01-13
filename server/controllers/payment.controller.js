@@ -18,7 +18,7 @@ const createCheckOut = async (req, res) => {
             currency: 'INR',
             receipt: 'receipt_' + Math.random().toString(36).substring(7),
         };
-
+        await pool.query('delete from transaction where user_id = ? AND order_id IS NULL', [userInfo[0].id])
         await pool.query('insert into transaction (user_id,module_id,price) values(?,?,?)', [userInfo[0].id, id, rows[0].file_price])
         await pool.query('insert into car_file (user_id,car_file_id,file_price,car_id) values(?,?,?,?)', [userInfo[0].id, rows[0].file_id, rows[0].file_price, rows[0].car_id])
 
@@ -43,7 +43,6 @@ const verifyCheckOut = async (req, res) => {
 
         if (razorpay_signature === expectedSign) {
             await pool.query('update transaction set order_id = ? where user_id = ?', [razorpay_order_id, userId[0].id])
-
             res.status(200).json({ type: 'success', message: 'Payment verified successfully', order: razorpay_order_id });
         } else {
             res.status(400).json({ error: 'Invalid payment signature' });

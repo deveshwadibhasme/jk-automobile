@@ -42,7 +42,9 @@ export default function PaymentButton({ module_id }) {
           },
         }
       );
-
+      if (response.message === "You are not authorised") {
+        alert("LogIn To make this payments");
+      }
       const [order, userInfo] = await response.data;
 
       const options = {
@@ -99,7 +101,11 @@ export default function PaymentButton({ module_id }) {
       const rzpay = new Razorpay(options);
       rzpay.open(options);
     } catch (err) {
-      alert("Error creating order: " + err.message);
+      alert(
+        "Error creating order: " +
+          " Please LogIn or Register " +
+          err?.response?.data?.message || err.message
+      );
     }
   };
 

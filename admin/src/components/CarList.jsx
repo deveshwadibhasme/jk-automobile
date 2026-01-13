@@ -9,6 +9,8 @@ const CarList = () => {
   const [error, setError] = useState(null);
   const { token } = useAuth();
 
+  console.log(token);
+
   const LOCAL_URL = "http://localhost:3000";
   const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
 
@@ -21,7 +23,7 @@ const CarList = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      alert(response.result.message)
+      setCars(cars.filter((car) => car.id !== id));
     } catch (err) {
       setError("Failed to fetch car data Try to Log in.");
       console.error("Error fetching car data:", err);
@@ -31,7 +33,7 @@ const CarList = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await axios.get(`${url}/data/get-car-data/id`, {
+        const response = await axios.get(`${url}/data/get-car-data/id/1/10`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -46,6 +48,20 @@ const CarList = () => {
 
     fetchCars();
   }, []);
+
+  if (token === null) {
+    return (
+      <>
+        <div>Log in to access this page</div>
+        <Link
+          className="flex-1 inline-block max-w-[150px] text-center mb-5 w-full py-3 text-gray-800 font-semibold rounded-lg shadow-lg bg-transparent border-2 border-gray-400 hover:bg-gray-100 transition transform hover:scale-105"
+          to={"/"}
+        >
+          Go Back
+        </Link>
+      </>
+    );
+  }
 
   if (loading) {
     return <div>Loading cars...</div>;

@@ -95,7 +95,7 @@ const userLogIn = async (req, res) => {
 
         if (!validPassword) { return res.status(404).json({ message: 'Enter Valid Credentials' }) }
 
-        const token = jwt.sign({ email: existing[0].email, name: existing[0].name }, process.env.JWT_SECRET, { expiresIn: '24h' })
+        const token = jwt.sign({ email: existing[0].email, name: existing[0].name, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '24h' })
 
         res.status(200).json({ message: 'Login Succesfully', token: token, username: existing[0].name })
 
@@ -118,7 +118,7 @@ const adminLogIn = async (req, res) => {
 
         if (!validPassword) { return res.status(404).json({ message: 'Enter Valid Credentials' }) }
 
-        const token = jwt.sign({ email: existing[0].email, name: existing[0].name }, process.env.JWT_SECRET, { expiresIn: '24h' })
+        const token = jwt.sign({ email: existing[0].email, name: existing[0].name, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '24h' })
 
         res.status(200).json({ message: 'Welcome Admin', token: token, role: 'admin' })
 

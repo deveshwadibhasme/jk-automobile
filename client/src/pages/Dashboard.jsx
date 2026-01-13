@@ -12,7 +12,7 @@ const FirmwareTable = () => {
 
   useEffect(() => {
     function fetchData() {
-      axios.get(`${url}/data/get-car-data/id`).then((result) => {
+      axios.get(`${url}/data/get-car-data/id/1/10`).then((result) => {
         setData(result.data.result);
       });
     }

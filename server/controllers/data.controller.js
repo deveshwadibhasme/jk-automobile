@@ -40,19 +40,45 @@ const editCarList = async (req, res) => {
 }
 
 const getCarList = async (req, res) => {
-    const { id } = req.params
+    const { id, page, limit } = req.params
     let data
-
     try {
+        const offset = (parseInt(page) - 1) * parseInt(limit);
         if (id === 'id') {
-            const [rows] = await pool.query('select * from car_list')
-            data = rows
+            const [[{ total }]] = await pool.query(
+                'SELECT COUNT(*) as total FROM car_list'
+            );
+
+            if (total < limit) {
+                const [rows] = await pool.query('select * from car_list')
+                data = rows
+                return res.json({
+                    message: 'Car Data Fetch Succesfully',
+                    result: data,
+                })
+            }
+            const [rows] = await pool.query(
+                'SELECT * FROM car_list LIMIT ? OFFSET ?',
+                [parseInt(limit), offset]
+            );
+
+            return res.json({
+                message: 'Car Data Fetch Succesfully',
+                result: rows,
+                pagination: {
+                    page,
+                    limit,
+                    total,
+                    totalPages: Math.ceil(total / parseInt(limit)),
+                }
+            })
         } else {
             const [rows] = await pool.query('select * from car_list where id = ?', [id])
             data = rows
+            return res.json({
+                result: data,
+            })
         }
-
-        res.status(201).json({ message: 'Car data fetched successfully', result: data });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error', error: error });
@@ -142,6 +168,7 @@ const deleteCarData = async (req, res) => {
 
         await pool.query('delete from car_info where car_id = ?', [id])
         await pool.query('delete from img_store where car_id = ?', [id])
+        await pool.query('delete from file_store where car_id = ?', [id])
         await pool.query('delete from car_list where id = ?', [id])
 
         res.status(201).json({ message: 'Car data delete successfully' });
