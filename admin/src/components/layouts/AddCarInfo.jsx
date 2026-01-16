@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../../AuthContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const AddCarInfo = () => {
@@ -168,7 +168,7 @@ const AddCarInfo = () => {
 
   return (
     <div className="relative min-h-screen py-5 max-w-screen-2xl mx-auto bg-[#302e2e] overflow-hidden font-sans">
-      <div className="relative bg-white/90 backdrop-blur-md p-5 rounded-xl shadow-xl w-full max-w-5xl mx-auto">
+      <div className="relative bg-white/90 backdrop-blur-md p-5 rounded-xl shadow-xl w-full max-w-5xl ml-auto mr-10">
         <form onSubmit={handleSubmit} className="space-y-3">
           <div className="grid md:grid-cols-2 gap-6">
             <Input

@@ -1,6 +1,27 @@
 import pool from "../config/connect-db.js";
 import imagekit from '../config/image-kit.js'
 
+
+const dashBoardData = async (req, res) => {
+    try {
+        const [[totalCars]] = await pool.query("SELECT COUNT(*) AS total FROM car_list");
+        const [[totalUsers]] = await pool.query("SELECT COUNT(*) AS total FROM user");
+        const [[totalTransactions]] = await pool.query("SELECT COUNT(*) AS total FROM transaction WHERE order_id IS NOT NULL");
+        const [[overallEarning]] = await pool.query("SELECT SUM(price) AS total FROM transaction WHERE order_id IS NOT NULL");
+
+        res.status(200).json({
+            totalCars: totalCars.total,
+            totalUsers: totalUsers.total,
+            totalTransactions: totalTransactions.total,
+            overallEarning: overallEarning.total || 0
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error', error: error });
+    }
+
+}
+
 const postCarList = async (req, res) => {
     const { brand, model, year, module, memory, block_number, file_type, admin_id } = req.body
     const admin = req.user
@@ -178,4 +199,4 @@ const deleteCarData = async (req, res) => {
     }
 }
 
-export { postCarList, getCarList, editCarList, postModuleData, getModuleData, deleteCarData }
+export { postCarList, getCarList, editCarList, postModuleData, getModuleData, deleteCarData, dashBoardData }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../../AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 
 const EditForm = () => {
@@ -59,7 +59,7 @@ const EditForm = () => {
   }, []);
 
   const handleSubmit = async (e) => {
-    setLoading(true)
+    setLoading(true);
     e.preventDefault();
     try {
       const response = await axios.post(
@@ -73,7 +73,7 @@ const EditForm = () => {
         }
       );
       alert(response.data.message);
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       console.error("Error uploading data:", error);
       alert(
@@ -107,7 +107,7 @@ const EditForm = () => {
 
   return (
     <div className="relative min-h-screen py-5 max-w-screen-2xl mx-auto bg-[#302e2e] overflow-hidden font-sans">
-      <div className="relative bg-white/90 backdrop-blur-md p-5 rounded-xl shadow-xl w-full max-w-5xl mx-auto">
+      <div className="relative bg-white/90 backdrop-blur-md p-5 rounded-xl shadow-xl w-full max-w-5xl ml-auto mr-10">
         <form onSubmit={handleSubmit} className="space-y-3">
           <div className="grid md:grid-cols-2 gap-6">
             <Input
@@ -185,7 +185,7 @@ const EditForm = () => {
               type="submit"
               className="flex-1 max-w-[150px] py-3 text-white font-semibold rounded-lg shadow-lg bg-linear-to-br from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 transition transform hover:scale-105"
             >
-              {!loading ? 'Update' : 'Updating...'} 
+              {!loading ? "Update" : "Updating..."}
             </button>
 
             <button

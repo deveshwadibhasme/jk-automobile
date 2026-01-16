@@ -3,3 +3,4 @@ node_modules/
 J_Khan-Auto-main/
 .vscode/settings.json
 server/config/connect-db.js
+server/config/connect-db.js

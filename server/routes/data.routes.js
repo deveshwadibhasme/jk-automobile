@@ -1,7 +1,7 @@
 import express from "express";
 import auth from "../middleware/auth.js";
 import roleAuth from "../middleware/roleAuth.js";
-import { editCarList, getCarList, getModuleData, postCarList, postModuleData, deleteCarData } from "../controllers/data.controller.js";
+import { editCarList, getCarList, getModuleData, postCarList, postModuleData, deleteCarData, dashBoardData } from "../controllers/data.controller.js";
 
 const router = express.Router()
 
@@ -12,8 +12,10 @@ router.post('/edit-car-data/:id', auth, roleAuth(['admin']), editCarList)
 router.delete('/delete-car-data/:id', auth, roleAuth(['admin']), deleteCarData)
 
 router.get('/get-car-data/:id/:page/:limit', getCarList)
+router.get('/get-car-data/:id', getCarList)
 router.get('/get-module-data/:id', getModuleData)
 
+router.get('/admin/dashboard', auth, roleAuth(['admin']), dashBoardData)
 
 
 export default router
