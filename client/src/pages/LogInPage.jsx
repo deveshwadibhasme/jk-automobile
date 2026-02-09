@@ -64,7 +64,7 @@ const LogInPage = () => {
     >
       <div className="px-10 py-5 border-b border-gray-700">
         <h1 className="text-3xl font-bold tracking-wider">
-          J.K Electronics Work
+          J.K Auto Electronics Works
         </h1>
         {/* <p className="text-sm text-gray-300 tracking-wide">Motors Group</p> */}
       </div>

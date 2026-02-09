@@ -27,98 +27,90 @@ const ModuleInfo = () => {
     fetchData();
   }, []);
 
-
   return (
     <div className="max-w-screen min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <Link
-        className="absolute top-10 right-10 bg-amber-950 p-2 text-amber-50"
-        to={"/"}
-      >
-        Go Back
-      </Link>
       {data ? (
-        <div className="bg-white shadow-lg rounded-lg p-6 max-w-2xl w-full">
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">
-            Module Information
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <p className="font-semibold text-gray-700">Module Type:</p>
-              <p className="text-gray-600 capitalize">{data[0]?.module_type}</p>
-            </div>
-            <div>
-              <p className="font-semibold text-gray-700">KM/Miles:</p>
-              <p className="text-gray-600">{data[0]?.km_miles}</p>
-            </div>
-            <div>
-              <p className="font-semibold text-gray-700">Engine Type:</p>
-              <p className="text-gray-600 capitalize">{data[0]?.engine_type}</p>
-            </div>
-            <div>
-              <p className="font-semibold text-gray-700">Transmission:</p>
-              <p className="text-gray-600 capitalize">
-                {data[0]?.transmission}
-              </p>
-            </div>
-            <div>
-              <p className="font-semibold text-gray-700">Module Number:</p>
-              <p className="text-gray-600">{data[0]?.module_number}</p>
-            </div>
+        <div className="bg-white shadow-2xl rounded-2xl overflow-hidden max-w-4xl w-full border border-gray-200 relative">
+          <div className="bg-gray-900 p-6 text-white">
+            <h2 className="text-xl font-semibold tracking-tight">
+              Module Details
+              <Link
+                className="absolute text-sm top-7 right-10 bg-white p-2 text-black rounded-2xl"
+                to={"/"}
+              >
+                Go Back
+              </Link>
+            </h2>
+            <p className="text-gray-400 text-sm">Technical Specifications</p>
           </div>
-          <div className="flex flex-col md:flex-row gap-4 justify-center">
-            {data[0]?.module_photo && (
-              <div className="flex flex-col items-center">
-                <p className="font-semibold text-gray-700 mb-2">
-                  Module Photo:
-                </p>
-                <img
-                  className="w-64 h-64 object-contain border rounded-md shadow-sm"
-                  src={data[0]?.module_photo}
-                  alt="Module"
-                />
+
+          <div className="p-6 space-y-4">
+            {[
+              { label: "Module Type", value: data[0]?.module_type },
+              { label: "KM/Miles", value: data[0]?.km_miles },
+              { label: "Engine Type", value: data[0]?.engine_type },
+              { label: "Transmission", value: data[0]?.transmission },
+              { label: "Module Number", value: data[0]?.module_number },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="flex justify-between items-center border-b border-gray-100 pb-2"
+              >
+                <span className="text-gray-500 font-medium">{item.label}</span>
+                <span className="text-gray-900 font-semibold capitalize">
+                  {item.value || "N/A"}
+                </span>
               </div>
-            )}
-            {data[0]?.sticker_photo && (
-              <div className="flex flex-col items-center">
-                <p className="font-semibold text-gray-700 mb-2">
-                  Sticker Photo:
-                </p>
-                <img
-                  className="w-64 h-64 object-contain border rounded-md shadow-sm"
-                  src={data[0]?.sticker_photo}
-                  alt="Sticker"
-                />
-              </div>
-            )}
+            ))}
+
+            <div className="space-y-6 pt-4 flex justify-evenly">
+              {data[0]?.module_photo && (
+                <div className="space-y-2">
+                  <p className="text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    Module Photo
+                  </p>
+                  <img
+                    className="w-full h-48 object-cover rounded-xl border border-gray-200"
+                    src={data[0]?.module_photo}
+                    alt="Module"
+                  />
+                </div>
+              )}
+              {data[0]?.sticker_photo && (
+                <div className="space-y-2">
+                  <p className="text-sm font-bold text-gray-700 uppercase tracking-wider">
+                    Sticker Photo
+                  </p>
+                  <img
+                    className="w-full h-48 object-cover rounded-xl border border-gray-200"
+                    src={data[0]?.sticker_photo}
+                    alt="Sticker"
+                  />
+                </div>
+              )}
+            </div>
+
             {fileData?.length > 0 && (
-              <div className="flex flex-col items-center text-center">
-                <p className="font-semibold text-gray-700 mb-2">
-                  File Information:
-                </p>
-                <p className="text-gray-600">
-                  File Name: {fileData[0]?.file_name}
-                </p>
-                <p className="text-gray-600">
-                  File Size: {fileData[0]?.archive_size / 1000} KB
-                </p>
-                <p className="rounded-xl p-1 my-1 px-3 bg-green-800 text-white">
-                  File Price: Rs {fileData[0]?.file_price}
-                </p>
-                <PaymentButton module_id={fileData[0]?.id} />
-                {/* Add a pay button here, interactive only when user is logged in */}
-                {/* You'll need to implement user authentication and state management for login */}
-                {/* For demonstration, let's assume `isLoggedIn` is a state variable */}
-                {/* <button
-                    className={`mt-4 px-6 py-2 rounded-md text-white ${
-                      isLoggedIn
-                        ? "bg-blue-600 hover:bg-blue-700"
-                        : "bg-gray-400 cursor-not-allowed"
-                    }`}
-                    disabled={!isLoggedIn}
-                    onClick={() => alert("Proceeding to payment!")}
-                  >
-                    Pay Now
-                  </button> */}
+              <div className="mt-8 p-5 bg-gray-50 rounded-2xl border border-gray-200">
+                <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-widest">
+                  Downloadable File
+                </h3>
+                <div className="space-y-1 mb-4">
+                  <p className="text-sm text-gray-600 truncate">
+                    <span className="font-medium">Name:</span>{" "}
+                    {fileData[0]?.file_name}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    <span className="font-medium">Size:</span>{" "}
+                    {fileData[0]?.archive_size / 1000} KB
+                  </p>
+                </div>
+                <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                  <span className="text-lg font-bold text-green-700">
+                    ₹{fileData[0]?.file_price}
+                  </span>
+                  <PaymentButton module_id={fileData[0]?.id} />
+                </div>
               </div>
             )}
           </div>
