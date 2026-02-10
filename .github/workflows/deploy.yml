@@ -1,4 +1,4 @@
-name: Deploy Vite Client to Hostinger
+name: Deploy Vite Apps to Hostinger
 
 on:
   push:
@@ -17,18 +17,27 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: client/package-lock.json
 
-      - name: Install dependencies
+      # CLIENT
+      - name: Install client dependencies
         run: npm install
         working-directory: client
 
-      - name: Build Vite project
+      - name: Build client
         run: npm run build
         working-directory: client
 
-      - name: Upload dist to Hostinger
+      # ADMIN
+      - name: Install admin dependencies
+        run: npm install
+        working-directory: admin
+
+      - name: Build admin
+        run: npm run build
+        working-directory: admin
+
+      # Upload client
+      - name: Upload client
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -36,3 +45,13 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: client/dist/
           server-dir: public_html/
+
+      # Upload admin
+      - name: Upload admin
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: admin/dist/
+          server-dir: public_html/admin/
