@@ -114,17 +114,16 @@ const postModuleData = async (req, res) => {
         engine_type,
         transmission,
         module_number, note, price } = req.body
-
+    const connection = await pool.getConnection();
     try {
-        const [carList] = await pool.query('select id from car_list where id = ?', [module_number])
+        await connection.beginTransaction();
+        const [carList] = await connection.query('select id from car_list where id = ?', [module_number])
         const carId = carList[0].id
-        const [carInfo] = await pool.query('select * from car_info where car_id = ?', [module_number])
-        const [binFile] = await pool.query('select * from file_store where car_id = ?', [module_number])
-
-
+        const [carInfo] = await connection.query('select * from car_info where car_id = ?', [module_number])
+        const [binFile] = await connection.query('select * from file_store where car_id = ?', [module_number])
 
         if (module_photo && sticker_photo && carInfo.length === 0) {
-            await pool.query(
+            await connection.query(
                 `INSERT INTO car_info 
          (module_type, module_photo, sticker_photo, km_miles, engine_type, transmission, module_number, notes, price, car_id)
          VALUES (?,?,?,?,?,?,?,?,?,?)`,
@@ -132,14 +131,14 @@ const postModuleData = async (req, res) => {
             );
         }
         else if (module_photo && carInfo.length !== 0) {
-            await pool.query(
+            await connection.query(
                 `UPDATE car_info 
          SET module_type = ?, module_photo = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ? , notes  = ?, price =  ?
          WHERE car_id = ?`,
                 [module_type, module_photo, km_miles, engine_type, transmission, module_number, note, price, carId]
             );
         } else if (sticker_photo && carInfo.length !== 0) {
-            await pool.query(
+            await connection.query(
                 `UPDATE car_info 
          SET module_type = ?, sticker_photo = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ?, notes = ?, price = ?
          WHERE car_id = ?`,
@@ -147,7 +146,7 @@ const postModuleData = async (req, res) => {
             );
         }
         else if (carInfo.length !== 0) {
-            await pool.query(
+            await connection.query(
                 `UPDATE car_info 
          SET module_type = ?, km_miles = ?, engine_type = ?, transmission = ?, module_number = ?, notes = ?, price = ?
          WHERE car_id = ?`,
@@ -155,13 +154,17 @@ const postModuleData = async (req, res) => {
             );
         }
         if (binFile.length !== 0) {
-            await pool.query('update file_store set file_price = ?, file_number = ? where car_id = ?', [price, carId, carId])
+            await connection.query('update file_store set file_price = ?, file_number = ? where car_id = ?', [price, carId, carId])
         }
 
+        await connection.commit();
         res.status(201).json({ message: 'Modules data posted successfully' });
     } catch (error) {
+        await connection.rollback();
         console.error(error);
         res.status(500).json({ message: 'Server Error', error: error });
+    } finally {
+        connection.release();
     }
 }
 
@@ -180,22 +183,28 @@ const getModuleData = async (req, res) => {
 
 const deleteCarData = async (req, res) => {
     const { id } = req.params
+    const connection = await pool.getConnection();
     try {
-        const [images] = await pool.query('select * from img_store where car_id = ?', [id])
+        await connection.beginTransaction();
+        const [images] = await connection.query('select * from img_store where car_id = ?', [id])
 
         for (const image of images) {
             await imagekit.deleteFile(image.file_id)
         }
 
-        await pool.query('delete from car_info where car_id = ?', [id])
-        await pool.query('delete from img_store where car_id = ?', [id])
-        await pool.query('delete from file_store where car_id = ?', [id])
-        await pool.query('delete from car_list where id = ?', [id])
+        await connection.query('delete from car_info where car_id = ?', [id])
+        await connection.query('delete from img_store where car_id = ?', [id])
+        await connection.query('delete from file_store where car_id = ?', [id])
+        await connection.query('delete from car_list where id = ?', [id])
 
+        await connection.commit();
         res.status(201).json({ message: 'Car data delete successfully' });
     } catch (error) {
+        await connection.rollback();
         console.error(error);
         res.status(500).json({ message: 'Server Error', error: error });
+    } finally {
+        connection.release();
     }
 }
 

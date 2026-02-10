@@ -42,43 +42,48 @@ const userSignUp = async (req, res) => {
 const verifyUserAndRegister = async (req, res) => {
     const { name, email, mobile_no, password, otp } = req.body
 
-    if (!name && !email && !mobile_no && !password && !otp) return res.status(400).json({ message: 'All Field are mandatory' })
+    if (!name || !email || !mobile_no || !password || !otp) return res.status(400).json({ message: 'All Field are mandatory' })
 
-
+    const connection = await pool.getConnection();
     try {
-        const [rows] = await pool.query(
+        await connection.beginTransaction();
+
+        const [rows] = await connection.query(
             "SELECT otp, expire_at FROM otp_store WHERE email = ?",
             [email]
         );
-
         if (!rows.length) {
+            await connection.rollback();
             return res.status(400).json({ message: 'Invalid or expired OTP. Verify Email Again' });
-
         }
 
         const nowUTC = new Date();
         const expired = nowUTC > new Date(rows[0].expire_at + 'Z');
 
         if (expired) {
-            await pool.query('DELETE FROM otp_store WHERE email = ?', [email]);
+            await connection.query('DELETE FROM otp_store WHERE email = ?', [email]);
+            await connection.commit();
             return res.status(400).json({ message: 'Invalid or expired OTP. Verify Email Again' });
         }
 
         if (otp !== rows[0].otp) {
+            await connection.rollback();
             return res.status(400).json({ message: 'Invalid OTP. Please try again.' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10)
 
-        await pool.query('insert into user (name, email, mobile_no, password) values(?,?,?,?)', [name, email, mobile_no, hashedPassword])
+        await connection.query('insert into user (name, email, mobile_no, password) values(?,?,?,?)', [name, email, mobile_no, hashedPassword])
+        await connection.query('delete from otp_store where email = ?', [email])
 
-        await pool.query('delete from otp_store where email = ?', [email])
-
+        await connection.commit();
         return res.status(200).json({ message: 'Registration Successfull' })
-
     } catch (error) {
+        await connection.rollback();
         console.error(error);
         res.status(500).json({ message: 'Server Error', error: error })
+    } finally {
+        connection.release();
     }
 }
 

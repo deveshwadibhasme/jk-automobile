@@ -3,11 +3,13 @@ import imagekit from '../config/image-kit.js'
 
 const uploadFile = async (req, res) => {
   const carId = req.body.car_id
+  const connection = await pool.getConnection();
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: "No files uploaded" });
     }
 
+    await connection.beginTransaction();
     const [images] = await pool.query('select * from img_store where car_id = ?', [carId])
     const [binFile] = await pool.query('select * from file_store where car_id = ?', [carId])
 
@@ -15,17 +17,17 @@ const uploadFile = async (req, res) => {
       for (const image of images) {
         if (image && image.file_id) {
           await imagekit.deleteFile(image.file_id)
-          await pool.query('delete from img_store where car_id = ?', [carId])
         }
       }
+      await connection.query('delete from img_store where car_id = ?', [carId])
     }
     if (binFile.length !== 0) {
       for (const bin of binFile) {
         if (bin && bin.file_id) {
           await imagekit.deleteFile(bin.file_id)
-          await pool.query('delete from file_store where car_id = ?', [carId])
         }
       }
+      await connection.query('delete from file_store where car_id = ?', [carId])
     }
 
     const uploadedFiles = [];
@@ -42,14 +44,15 @@ const uploadFile = async (req, res) => {
       });
 
       if (fileType === "image") {
-        await pool.query('insert into img_store (car_id,file_id,file_url) values (?,?,?)', [carId, uploaded.fileId, uploaded.url])
+        await connection.query('insert into img_store (car_id,file_id,file_url) values (?,?,?)', [carId, uploaded.fileId, uploaded.url])
       }
       else {
-        await pool.query('insert into file_store (file_id,car_id,file_url,file_name,archive_size) values (?,?,?,?,?)', [uploaded.fileId, carId, uploaded.url, fileName, uploaded.size])
+        await connection.query('insert into file_store (file_id,car_id,file_url,file_name,archive_size) values (?,?,?,?,?)', [uploaded.fileId, carId, uploaded.url, fileName, uploaded.size])
       }
 
       uploadedFiles.push({ file: uploaded.fileId, url: uploaded.url });
     }
+    await connection.commit();
 
     return res.json({
       success: true,
@@ -57,8 +60,11 @@ const uploadFile = async (req, res) => {
       files: uploadedFiles
     });
   } catch (err) {
+    await connection.rollback();
     console.error(err);
     res.status(500).json({ error: "Upload failed" });
+  } finally {
+    connection.release();
   }
 }
 
