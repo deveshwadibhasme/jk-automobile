@@ -8,9 +8,10 @@ import {
   faBars,
   faTimes,
   faSignInAlt,
+  faInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "/jk-logo.png";
 
 const Header = () => {
@@ -39,40 +40,45 @@ const Header = () => {
         <div className="max-w-[1400px] mx-auto flex justify-between items-center px-5 py-4 border-b border-[#333]">
           {/* Logo */}
           <div className="flex items-center w-32 h-10">
-            <img
-              src={logo}
-              className="w-full h-full"
-              alt=""
-            />
+            <img src={logo} className="w-full h-full" alt="" />
           </div>
 
           <nav className="hidden md:flex gap-5 text-gray-300">
             <div className="flex items-center gap-5">
-              <div className="cursor-pointer px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#2d2d2d] hover:text-white transition">
+              <Link
+                to={"/"}
+                className="cursor-pointer px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#2d2d2d] hover:text-white transition"
+              >
                 <FontAwesomeIcon icon={faHouse} />
                 Home
-              </div>
+              </Link>
 
               <span className="text-gray-500">|</span>
 
-              <div className="cursor-pointer px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#2d2d2d] hover:text-white transition">
-                <FontAwesomeIcon icon={faWrench} />
-                Service Info
-              </div>
+              <Link
+                to={"/terms"}
+                className="cursor-pointer px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#2d2d2d] hover:text-white transition"
+              >
+                <FontAwesomeIcon icon={faInfo} />
+                Terms and conditions
+              </Link>
 
               <span className="text-gray-500">|</span>
 
-              <div className="cursor-pointer px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#2d2d2d] hover:text-white transition">
+              {/* <div className="cursor-pointer px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#2d2d2d] hover:text-white transition">
                 <FontAwesomeIcon icon={faCircleQuestion} />
                 Help
-              </div>
+              </div> */}
             </div>
           </nav>
 
           <div className="hidden md:flex items-center gap-5">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
-                  <span className="text-sm font-bold"> {name && ('Welcome, ' + name.split(" ")[0])}</span>
+                <span className="text-sm font-bold">
+                  {" "}
+                  {name && "Welcome, " + name.split(" ")[0]}
+                </span>
                 <div className="w-8 h-8 rounded-full bg-linear-to-br from-gray-400 to-gray-600 flex items-center justify-center text-sm">
                   <FontAwesomeIcon icon={faUser} />
                 </div>
@@ -129,17 +135,17 @@ const Header = () => {
                 className="flex items-center gap-3 text-gray-300 px-4 py-3 rounded-md hover:bg-[#2d2d2d] hover:text-white transition"
                 onClick={closeMobileMenu}
               >
-                <FontAwesomeIcon icon={faWrench} />
-                Service Info
+                <FontAwesomeIcon icon={faInfo} />
+                Term and Condition
               </div>
 
-              <div
+              {/* <div
                 className="flex items-center gap-3 text-gray-300 px-4 py-3 rounded-md hover:bg-[#2d2d2d] hover:text-white transition"
                 onClick={closeMobileMenu}
               >
                 <FontAwesomeIcon icon={faCircleQuestion} />
                 Help
-              </div>
+              </div> */}
 
               <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-[#333]">
                 <button
