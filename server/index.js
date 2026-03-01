@@ -11,7 +11,9 @@ import paymentRoute from './routes/payment.route.js'
 
 const app = express();
 
-app.use(cors({ origin: "*" }))
+const allowedOrigin = ['https://jkautoelectronicworks.com', 'https://admin.jkautoelectronicworks.com/',]
+
+app.use(cors({ origin: allowedOrigin }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 

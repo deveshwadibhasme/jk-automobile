@@ -9,6 +9,7 @@ import {
   faTimes,
   faSignInAlt,
   faInfo,
+  faBucket,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -65,10 +66,15 @@ const Header = () => {
 
               <span className="text-gray-500">|</span>
 
-              {/* <div className="cursor-pointer px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#2d2d2d] hover:text-white transition">
-                <FontAwesomeIcon icon={faCircleQuestion} />
-                Help
-              </div> */}
+              <a
+                target="_blank"
+                href="https://tnm.jkautoelectronicworks.com/"
+                className="flex items-center gap-3 text-gray-300 px-4 py-3 rounded-md hover:bg-[#2d2d2d] hover:text-white transition"
+                onClick={closeMobileMenu}
+              >
+                <FontAwesomeIcon icon={faBucket} />
+                Buy TNM7000
+              </a>
             </div>
           </nav>
 
@@ -139,13 +145,14 @@ const Header = () => {
                 Term and Condition
               </div>
 
-              {/* <div
+              <div
+                href="https://tnm.jkautoelectronicworks.com/"
                 className="flex items-center gap-3 text-gray-300 px-4 py-3 rounded-md hover:bg-[#2d2d2d] hover:text-white transition"
                 onClick={closeMobileMenu}
               >
                 <FontAwesomeIcon icon={faCircleQuestion} />
-                Help
-              </div> */}
+                Buy TNM7000
+              </div>
 
               <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-[#333]">
                 <button
