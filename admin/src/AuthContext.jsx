@@ -1,8 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useState } from "react";
-import { useEffect } from "react";
 import { useContext } from "react";
 import { createContext } from "react";
-import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext(null);
 
@@ -18,37 +17,26 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [name, setName] = useState("");
   const [token, setToken] = useState(() => localStorage.getItem("token"));
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken && !token) {
-      setToken(storedToken);
-    }
-  }, []);
 
   const loginAction = (data) => {
-    if (data.role === "admin") {
-      navigate("http://localhost:5173/");
-    }
     setToken(data.token);
     setUser(data.user);
-    setName(data.username);
+    setName(data.username ?? data.user?.name ?? "");
     localStorage.setItem("token", data.token);
-    navigate("/");
   };
 
   const logOut = () => {
     setUser(null);
+    setName("");
     setToken(null);
     localStorage.removeItem("token");
-    navigate("/login");
   };
 
   const value = {
     token,
     user,
     name,
+    isAuthenticated: Boolean(token),
     loginAction,
     logOut,
   };

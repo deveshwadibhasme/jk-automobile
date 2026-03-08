@@ -22,43 +22,23 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: (
-          <AuthProvider>
-            <Dashboard />
-          </AuthProvider>
-        ),
+        element: <Dashboard />,
       },
       {
         path: "/list",
-        element: (
-          <AuthProvider>
-            <VehicleList />
-          </AuthProvider>
-        ),
+        element: <VehicleList />,
       },
       {
         path: "/edit-form/:id",
-        element: (
-          <AuthProvider>
-            <EditForm />
-          </AuthProvider>
-        ),
+        element: <EditForm />,
       },
       {
         path: "/car-info/:id",
-        element: (
-          <AuthProvider>
-            <AddCarInfo />
-          </AuthProvider>
-        ),
+        element: <AddCarInfo />,
       },
       {
         path: "/upload",
-        element: (
-          <AuthProvider>
-            <FormToUpload />
-          </AuthProvider>
-        ),
+        element: <FormToUpload />,
       },
     ],
   },

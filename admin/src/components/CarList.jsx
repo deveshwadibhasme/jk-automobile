@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+import { API_BASE_URL } from "../config/api";
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
@@ -9,16 +10,9 @@ const CarList = () => {
   const [error, setError] = useState(null);
   const { token } = useAuth();
 
-  console.log(token);
-
-  const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
-
-  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
-
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`${url}/data/delete-car-data/${id}`, {
+      await axios.delete(`${API_BASE_URL}/data/delete-car-data/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -33,7 +27,7 @@ const CarList = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await axios.get(`${url}/data/get-car-data/id/1/10`, {
+        const response = await axios.get(`${API_BASE_URL}/data/get-car-data/id/1/10`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -47,7 +41,7 @@ const CarList = () => {
     };
 
     fetchCars();
-  }, []);
+  }, [token]);
 
   if (token === null) {
     return (

@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../AuthContext.jsx";
+import { API_BASE_URL } from "../config/api";
 
 const LogInPage = () => {
   const { loginAction } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     rememberMe: false,
   });
-  const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
-
-  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -28,16 +27,17 @@ const LogInPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     axios
-      .post(`${url}/auth/admin/login`, formData, {
+      .post(`${API_BASE_URL}/auth/admin/login`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
       })
       .then((response) => {
-        setLoading(true);
         alert(response.data.message);
         loginAction(response.data);
+        navigate("/");
       })
       .catch((error) => {
         console.error(
@@ -169,8 +169,9 @@ const LogInPage = () => {
               {/* Submit */}
               <button
                 type="submit"
+                disabled={loading}
                 className="py-3 rounded-lg bg-linear-to-r from-orange-500 to-orange-400 font-semibold
-                           hover:-translate-y-1 transition shadow-lg"
+                           hover:-translate-y-1 transition shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {!loading ? "Sign in" : "Signing...."}
               </button>

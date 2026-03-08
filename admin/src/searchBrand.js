@@ -540,7 +540,7 @@ function sortModel(brand) {
   }
 }
 
-const sortedBrand = (query) => {
+const sortedBrand = () => {
   const brands = carBrands.map(({ brand }) => brand)
   return brands
   // let sorted = []

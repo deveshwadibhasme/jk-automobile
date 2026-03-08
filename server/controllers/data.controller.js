@@ -162,7 +162,7 @@ const postModuleData = async (req, res) => {
     } catch (error) {
         await connection.rollback();
         console.error(error);
-        res.status(500).json({ message: 'Server Error', error: error });
+        res.status(500).json({ message: 'Error due to input error', error: error });
     } finally {
         connection.release();
     }

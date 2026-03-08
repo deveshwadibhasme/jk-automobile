@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from "../config/api";
+import { FaCar, FaUsers, FaExchangeAlt, FaWallet } from "react-icons/fa";
 
 const Dashboard = () => {
   const { token, logOut } = useAuth();
@@ -10,10 +12,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
-  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
-
   useEffect(() => {
     const fetchDashboardData = async () => {
       if (!token) {
@@ -21,11 +19,14 @@ const Dashboard = () => {
         return;
       }
       try {
-        const response = await axios.get(`${url}/data/admin/dashboard`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${API_BASE_URL}/data/admin/dashboard`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setDashboardData(response.data);
       } catch (err) {
         console.error("Error fetching dashboard data:", err);
@@ -42,7 +43,7 @@ const Dashboard = () => {
     };
 
     fetchDashboardData();
-  }, [token, navigate, logOut, url]);
+  }, [token, navigate, logOut]);
 
   if (loading) {
     return (
@@ -75,34 +76,54 @@ const Dashboard = () => {
           Admin Dashboard
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-blue-100 p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold text-blue-800 mb-2">
-              Total Cars
-            </h2>
-            <p className="text-3xl font-bold text-blue-600">
-              {dashboardData.totalCars}
-            </p>
+          <div className="bg-blue-50 p-6 rounded-xl border border-blue-100 shadow-sm flex items-center gap-5">
+            <div className="p-4 bg-blue-600 rounded-lg text-white">
+              <FaCar size={24} />
+            </div>
+            <div>
+              <h2 className="text-sm font-medium text-blue-800 uppercase tracking-wider">
+                Total Cars
+              </h2>
+              <p className="text-3xl font-bold text-gray-900">
+                {dashboardData.totalCars}
+              </p>
+            </div>
           </div>
-          <div className="bg-green-100 p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold text-green-800 mb-2">
-              Total Users
-            </h2>
-            <p className="text-3xl font-bold text-green-600">
-              {dashboardData.totalUsers}
-            </p>
+          <div className="bg-green-50 p-6 rounded-xl border border-green-100 shadow-sm flex items-center gap-5">
+            <div className="p-4 bg-green-600 rounded-lg text-white">
+              <FaUsers size={24} />
+            </div>
+            <div>
+              <h2 className="text-sm font-medium text-green-800 uppercase tracking-wider">
+                Total Users
+              </h2>
+              <p className="text-3xl font-bold text-gray-900">
+                {dashboardData.totalUsers}
+              </p>
+            </div>
           </div>
-          <div className="bg-yellow-100 p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold text-yellow-800 mb-2">
-              Total Transaction
-            </h2>
-            <p className="text-3xl font-bold text-yellow-600">
-              {dashboardData.totalTransactions}
-            </p>
+          <div className="bg-purple-50 p-6 rounded-xl border border-purple-100 shadow-sm flex items-center gap-5">
+            <div className="p-4 bg-purple-600 rounded-lg text-white">
+              <FaExchangeAlt size={24} />
+            </div>
+            <div>
+              <h2 className="text-sm font-medium text-purple-800 uppercase tracking-wider">
+                Transactions
+              </h2>
+              <p className="text-3xl font-bold text-gray-900">
+                {dashboardData.totalTransactions}
+              </p>
+            </div>
           </div>
-          <div className="bg-yellow-100 p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold text-yellow-800 mb-2">
-              Overall Earning
-            </h2>
+          <div className="bg-amber-50 p-6 rounded-xl border border-amber-100 shadow-sm flex items-center gap-5 lg:col-span-3">
+            <div className="p-4 bg-amber-600 rounded-lg text-white">
+              <FaWallet size={24} />
+            </div>
+            <div>
+              <h2 className="text-sm font-medium text-amber-800 uppercase tracking-wider">
+                Overall Earning
+              </h2>
+            </div>
             <p className="text-3xl font-bold text-yellow-600">
               {dashboardData.overallEarning.toLocaleString("en-IN")} Rs
             </p>

@@ -4,38 +4,36 @@ import imagekit from '../config/image-kit.js'
 const uploadFile = async (req, res) => {
   const carId = req.body.car_id
   const connection = await pool.getConnection();
+  const uploads = []
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: "No files uploaded" });
     }
 
     await connection.beginTransaction();
-    const [images] = await pool.query('select * from img_store where car_id = ?', [carId])
-    const [binFile] = await pool.query('select * from file_store where car_id = ?', [carId])
-
-    if (images.length !== 0) {
-      for (const image of images) {
-        if (image && image.file_id) {
-          await imagekit.deleteFile(image.file_id)
-        }
-      }
-      await connection.query('delete from img_store where car_id = ?', [carId])
-    }
-    if (binFile.length !== 0) {
-      for (const bin of binFile) {
-        if (bin && bin.file_id) {
-          await imagekit.deleteFile(bin.file_id)
-        }
-      }
-      await connection.query('delete from file_store where car_id = ?', [carId])
-    }
-
-    const uploadedFiles = [];
 
     for (const file of req.files) {
+      const fileType = file.mimetype.split("/")[0];
+
+      if (fileType === "image") {
+        const [images] = await connection.query('select * from img_store where car_id = ?', [carId]);
+        if (images.length !== 0) {
+          for (const image of images) {
+            await imagekit.deleteFile(image.file_id);
+          }
+          await connection.query('delete from img_store where car_id = ?', [carId]);
+        }
+      } else {
+        const [binFiles] = await connection.query('select * from file_store where car_id = ?', [carId]);
+        if (binFiles.length !== 0) {
+          for (const bin of binFiles) {
+            await imagekit.deleteFile(bin.file_id);
+          }
+          await connection.query('delete from file_store where car_id = ?', [carId]);
+        }
+      }
       const fileExt = file.originalname.split(".").pop();
       const fileName = file.originalname.split(".")[0] + '-' + Math.floor(Math.random() * 4000 + 1000) + "." + fileExt;
-      const fileType = file.mimetype.split("/")[0]
 
       const uploaded = await imagekit.upload({
         file: file.buffer,
@@ -49,16 +47,16 @@ const uploadFile = async (req, res) => {
       else {
         await connection.query('insert into file_store (file_id,car_id,file_url,file_name,archive_size) values (?,?,?,?,?)', [uploaded.fileId, carId, uploaded.url, fileName, uploaded.size])
       }
-
-      uploadedFiles.push({ file: uploaded.fileId, url: uploaded.url });
+      uploads.push(uploaded)
     }
     await connection.commit();
-
     return res.json({
       success: true,
       message: "File Uploaded",
-      files: uploadedFiles
+      result: uploads
     });
+
+
   } catch (err) {
     await connection.rollback();
     console.error(err);
