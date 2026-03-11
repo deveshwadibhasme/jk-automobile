@@ -129,30 +129,30 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div className="w-full h-full bg-gray-600 text-white z-10 relative block md:hidden">
             <nav className="flex flex-col p-5 gap-3">
-              <div
+              <a
                 className="flex items-center gap-3 text-gray-300 px-4 py-3 rounded-md hover:bg-[#2d2d2d] hover:text-white transition"
                 onClick={closeMobileMenu}
               >
                 <FontAwesomeIcon icon={faHouse} />
                 Home
-              </div>
+              </a>
 
-              <div
+              <a
                 className="flex items-center gap-3 text-gray-300 px-4 py-3 rounded-md hover:bg-[#2d2d2d] hover:text-white transition"
                 onClick={closeMobileMenu}
               >
                 <FontAwesomeIcon icon={faInfo} />
                 Term and Condition
-              </div>
+              </a>
 
-              <div
+              <a
                 href="https://tnm.jkautoelectronicworks.com/"
                 className="flex items-center gap-3 text-gray-300 px-4 py-3 rounded-md hover:bg-[#2d2d2d] hover:text-white transition"
                 onClick={closeMobileMenu}
               >
                 <FontAwesomeIcon icon={faCircleQuestion} />
                 Buy TNM7000
-              </div>
+              </a>
 
               <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-[#333]">
                 <button

@@ -25,7 +25,7 @@ export default function PaymentButton({ module_id }) {
 
   const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
-  const RAZORPAY_KEY_ID = "rzp_test_uKcZGSMuN7tEhw";
+  const RAZORPAY_KEY_ID = "rzp_test_SPaI6BBGUMk2HC";
 
   const handlePayment = async () => {
     if (token === null) {
