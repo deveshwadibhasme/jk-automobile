@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 
-
 const RegistrationPage = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -15,13 +14,12 @@ const RegistrationPage = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const { navigate } = useNavigate();
+  const navigate = useNavigate();
 
-  const LOCAL_URL = 'http://localhost:3000'
-  const PUBLIC_URL = 'https://jk-automobile-9xtf.onrender.com'
+  const LOCAL_URL = "http://localhost:3000";
+  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
 
-  const url = location.hostname === 'localhost' ? LOCAL_URL : PUBLIC_URL
-
+  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -32,8 +30,8 @@ const RegistrationPage = () => {
   };
 
   const handleOTP = () => {
-
-    axios.post(
+    axios
+      .post(
         `${url}/auth/user/sign-up`,
         { email: formData.email },
         {
@@ -46,29 +44,38 @@ const RegistrationPage = () => {
         alert(response.data.message);
       })
       .catch((error) => {
-        console.error("Error sending OTP:", error.response ? error.response.data : error.message);
-        alert(error.response?.data?.message || "Failed to send OTP. Please try again.");
+        console.error(
+          "Error sending OTP:",
+          error.response ? error.response.data : error.message
+        );
+        alert(
+          error.response?.data?.message ||
+            "Failed to send OTP. Please try again."
+        );
       });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-     axios.post(
-        `${url}/auth/user/verify-and-register`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+    axios
+      .post(`${url}/auth/user/verify-and-register`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         alert("Registration successful!");
-        navigate('/login')
+        navigate("/login");
       })
       .catch((error) => {
-        console.error("Error during registration:", error.response ? error.response.data : error.message);
-        alert(error.response?.data?.message || "Registration failed. Please check your details.");
+        console.error(
+          "Error during registration:",
+          error.response ? error.response.data : error.message
+        );
+        alert(
+          error.response?.data?.message ||
+            "Registration failed. Please check your details."
+        );
       });
   };
 
@@ -177,7 +184,7 @@ const RegistrationPage = () => {
 
             <div className="relative mt-2">
               <input
-                type="text" 
+                type="text"
                 name="mobile_no"
                 value={formData.mobile_no}
                 onChange={handleChange}

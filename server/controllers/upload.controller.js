@@ -3,35 +3,25 @@ import imagekit from '../config/image-kit.js'
 
 const uploadFile = async (req, res) => {
   const carId = req.body.car_id
-  const connection = await pool.getConnection();
   const uploads = []
   try {
-    if (!req.files || req.files.length === 0) {
+    if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).json({ error: "No files uploaded" });
     }
 
-    await connection.beginTransaction();
+    const allFiles = Object.values(req.files).flat();
 
-    for (const file of req.files) {
+    for (const file of allFiles) {
       const fileType = file.mimetype.split("/")[0];
 
-      if (fileType === "image") {
-        const [images] = await connection.query('select * from img_store where car_id = ?', [carId]);
-        if (images.length !== 0) {
-          for (const image of images) {
-            await imagekit.deleteFile(image.file_id);
-          }
-          await connection.query('delete from img_store where car_id = ?', [carId]);
+      const [binFiles] = await pool.query('select * from file_store where car_id = ?', [carId]);
+      if (binFiles.length !== 0) {
+        for (const bin of binFiles) {
+          await imagekit.deleteFile(bin.file_id);
         }
-      } else {
-        const [binFiles] = await connection.query('select * from file_store where car_id = ?', [carId]);
-        if (binFiles.length !== 0) {
-          for (const bin of binFiles) {
-            await imagekit.deleteFile(bin.file_id);
-          }
-          await connection.query('delete from file_store where car_id = ?', [carId]);
-        }
+        await pool.query('delete from file_store where car_id = ?', [carId]);
       }
+
       const fileExt = file.originalname.split(".").pop();
       const fileName = file.originalname.split(".")[0] + '-' + Math.floor(Math.random() * 4000 + 1000) + "." + fileExt;
 
@@ -42,27 +32,22 @@ const uploadFile = async (req, res) => {
       });
 
       if (fileType === "image") {
-        await connection.query('insert into img_store (car_id,file_id,file_url) values (?,?,?)', [carId, uploaded.fileId, uploaded.url])
+        await pool.query('insert into img_store (car_id,file_id,file_url) values (?,?,?)', [carId, uploaded.fileId, uploaded.url])
       }
       else {
-        await connection.query('insert into file_store (file_id,car_id,file_url,file_name,archive_size) values (?,?,?,?,?)', [uploaded.fileId, carId, uploaded.url, fileName, uploaded.size])
+        await pool.query('insert into file_store (file_id,car_id,file_url,file_name,archive_size) values (?,?,?,?,?)', [uploaded.fileId, carId, uploaded.url, fileName, uploaded.size])
       }
       uploads.push(uploaded)
     }
-    await connection.commit();
+
     return res.json({
       success: true,
       message: "File Uploaded",
       result: uploads
     });
-
-
   } catch (err) {
-    await connection.rollback();
     console.error(err);
     res.status(500).json({ error: "Upload failed" });
-  } finally {
-    connection.release();
   }
 }
 
