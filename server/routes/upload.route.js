@@ -6,7 +6,7 @@ import roleAuth from "../middleware/roleAuth.js";
 
 const router = express.Router();
 
-router.post("/upload", upload.array("file"), auth, roleAuth(['admin']), uploadFile)
+router.post("/upload", auth, roleAuth(['admin']), upload.array("file"), uploadFile)
 
 
 // router.put("/update-file/:fileId", upload.single("file"), updateFile);
