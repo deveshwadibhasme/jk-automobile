@@ -106,6 +106,7 @@ const EditForm = () => {
         }
       );
       alert(response.data.message);
+      navigate("/list");
     } catch (error) {
       console.error("Error uploading data:", error);
     } finally {
@@ -265,7 +266,7 @@ const EditForm = () => {
             <button
               type="submit"
               disabled={loading || !token}
-              className="flex-1 min-w-[140px] max-w-[180px] py-3 text-white font-semibold rounded-lg shadow-lg bg-gradient-to-br from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 transition transform hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50"
+              className="flex-1 min-w-[140px] max-w-[180px] py-3 text-white font-semibold rounded-lg shadow-lg bg-linear-to-br from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 transition transform hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <FaSave size={18} />
               {!loading ? "Update" : "Updating..."}
