@@ -10,17 +10,10 @@ const uploadFile = async (req, res) => {
     }
 
     const allFiles = Object.values(req.files).flat();
+    const [binFiles] = await pool.query('select * from file_store where car_id = ?', [carId]);
 
     for (const file of allFiles) {
       const fileType = file.mimetype.split("/")[0];
-
-      const [binFiles] = await pool.query('select * from file_store where car_id = ?', [carId]);
-      if (binFiles.length !== 0) {
-        for (const bin of binFiles) {
-          await imagekit.deleteFile(bin.file_id);
-        }
-        await pool.query('delete from file_store where car_id = ?', [carId]);
-      }
 
       const fileExt = file.originalname.split(".").pop();
       const fileName = file.originalname.split(".")[0] + '-' + Math.floor(Math.random() * 4000 + 1000) + "." + fileExt;
@@ -35,6 +28,10 @@ const uploadFile = async (req, res) => {
         await pool.query('insert into img_store (car_id,file_id,file_url) values (?,?,?)', [carId, uploaded.fileId, uploaded.url])
       }
       else {
+        if (binFiles.length !== 0) {
+          await imagekit.deleteFile(bin.file_id);
+          await pool.query('delete from file_store where car_id = ?', [carId]);
+        }
         await pool.query('insert into file_store (file_id,car_id,file_url,file_name,archive_size) values (?,?,?,?,?)', [uploaded.fileId, carId, uploaded.url, fileName, uploaded.size])
       }
       uploads.push(uploaded)
