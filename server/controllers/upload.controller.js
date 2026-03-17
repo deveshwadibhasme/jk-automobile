@@ -29,7 +29,7 @@ const uploadFile = async (req, res) => {
       }
       else {
         if (binFiles.length !== 0) {
-          await imagekit.deleteFile(binFiles.file_id);
+          await imagekit.deleteFile(binFiles[0].file_id);
           await pool.query('delete from file_store where car_id = ?', [carId]);
         }
         await pool.query('insert into file_store (file_id,car_id,file_url,file_name,archive_size) values (?,?,?,?,?)', [uploaded.fileId, carId, uploaded.url, fileName, uploaded.size])
