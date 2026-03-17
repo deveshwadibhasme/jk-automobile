@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useRazorpay } from "react-razorpay";
 import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function PaymentButton({ module_id }) {
   const { token } = useAuth();
@@ -19,13 +20,14 @@ export default function PaymentButton({ module_id }) {
   }
 
   const { Razorpay } = useRazorpay();
+  const navigate = useNavigate();
 
   const LOCAL_URL = "http://localhost:3000";
   const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
 
   const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
-  const RAZORPAY_KEY_ID = "rzp_test_SPaI6BBGUMk2HC";
+  const RAZORPAY_KEY_ID = "rzp_live_SPzDzAzWzDqflz";
 
   const handlePayment = async () => {
     if (token === null) {
@@ -106,6 +108,9 @@ export default function PaymentButton({ module_id }) {
           " Please LogIn or Register " +
           err?.response?.data?.message || err.message
       );
+      if (confirm("You have to register before payment !!")) {
+        navigate("/login");
+      }
     }
   };
 
