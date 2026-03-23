@@ -17,12 +17,18 @@ const ModuleInfo = () => {
 
   useEffect(() => {
     function fetchData() {
-      axios.get(`${url}/data/get-module-data/${id}`).then((result) => {
-        setData(result.data.result);
-      });
-      axios.get(`${url}/bin/get-file-data/${id}`).then((result) => {
-        setFileData(result.data.result);
-      });
+      axios
+        .get(
+          `https://jk-automobile-9xtf.onrender.com/data/get-module-data/${id}`
+        )
+        .then((result) => {
+          setData(result.data.result);
+        });
+      axios
+        .get(`https://jk-automobile-9xtf.onrender.com/bin/get-file-data/${id}`)
+        .then((result) => {
+          setFileData(result.data.result);
+        });
     }
     fetchData();
   }, []);

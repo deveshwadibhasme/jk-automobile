@@ -29,11 +29,15 @@ const LogInPage = () => {
     e.preventDefault();
     setLoading(true);
     axios
-      .post(`${API_BASE_URL}/auth/admin/login`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      .post(
+        `https://jk-automobile-9xtf.onrender.com/auth/admin/login`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         alert(response.data.message);
         loginAction(response.data);

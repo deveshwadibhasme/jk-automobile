@@ -31,11 +31,15 @@ const LogInPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`${url}/auth/user/log-in`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      .post(
+        `https://jk-automobile-9xtf.onrender.com/auth/user/log-in`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         setLoading(true);
         alert(response.data.message);

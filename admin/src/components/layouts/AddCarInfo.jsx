@@ -82,7 +82,7 @@ const AddCarInfo = () => {
         filesData.append("car_id", idToPost);
 
         const uploadResponse = await axios.post(
-          `${API_BASE_URL}/file/upload`,
+          `https://jk-automobile-9xtf.onrender.com/file/upload`,
           filesData,
           {
             headers: {
@@ -106,7 +106,7 @@ const AddCarInfo = () => {
         };
       }
       const postModuleResponse = await axios.post(
-        `${API_BASE_URL}/data/post-module-data`,
+        `https://jk-automobile-9xtf.onrender.com/data/post-module-data`,
         formToUpload,
         {
           headers: {
@@ -163,7 +163,7 @@ const AddCarInfo = () => {
     const fetchCars = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/data/get-module-data/${idToPost}`,
+          `https://jk-automobile-9xtf.onrender.com/data/get-module-data/${idToPost}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

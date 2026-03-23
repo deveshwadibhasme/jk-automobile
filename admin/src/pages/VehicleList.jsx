@@ -20,11 +20,14 @@ const VehicleList = () => {
     }
 
     try {
-      await axios.delete(`${API_BASE_URL}/data/delete-car-data/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(
+        `https://jk-automobile-9xtf.onrender.com/data/delete-car-data/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setCars((prev) => prev.filter((car) => car.id !== id));
     } catch (err) {
       alert("Failed to delete record. Please try again.");
@@ -41,7 +44,7 @@ const VehicleList = () => {
     const fetchCars = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/data/get-car-data/id/1/100`,
+          `https://jk-automobile-9xtf.onrender.com/data/get-car-data/id/1/100`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

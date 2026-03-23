@@ -35,7 +35,7 @@ export default function PaymentButton({ module_id }) {
     }
     try {
       const response = await axios.post(
-        `${url}/payment/check-out`,
+        `https://jk-automobile-9xtf.onrender.com/payment/check-out`,
         JSON.stringify({ id: module_id }),
         {
           headers: {
@@ -64,15 +64,19 @@ export default function PaymentButton({ module_id }) {
           };
           try {
             await axios
-              .post(`${url}/payment/verify-payment`, JSON.stringify(body), {
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-              })
+              .post(
+                `https://jk-automobile-9xtf.onrender.com/payment/verify-payment`,
+                JSON.stringify(body),
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              )
               .then(async (res) => {
                 const response = await axios.get(
-                  `${url}/bin/download-bin/${module_id}/${res.data.order}`,
+                  `https://jk-automobile-9xtf.onrender.com/bin/download-bin/${module_id}/${res.data.order}`,
                   {
                     headers: {
                       "Content-Type": "application/json",

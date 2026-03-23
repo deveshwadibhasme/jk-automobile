@@ -20,7 +20,7 @@ const Dashboard = () => {
       }
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/data/admin/dashboard`,
+          `https://jk-automobile-9xtf.onrender.com/data/admin/dashboard`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

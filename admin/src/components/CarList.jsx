@@ -12,11 +12,14 @@ const CarList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_BASE_URL}/data/delete-car-data/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(
+        `https://jk-automobile-9xtf.onrender.com/data/delete-car-data/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setCars(cars.filter((car) => car.id !== id));
     } catch (err) {
       setError("Failed to fetch car data Try to Log in.");
@@ -27,11 +30,14 @@ const CarList = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/data/get-car-data/id/1/10`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `https://jk-automobile-9xtf.onrender.com/data/get-car-data/id/1/10`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setCars(response.data.result);
       } catch (err) {
         console.error("Error fetching car data:", err);

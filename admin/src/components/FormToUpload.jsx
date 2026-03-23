@@ -37,12 +37,16 @@ const FormToUpload = () => {
     setLoading(true);
     e.preventDefault();
     try {
-      const response = await axios.post(`${url}/data/post-car-data`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(
+        `https://jk-automobile-9xtf.onrender.com/data/post-car-data`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       alert(response.data.message);
       setLoading(false);
     } catch (error) {

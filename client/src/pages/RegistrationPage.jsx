@@ -32,7 +32,7 @@ const RegistrationPage = () => {
   const handleOTP = () => {
     axios
       .post(
-        `${url}/auth/user/sign-up`,
+        `https://jk-automobile-9xtf.onrender.com/auth/user/sign-up`,
         { email: formData.email },
         {
           headers: {
@@ -58,11 +58,15 @@ const RegistrationPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`${url}/auth/user/verify-and-register`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      .post(
+        `https://jk-automobile-9xtf.onrender.com/auth/user/verify-and-register`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         alert("Registration successful!");
         navigate("/login");

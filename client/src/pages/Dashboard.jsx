@@ -12,9 +12,13 @@ const FirmwareTable = () => {
 
   useEffect(() => {
     function fetchData() {
-      axios.get(`${url}/data/get-car-data/id/1/10`).then((result) => {
-        setData(result.data.result);
-      });
+      axios
+        .get(
+          `https://jk-automobile-9xtf.onrender.com/data/get-car-data/id/1/10`
+        )
+        .then((result) => {
+          setData(result.data.result);
+        });
     }
     handleApplyFilters();
     fetchData();

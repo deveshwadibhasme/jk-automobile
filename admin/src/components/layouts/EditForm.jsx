@@ -57,7 +57,7 @@ const EditForm = () => {
     const fetchCars = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/data/get-car-data/${idToEdit}`,
+          `https://jk-automobile-9xtf.onrender.com/data/get-car-data/${idToEdit}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -96,7 +96,7 @@ const EditForm = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/data/edit-car-data/${idToEdit}`,
+        `https://jk-automobile-9xtf.onrender.com/data/edit-car-data/${idToEdit}`,
         formData,
         {
           headers: {

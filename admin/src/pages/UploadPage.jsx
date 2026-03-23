@@ -48,7 +48,7 @@ const FormToUpload = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/data/post-car-data`,
+        `https://jk-automobile-9xtf.onrender.com/data/post-car-data`,
         formData,
         {
           headers: {
@@ -219,7 +219,7 @@ const FormToUpload = () => {
             <button
               type="submit"
               disabled={loading || !token}
-              className="flex-1 max-w-[200px] py-3 text-white mx-auto w-full font-semibold rounded-lg shadow-lg bg-gradient-to-br from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 transition transform hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 max-w-[200px] py-3 text-white mx-auto w-full font-semibold rounded-lg shadow-lg bg-linear-to-br from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 transition transform hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FaCloudUploadAlt size={20} />
               {!loading ? "Upload Data" : "Uploading..."}
