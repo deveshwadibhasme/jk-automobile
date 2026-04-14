@@ -210,6 +210,7 @@ const FirmwareTable = () => {
                   <td className="px-4 py-3">
                     <Link
                       to={`/module-info/${item.id}`}
+                      state={item.block_number}
                       className={`px-3 py-1 rounded-full text-xs font-semibold shadow ${badgeColor(
                         item.file_type
                       )}`}

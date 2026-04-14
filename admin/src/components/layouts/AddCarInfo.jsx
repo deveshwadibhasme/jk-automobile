@@ -273,25 +273,48 @@ const AddCarInfo = () => {
               onChange={handleChange}
               placeholder="Enter KM/Miles"
             />
-            <Input
-              label="Engine Type"
-              icon={<FaCogs className="inline mr-2" />}
-              name="engine_type"
-              value={formData.engine_type}
-              onChange={handleChange}
-              placeholder="Enter engine type"
-            />
+            <div>
+              <label className="text-gray-700 font-semibold mb-2 flex items-center">
+                <FaCogs className="inline mr-2" />
+                Engine Type
+              </label>
+              <select
+                name="engine_type"
+                value={formData.engine_type}
+                onChange={handleChange}
+                className="w-full border-2 border-gray-300 rounded-md px-4 py-3 text-gray-800
+      focus:ring-2 focus:ring-blue-400 outline-none transition inline-block"
+                required
+              >
+                <option value="">Select type</option>
+                <option value="petrol">Petrol</option>
+                <option value="diesel">Diesel</option>
+                <option value="hybrid">Hybrid</option>
+                <option value="CNG">CNG</option>
+                <option value="electronic">Electronic</option>
+              </select>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <Input
-              label="Transmission"
-              icon={<FaCogs className="inline mr-2 opacity-70" />}
-              name="transmission"
-              value={formData.transmission}
-              onChange={handleChange}
-              placeholder="Enter transmission type"
-            />
+            <div>
+              <label className="text-gray-700 font-semibold mb-2 flex items-center">
+                <FaCogs className="inline mr-2" />
+                Transmission
+              </label>
+              <select
+                name="transmission"
+                value={formData.transmission}
+                onChange={handleChange}
+                className="w-full border-2 border-gray-300 rounded-md px-4 py-3 text-gray-800
+      focus:ring-2 focus:ring-blue-400 outline-none transition inline-block"
+                required
+              >
+                <option value="">Select type</option>
+                <option value="petrol">Auto</option>
+                <option value="diesel">Manual</option>
+              </select>
+            </div>
             <Input
               readOnly
               label="Module Number"

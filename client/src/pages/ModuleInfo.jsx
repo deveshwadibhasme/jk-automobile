@@ -2,12 +2,13 @@ import React from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import PaymentButton from "../components/PaymentButton";
 
 const ModuleInfo = () => {
   const [data, setData] = useState();
   const [fileData, setFileData] = useState();
+  const { state } = useLocation();
   const LOCAL_URL = "http://localhost:3000";
   const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
 
@@ -56,7 +57,7 @@ const ModuleInfo = () => {
               { label: "KM/Miles", value: data[0]?.km_miles },
               { label: "Engine Type", value: data[0]?.engine_type },
               { label: "Transmission", value: data[0]?.transmission },
-              { label: "Module Number", value: data[0]?.module_number },
+              { label: "Module Number", value: state },
             ].map((item, idx) => (
               <div
                 key={idx}
