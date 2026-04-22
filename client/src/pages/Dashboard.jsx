@@ -98,7 +98,7 @@ const FirmwareTable = () => {
   return (
     <>
       <Header />
-      <div className="max-w-[1500px] mx-auto p-6 bg-gray-100 rounded-lg">
+      <div className="max-w-[1500px] min-h-screen mx-auto p-6 bg-gray-100 rounded-lg">
         {/* Header */}
         <header className="mb-6">
           <h1 className="text-2xl font-bold">Total Records</h1>
