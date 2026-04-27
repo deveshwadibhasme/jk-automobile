@@ -129,21 +129,23 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div className="w-full h-full bg-gray-600 text-white z-10 relative block md:hidden">
             <nav className="flex flex-col p-5 gap-3">
-              <a
+              <Link
+                to={'/'}
                 className="flex items-center gap-3 text-gray-300 px-4 py-3 rounded-md hover:bg-[#2d2d2d] hover:text-white transition"
                 onClick={closeMobileMenu}
               >
                 <FontAwesomeIcon icon={faHouse} />
                 Home
-              </a>
+              </Link>
 
-              <a
+              <Link
+                to={'/terms'}
                 className="flex items-center gap-3 text-gray-300 px-4 py-3 rounded-md hover:bg-[#2d2d2d] hover:text-white transition"
                 onClick={closeMobileMenu}
               >
                 <FontAwesomeIcon icon={faInfo} />
                 Term and Condition
-              </a>
+              </Link>
 
               <a
                 href="https://tnm.jkautoelectronicworks.com/"
