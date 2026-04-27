@@ -1,6 +1,7 @@
 /* EcomFooter.css */
 .footer {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, sans-serif;
   background-color: #1a1a1a;
   color: #ffffff;
 }
@@ -87,18 +88,18 @@
 
 /* Main Footer Content */
 .footer-main {
-  padding: 80px 0 40px;
+  padding: 40px 0 10px;
+  /* max-width: max-content; */
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 20px;
 }
 
 .footer-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 60px;
   margin-bottom: 50px;
 }
@@ -115,19 +116,19 @@
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
   .stay-updated {
     padding: 40px 0;
   }
-  
+
   .stay-updated h2 {
     font-size: 28px;
   }
-  
+
   .subscribe-form {
     flex-direction: column;
   }
-  
+
   .subscribe-btn {
     width: 100%;
   }
@@ -136,6 +137,7 @@
 /* Brand Section */
 .footer-brand {
   grid-column: 1;
+  width: 100%;
 }
 
 .brand-title {
@@ -205,7 +207,7 @@
 }
 
 .section-title::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -241,7 +243,7 @@
 }
 
 .footer-links a::before {
-  content: '▸';
+  content: "▸";
   color: #e63946;
   font-size: 12px;
   opacity: 0;
@@ -400,16 +402,16 @@
   .footer-bottom-content {
     gap: 20px;
   }
-  
+
   .legal-links {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .separator {
     display: none;
   }
-  
+
   .payment-methods {
     flex-direction: column;
     gap: 10px;
