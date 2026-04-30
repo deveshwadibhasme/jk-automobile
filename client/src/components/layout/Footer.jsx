@@ -30,9 +30,13 @@ const Footer = () => {
                   fontFamily: "bold",
                   paddingBottom: "1px",
                   textDecoration: "underline",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
                 }}
               >
-                Powerd by Resicode Solution
+                <img src="/resicode.jpeg" height={50} width={50} alt="" />{" "}
+                Powered by Resicode Solution
               </a>
               <p className="brand-description">
                 Your trusted source for premium automotive parts and
@@ -45,18 +49,12 @@ const Footer = () => {
                   <a href="#facebook" aria-label="Facebook">
                     <FontAwesomeIcon size="lg" icon={faFacebook} className="" />
                   </a>
-                  <a href="#twitter" aria-label="Twitter">
-                    <FontAwesomeIcon size="lg" icon={faTwitter} className="" />
-                  </a>
                   <a href="#instagram" aria-label="Instagram">
                     <FontAwesomeIcon
                       size="lg"
                       icon={faInstagram}
                       className=""
                     />
-                  </a>
-                  <a href="#linkedin" aria-label="LinkedIn">
-                    <FontAwesomeIcon size="lg" icon={faLinkedin} className="" />
                   </a>
                   <a href="#youtube" aria-label="YouTube">
                     <FontAwesomeIcon size="lg" icon={faYoutube} className="" />
@@ -120,7 +118,8 @@ const Footer = () => {
                         className=""
                       />
                     </span>
-                    Shantinagar, Nagpur
+                    H no. 107/45 , Shantinagar ghat square, OLD KAMTHI, Shanti
+                    Nagar Main Rd, Nagpur, Maharashtra 440002
                   </li>
                 </ul>
               </div>
