@@ -311,8 +311,8 @@ const AddCarInfo = () => {
                 required
               >
                 <option value="">Select type</option>
-                <option value="petrol">Auto</option>
-                <option value="diesel">Manual</option>
+                <option value="auto">Auto</option>
+                <option value="manual">Manual</option>
               </select>
             </div>
             <Input

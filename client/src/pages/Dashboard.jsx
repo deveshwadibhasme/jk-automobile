@@ -177,7 +177,6 @@ const FirmwareTable = () => {
                   "Model",
                   "Year",
                   "Module",
-                  "Memory",
                   "Block Number",
                   "File Type",
                 ].map((h) => (
@@ -199,7 +198,6 @@ const FirmwareTable = () => {
                   <td className="px-4 py-3">{item.model}</td>
                   <td className="px-4 py-3">{item.year}</td>
                   <td className="px-4 py-3">{item.module}</td>
-                  <td className="px-4 py-3">{item.memory}</td>
 
                   <td className="px-4 py-3">
                     {item.block_number?.split("\n").map((line, i) => (

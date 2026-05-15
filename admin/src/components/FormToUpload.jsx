@@ -12,7 +12,7 @@ const FormToUpload = () => {
     model: "",
     year: "",
     module: "",
-    memory: "",
+    memory: "0",
     block_number: "",
     file_type: "",
   });
@@ -147,6 +147,7 @@ const FormToUpload = () => {
               placeholder="Enter module name"
             />
             <Input
+              hidden
               label="Memory Size"
               name="memory"
               value={formData.memory}

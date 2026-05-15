@@ -11,7 +11,7 @@ import paymentRoute from './routes/payment.route.js'
 
 const app = express();
 
-const allowedOrigin = ['https://jkautoelectronicworks.com', 'https://admin.jkautoelectronicworks.com', 'http://localhost:5174', 'http://localhost:5173', 'https://tnm.jkautoelectronicworks.com']
+const allowedOrigin = ['https://jkautoelectronicworks.com', 'https://admin.jkautoelectronicworks.com', 'https://www.jkautoelectronicworks.com', 'http://localhost:5174', 'http://localhost:5173', 'https://tnm.jkautoelectronicworks.com', 'https://www.admin.jkautoelectronicworks.com', 'https://www.tnm.jkautoelectronicworks.com']
 
 app.use(cors({
     origin: allowedOrigin,
