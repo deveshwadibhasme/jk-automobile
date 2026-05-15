@@ -9,7 +9,7 @@ const RegistrationPage = () => {
     name: "",
     email: "",
     password: "",
-    mobile_no: "",
+    mobileNo: "",
     otp: "",
   });
 
@@ -17,7 +17,7 @@ const RegistrationPage = () => {
   const navigate = useNavigate();
 
   const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
+  const PUBLIC_URL = "https://jk-backend.onthewifi.com";
 
   const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
@@ -32,7 +32,7 @@ const RegistrationPage = () => {
   const handleOTP = () => {
     axios
       .post(
-        `https://jk-automobile-9xtf.onrender.com/auth/user/sign-up`,
+        `https://jk-backend.onthewifi.com/api/v1/auth/send-otp`,
         { email: formData.email },
         {
           headers: {
@@ -59,7 +59,7 @@ const RegistrationPage = () => {
     e.preventDefault();
     axios
       .post(
-        `https://jk-automobile-9xtf.onrender.com/auth/user/verify-and-register`,
+        `https://jk-backend.onthewifi.com/api/v1/auth/verify-and-register`,
         formData,
         {
           headers: {
@@ -67,7 +67,7 @@ const RegistrationPage = () => {
           },
         }
       )
-      .then((response) => {
+      .then(() => {
         alert("Registration successful!");
         navigate("/login");
       })
@@ -189,8 +189,8 @@ const RegistrationPage = () => {
             <div className="relative mt-2">
               <input
                 type="text"
-                name="mobile_no"
-                value={formData.mobile_no}
+                name="mobileNo"
+                value={formData.mobileNo}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border rounded-lg pr-12 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none"
                 required
