@@ -12,7 +12,7 @@ const LogInPage = () => {
     rememberMe: false,
   });
   const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
+  const PUBLIC_URL = "https://jk-backend.onthewifi.com";
 
   const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
   const state = useLocation().state;
@@ -32,7 +32,7 @@ const LogInPage = () => {
     e.preventDefault();
     axios
       .post(
-        `https://jk-automobile-9xtf.onrender.com/auth/user/log-in`,
+        `https://jk-backend.onthewifi.com/api/v1/auth/login`,
         formData,
         {
           headers: {

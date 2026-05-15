@@ -30,7 +30,7 @@ const LogInPage = () => {
     setLoading(true);
     axios
       .post(
-        `https://jk-automobile-9xtf.onrender.com/auth/admin/login`,
+        `https://jk-backend.onthewifi.com/api/v1/auth/admin/login`,
         formData,
         {
           headers: {
