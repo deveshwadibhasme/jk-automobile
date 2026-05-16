@@ -11,6 +11,15 @@ const LogInPage = () => {
     password: "",
     rememberMe: false,
   });
+<<<<<<< HEAD
+=======
+  const LOCAL_URL = "http://localhost:3000";
+  const PUBLIC_URL = "https://jk-backend.onthewifi.com";
+
+  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
+  const state = useLocation().state;
+
+>>>>>>> c57df8d266850b322ef213df78b73622afc13771
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   
@@ -31,10 +40,14 @@ const LogInPage = () => {
     axios
       .post(
         `https://jk-backend.onthewifi.com/api/v1/auth/login`,
+<<<<<<< HEAD
         {
           email: formData.email,
           password: formData.password
         },
+=======
+        formData,
+>>>>>>> c57df8d266850b322ef213df78b73622afc13771
         {
           headers: {
             "Content-Type": "application/json",
