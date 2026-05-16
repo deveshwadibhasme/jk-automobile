@@ -11,14 +11,10 @@ const LogInPage = () => {
     password: "",
     rememberMe: false,
   });
-  const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-backend.onthewifi.com";
-
-  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
-  const state = useLocation().state;
-
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  
+  const state = useLocation().state;
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -30,10 +26,15 @@ const LogInPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+    
     axios
       .post(
         `https://jk-backend.onthewifi.com/api/v1/auth/login`,
-        formData,
+        {
+          email: formData.email,
+          password: formData.password
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -41,9 +42,13 @@ const LogInPage = () => {
         }
       )
       .then((response) => {
-        setLoading(true);
-        alert(response.data.message);
-        loginAction(response.data, state);
+        if (response.data.statusCode === 200) {
+          alert(response.data.message);
+          // Pass the data object (not the whole response) to loginAction
+          loginAction(response.data.data, state);
+        } else {
+          alert(response.data.message || "Login failed");
+        }
       })
       .catch((error) => {
         console.error(
@@ -70,7 +75,6 @@ const LogInPage = () => {
         <h1 className="text-3xl font-bold tracking-wider">
           J.K Auto Electronics Works
         </h1>
-        {/* <p className="text-sm text-gray-300 tracking-wide">Motors Group</p> */}
       </div>
 
       <div className="grid md:grid-cols-2 min-h-[calc(100vh-80px)] items-center">
@@ -93,20 +97,6 @@ const LogInPage = () => {
               </span>
               <span className="text-sm text-gray-300">Premium Brands</span>
             </div>
-
-            {/* <div className="text-center">
-              <span className="text-3xl font-bold text-orange-500 block">
-                200+
-              </span>
-              <span className="text-sm text-gray-300">Global Locations</span>
-            </div> */}
-
-            {/* <div className="text-center">
-              <span className="text-3xl font-bold text-orange-500 block">
-                10K+
-              </span>
-              <span className="text-sm text-gray-300">Happy Clients</span>
-            </div> */}
           </div>
         </div>
 
@@ -175,8 +165,9 @@ const LogInPage = () => {
               {/* Submit */}
               <button
                 type="submit"
+                disabled={loading}
                 className="py-3 rounded-lg bg-linear-to-r from-orange-500 to-orange-400 font-semibold
-                           hover:-translate-y-1 transition shadow-lg"
+                           hover:-translate-y-1 transition shadow-lg disabled:opacity-50"
               >
                 {!loading ? "Sign in" : "Signing...."}
               </button>

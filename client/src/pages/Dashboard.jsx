@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const FirmwareTable = () => {
   const [data, setData] = useState();
   const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
+  const PUBLIC_URL = "https://jk-backend.onthewifi.com";
 
   const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
@@ -14,10 +14,10 @@ const FirmwareTable = () => {
     function fetchData() {
       axios
         .get(
-          `https://jk-automobile-9xtf.onrender.com/data/get-car-data/id/1/10`
+          `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/1/10`
         )
         .then((result) => {
-          setData(result.data.result);
+          setData(result.data.data.result);
         });
     }
     handleApplyFilters();
@@ -200,7 +200,7 @@ const FirmwareTable = () => {
                   <td className="px-4 py-3">{item.module}</td>
 
                   <td className="px-4 py-3">
-                    {item.block_number?.split("\n").map((line, i) => (
+                    {item.blockNumber?.split("\n").map((line, i) => (
                       <div key={i}>{line}</div>
                     ))}
                   </td>
@@ -210,10 +210,10 @@ const FirmwareTable = () => {
                       to={`/module-info/${item.id}`}
                       state={item.block_number}
                       className={`px-3 py-1 rounded-full text-xs font-semibold shadow ${badgeColor(
-                        item.file_type
+                        item.fileType
                       )}`}
                     >
-                      {item.file_type}
+                      {item.fileType}
                     </Link>
                   </td>
                 </tr>

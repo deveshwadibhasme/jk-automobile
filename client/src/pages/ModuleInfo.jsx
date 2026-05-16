@@ -12,27 +12,37 @@ const ModuleInfo = () => {
   const LOCAL_URL = "http://localhost:3000";
   const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
 
-  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
-
   const id = location.pathname.split("/")[2];
 
   useEffect(() => {
     function fetchData() {
       axios
         .get(
-          `https://jk-automobile-9xtf.onrender.com/data/get-module-data/${id}`
+          `https://jk-backend.onthewifi.com/api/v1/data/get-module-data/${id}`,
         )
         .then((result) => {
-          setData(result.data.result);
+          console.log("Full Module Data:", result.data.data);
+          console.log("Engine Type:", result.data.data.engineType);
+          console.log("Transmission:", result.data.data.transmission);
+          setData(result.data.data);
         });
+
       axios
-        .get(`https://jk-automobile-9xtf.onrender.com/bin/get-file-data/${id}`)
+        .get(`https://jk-backend.onthewifi.com/api/v1/data/get-car-data/${id}`)
         .then((result) => {
-          setFileData(result.data.result);
+          console.log("Car Data:", result.data.data);
+          // Get the first fileStore item or the matching one based on carId
+          const fileStores = result.data.data.fileStores;
+          if (fileStores && fileStores.length > 0) {
+            setFileData(fileStores[0]);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching car data:", error);
         });
     }
     fetchData();
-  }, []);
+  }, [id]);
 
   return (
     <div className="max-w-screen min-h-screen flex items-center justify-center bg-gray-100 p-4">
@@ -53,11 +63,11 @@ const ModuleInfo = () => {
 
           <div className="p-6 space-y-4">
             {[
-              { label: "Module Type", value: data[0]?.module_type },
-              { label: "KM/Miles", value: data[0]?.km_miles },
-              { label: "Engine Type", value: data[0]?.engine_type },
-              { label: "Transmission", value: data[0]?.transmission },
-              { label: "Module Number", value: state },
+              { label: "Module Type", value: data.moduleType },
+              { label: "KM/Miles", value: data.kmMiles },
+              { label: "Engine Type", value: data.engineType },
+              { label: "Transmission", value: data.transmission },
+              { label: "Module Number", value: data.moduleNumber || state },
             ].map((item, idx) => (
               <div
                 key={idx}
@@ -71,33 +81,33 @@ const ModuleInfo = () => {
             ))}
 
             <div className="space-y-6 pt-4 flex justify-evenly">
-              {data[0]?.module_photo && (
+              {data.modulePhoto && (
                 <div className="space-y-2">
                   <p className="text-sm font-bold text-gray-700 uppercase tracking-wider">
                     Module Photo
                   </p>
                   <img
                     className="w-full h-48 object-cover rounded-xl border border-gray-200"
-                    src={data[0]?.module_photo}
+                    src={data.modulePhoto}
                     alt="Module"
                   />
                 </div>
               )}
-              {data[0]?.sticker_photo && (
+              {data.stickerPhoto && (
                 <div className="space-y-2">
                   <p className="text-sm font-bold text-gray-700 uppercase tracking-wider">
                     Sticker Photo
                   </p>
                   <img
                     className="w-full h-48 object-cover rounded-xl border border-gray-200"
-                    src={data[0]?.sticker_photo}
+                    src={data.stickerPhoto}
                     alt="Sticker"
                   />
                 </div>
               )}
             </div>
 
-            {fileData?.length > 0 && (
+            {fileData && (
               <div className="mt-8 p-5 bg-gray-50 rounded-2xl border border-gray-200">
                 <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-widest">
                   Downloadable File
@@ -105,18 +115,18 @@ const ModuleInfo = () => {
                 <div className="space-y-1 mb-4">
                   <p className="text-sm text-gray-600 truncate">
                     <span className="font-medium">Name:</span>{" "}
-                    {fileData[0]?.file_name}
+                    {fileData.fileName}
                   </p>
                   <p className="text-sm text-gray-600">
                     <span className="font-medium">Size:</span>{" "}
-                    {fileData[0]?.archive_size / 1000} KB
+                    {(fileData.archiveSize / 1024).toFixed(2)} KB
                   </p>
                 </div>
                 <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                   <span className="text-lg font-bold text-green-700">
-                    ₹{fileData[0]?.file_price}
+                    ₹{fileData.filePrice}
                   </span>
-                  <PaymentButton module_id={fileData[0]?.id} />
+                  <PaymentButton module_id={fileData.id} />
                 </div>
               </div>
             )}

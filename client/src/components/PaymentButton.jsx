@@ -2,12 +2,11 @@ import axios from "axios";
 import { useRazorpay } from "react-razorpay";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 export default function PaymentButton({ module_id }) {
   const { token } = useAuth();
 
-  if (token === null) {
+  if (!token) {
     return (
       <Link
         className="mt-4 px-6 py-2 rounded-md text-white bg-linear-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105"
@@ -22,61 +21,56 @@ export default function PaymentButton({ module_id }) {
   const { Razorpay } = useRazorpay();
   const navigate = useNavigate();
 
-  const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-automobile-9xtf.onrender.com";
-
-  const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
-
-  const RAZORPAY_KEY_ID = "rzp_live_SPzDzAzWzDqflz";
+  const RAZORPAY_KEY_ID = "rzp_test_SMngUYBcHEMnGI";
 
   const handlePayment = async () => {
-    if (token === null) {
-      alert("Register or LogIn to make this payment");
-    }
     try {
       const response = await axios.post(
-        `https://jk-automobile-9xtf.onrender.com/payment/check-out`,
-        JSON.stringify({ id: module_id }),
+        `https://jk-backend.onthewifi.com/api/v1/payment/check-out`,
+        { id: module_id },
         {
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-      if (response.message === "You are not authorised") {
-        alert("LogIn To make this payments");
-      }
-      const [order, userInfo] = await response.data;
 
-      const options = {
-        key: RAZORPAY_KEY_ID,
-        amount: order.amount,
-        currency: order.currency,
-        name: "J.K. Automobiles",
-        description: "Pay to download",
-        order_id: order.id,
-        handler: async (response) => {
-          const body = {
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-          };
-          try {
-            await axios
-              .post(
-                `https://jk-automobile-9xtf.onrender.com/payment/verify-payment`,
-                JSON.stringify(body),
+      if (response.data.statusCode === 200) {
+        const { order, user } = response.data.data;
+
+        const options = {
+          key: RAZORPAY_KEY_ID,
+          amount: order.amount,
+          currency: order.currency,
+          name: "J.K. Automobiles",
+          description: "Pay to download",
+          order_id: order.id,
+          handler: async (razorpayResponse) => {
+            const body = {
+              razorpay_order_id: razorpayResponse.razorpay_order_id,
+              razorpay_payment_id: razorpayResponse.razorpay_payment_id,
+              razorpay_signature: razorpayResponse.razorpay_signature,
+            };
+
+            try {
+              const verifyResponse = await axios.post(
+                `https://jk-backend.onthewifi.com/api/v1/payment/verify-payment`,
+                body,
                 {
                   headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                   },
                 }
-              )
-              .then(async (res) => {
-                const response = await axios.get(
-                  `https://jk-automobile-9xtf.onrender.com/bin/download-bin/${module_id}/${res.data.order}`,
+              );
+
+              if (verifyResponse.data.statusCode === 200) {
+                const orderId = verifyResponse.data.data.orderId;
+
+                // Updated download API endpoint
+                const downloadResponse = await axios.get(
+                  `https://jk-backend.onthewifi.com/api/v1/bin/download-bin/${module_id}/${orderId}`,
                   {
                     headers: {
                       "Content-Type": "application/json",
@@ -84,36 +78,45 @@ export default function PaymentButton({ module_id }) {
                     },
                   }
                 );
-                window.location.href = response.data.url;
-              });
-            alert("Payment successful!");
-          } catch (err) {
-            // alert("Payment failed: " + err.message);
-            alert("Try to Login or comeback later");
-          }
-        },
-        prefill: {
-          name: userInfo.name,
-          email: userInfo.email,
-          contact: userInfo.mobile_no,
-        },
-        notes: {
-          address: "Razorpay Corporate Office",
-        },
-        theme: {
-          color: "#3399cc",
-        },
-      };
-      const rzpay = new Razorpay(options);
-      rzpay.open(options);
+
+                // Get the download URL from response data
+                if (downloadResponse.data.statusCode === 200) {
+                  window.location.href = downloadResponse.data.data.url;
+                  alert("Payment successful! Your download will start shortly.");
+                }
+              }
+            } catch (err) {
+              console.error("Verification error:", err);
+              alert("Payment verification failed. Please contact support.");
+            }
+          },
+          prefill: {
+            name: user.name,
+            email: user.email,
+            contact: user.mobileNo,
+          },
+          notes: {
+            address: "J.K. Automobiles",
+            module_id: module_id,
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+
+        const rzpay = new Razorpay(options);
+        rzpay.open();
+      }
     } catch (err) {
-      alert(
-        "Error creating order: " +
-          " Please LogIn or Register " +
-          err?.response?.data?.message || err.message
-      );
-      if (confirm("You have to register before payment !!")) {
+      console.error("Payment error:", err);
+
+      if (err.response?.status === 401) {
+        alert("Session expired. Please login again.");
         navigate("/login");
+      } else if (err.response?.data?.message) {
+        alert(err.response.data.message);
+      } else {
+        alert("Error creating order. Please try again later.");
       }
     }
   };
