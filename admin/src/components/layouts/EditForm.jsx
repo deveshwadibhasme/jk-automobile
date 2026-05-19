@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { API_BASE_URL } from "../../config/api";
 import { sortedBrand, sortModel } from "../../searchBrand";
 import {
   FaCarSide,
@@ -55,36 +54,55 @@ const EditForm = () => {
     }
 
     const fetchCars = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
-          `https://jk-automobile-9xtf.onrender.com/data/get-car-data/${idToEdit}`,
+          `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/${idToEdit}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        const [data] = response.data.result ?? [];
-        if (!data) {
+        console.log("response my : ", response);
+        
+        // Fix: Access data from response.data.data
+        const carData = response.data.data;
+        
+        if (!carData) {
           setError("Car data not found.");
           return;
         }
+        
         setFormData({
-          brand: data.brand,
-          model: data.model,
-          year: data.year,
-          module: data.module,
-          memory: data.memory,
-          block_number: data.block_number,
-          file_type: data.file_type,
+          brand: carData.brand || "",
+          model: carData.model || "",
+          year: carData.year || "",
+          module: carData.module || "",
+          memory: carData.memory || "",
+          block_number: carData.blockNumber || "",  // Map camelCase to snake_case
+          file_type: carData.fileType || "",        // Map camelCase to snake_case
         });
+        
+        // Load models for the brand
+        if (carData.brand) {
+          const models = sortModel(carData.brand) ?? [];
+          setOption(models);
+        }
       } catch (err) {
-        setError("Failed to fetch car data Try to Log in.");
+        setError("Failed to fetch car data. Please try logging in again.");
         console.error("Error fetching car data:", err);
+        if (err.response && err.response.status === 401) {
+          logOut();
+          navigate("/login");
+        }
+      } finally {
+        setLoading(false);
       }
     };
+    
     fetchCars();
-  }, [idToEdit, token, navigate]);
+  }, [idToEdit, token, navigate, logOut]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -94,10 +112,25 @@ const EditForm = () => {
     }
 
     setLoading(true);
+    setError("");
+    
     try {
-      const response = await axios.post(
-        `https://jk-automobile-9xtf.onrender.com/data/edit-car-data/${idToEdit}`,
-        formData,
+      // Convert form data to match API expected format (camelCase)
+      const submitData = {
+        brand: formData.brand,
+        model: formData.model,
+        year: parseInt(formData.year) || formData.year,
+        module: formData.module,
+        memory: formData.memory,
+        blockNumber: formData.block_number,  // Convert snake_case to camelCase
+        fileType: formData.file_type,        // Convert snake_case to camelCase
+      };
+      
+      console.log("Submitting data:", submitData);
+      
+      const response = await axios.put(
+        `https://jk-backend.onthewifi.com/api/v1/data/edit-car-data/${idToEdit}`,
+        submitData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -105,10 +138,24 @@ const EditForm = () => {
           },
         }
       );
-      alert(response.data.message);
+      
+      console.log("Update response:", response.data);
+      alert(response.data.message || "Car data updated successfully!");
       navigate("/list");
     } catch (error) {
-      console.error("Error uploading data:", error);
+      console.error("Error updating data:", error);
+      let errorMessage = "Failed to update car data. ";
+      if (error.response) {
+        errorMessage += error.response.data?.message || 
+                       error.response.data?.error || 
+                       `Server error: ${error.response.status}`;
+      } else if (error.request) {
+        errorMessage += "No response from server. Please check your connection.";
+      } else {
+        errorMessage += error.message;
+      }
+      setError(errorMessage);
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -124,14 +171,12 @@ const EditForm = () => {
       block_number: "",
       file_type: "",
     });
+    setOption([]);
   };
+  
   const handleLog = () => {
-    if (token) {
-      navigate("/login");
-      logOut();
-    } else {
-      navigate("/login");
-    }
+    logOut();
+    navigate("/login");
   };
 
   return (
@@ -147,6 +192,12 @@ const EditForm = () => {
         {error && (
           <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded">
             {error}
+          </div>
+        )}
+
+        {loading && (
+          <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded">
+            Loading car data...
           </div>
         )}
 
@@ -196,17 +247,21 @@ const EditForm = () => {
                 disabled={!formData.brand}
               >
                 <option value="">Select model</option>
-                {option &&
+                {option && option.length > 0 ? (
                   option.map((op) => (
                     <option key={op} value={op}>
                       {op}
                     </option>
-                  ))}
+                  ))
+                ) : (
+                  <option value="" disabled>No models available</option>
+                )}
               </select>
             </div>
             <Input
               label="Year"
               name="year"
+              type="number"
               value={formData.year}
               onChange={handleChange}
               placeholder="e.g. 2022"

@@ -13,7 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "/jk-logo.png";
+import logo from "/jk_Logo.jpeg";
 
 const Header = () => {
   const { token, logOut, name } = useAuth();
@@ -37,11 +37,11 @@ const Header = () => {
 
   return (
     <>
-      <header className="w-full bg-[#3d4468] text-white z-10 relative">
+      <header className="w-full bg-[#000000] text-white z-10 relative">
         <div className="max-w-[1400px] mx-auto flex justify-between items-center px-5 py-4 border-b border-[#333]">
           {/* Logo */}
           <div className="flex items-center w-32 h-10">
-            <img src={logo} className="w-full h-full" alt="" />
+            <img src={logo} className="h-full" alt="Logo" style={{height:"50px",borderRadius:"10px"}} />
           </div>
 
           <nav className="hidden md:flex gap-5 text-gray-300">

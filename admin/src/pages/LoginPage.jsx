@@ -25,38 +25,46 @@ const LogInPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-    axios
-      .post(
-        `https://jk-backend.onthewifi.com/api/v1/auth/admin/login`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        alert(response.data.message);
-        loginAction(response.data);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error(
-          "Error during login:",
-          error.response ? error.response.data : error.message
-        );
-        alert(
-          error.response?.data?.message ||
-            "Login failed. Please check your credentials."
-        );
-      })
-      .finally(() => {
-        setLoading(false);
+ const handleSubmit = (e) => {
+  e.preventDefault();
+  setLoading(true);
+  axios
+    .post(
+      `https://jk-backend.onthewifi.com/api/v1/auth/admin/login`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      alert(response.data.message);
+      // Fix: Extract the nested data to match what AuthContext expects
+      loginAction({
+        token: response.data.data.token,
+        user: {
+          email: formData.email,
+          role: response.data.data.role,
+        },
+        username: response.data.data.username,
       });
-  };
+      navigate("/");
+    })
+    .catch((error) => {
+      console.error(
+        "Error during login:",
+        error.response ? error.response.data : error.message
+      );
+      alert(
+        error.response?.data?.message ||
+          "Login failed. Please check your credentials."
+      );
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+};
 
   return (
     <div

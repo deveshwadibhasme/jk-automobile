@@ -4,6 +4,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import RegistrationPage from "./pages/RegistrationPage.jsx";
 import LogInPage from "./pages/LogInPage.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
+import ChangePassword from "./pages/ChangePassword.jsx"; // Import ChangePassword
 import App from "./App.jsx";
 import RootLayout from "./RootLayout.jsx";
 import FirmwareTable from "./pages/Dashboard.jsx";
@@ -26,6 +29,18 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LogInPage />,
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "/reset-password",
+        element: <ResetPassword />,
+      },
+      {
+        path: "/change-password", // Add change password route
+        element: <ChangePassword />,
       },
       {
         path: "/registration",

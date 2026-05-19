@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_BASE_URL } from "../config/api";
 import { FaCar, FaUsers, FaExchangeAlt, FaWallet } from "react-icons/fa";
 
 const Dashboard = () => {
@@ -20,14 +19,26 @@ const Dashboard = () => {
       }
       try {
         const response = await axios.get(
-          `https://jk-automobile-9xtf.onrender.com/data/admin/dashboard`,
+          `https://jk-backend.onthewifi.com/api/v1/data/admin/dashboard?includeDeleted=true`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        setDashboardData(response.data);
+        
+        // Log the actual response structure to debug
+        console.log("Dashboard API Response:", response.data);
+        
+        // Check if response has nested data structure
+        let data;
+        if (response.data.data) {
+          data = response.data.data;
+        } else {
+          data = response.data;
+        }
+        
+        setDashboardData(data);
       } catch (err) {
         console.error("Error fetching dashboard data:", err);
         setError(
@@ -69,6 +80,12 @@ const Dashboard = () => {
     );
   }
 
+  // Safe access with fallback values
+  const totalCars = dashboardData.totalCars ?? dashboardData.total_cars ?? 0;
+  const totalUsers = dashboardData.totalUsers ?? dashboardData.total_users ?? 0;
+  const totalTransactions = dashboardData.totalTransactions ?? dashboardData.total_transactions ?? 0;
+  const totalEarnings = dashboardData.overallEarning ?? dashboardData.totalEarnings ?? 0;
+
   return (
     <div className="relative min-h-screen py-5 max-w-screen-2xl mx-auto bg-[#302e2e] overflow-hidden font-sans">
       <div className="relative bg-white/90 backdrop-blur-md p-5 rounded-xl shadow-xl w-full max-w-5xl ml-auto mr-10">
@@ -85,7 +102,7 @@ const Dashboard = () => {
                 Total Cars
               </h2>
               <p className="text-3xl font-bold text-gray-900">
-                {dashboardData.totalCars}
+                {totalCars}
               </p>
             </div>
           </div>
@@ -98,7 +115,7 @@ const Dashboard = () => {
                 Total Users
               </h2>
               <p className="text-3xl font-bold text-gray-900">
-                {dashboardData.totalUsers}
+                {totalUsers}
               </p>
             </div>
           </div>
@@ -111,7 +128,7 @@ const Dashboard = () => {
                 Transactions
               </h2>
               <p className="text-3xl font-bold text-gray-900">
-                {dashboardData.totalTransactions}
+                {totalTransactions}
               </p>
             </div>
           </div>
@@ -123,10 +140,10 @@ const Dashboard = () => {
               <h2 className="text-sm font-medium text-amber-800 uppercase tracking-wider">
                 Overall Earning
               </h2>
+              <p className="text-3xl font-bold text-yellow-600 ml-4">
+                {typeof totalEarnings === 'number' ? totalEarnings.toLocaleString("en-IN") : totalEarnings} Rs
+              </p>
             </div>
-            <p className="text-3xl font-bold text-yellow-600">
-              {dashboardData.overallEarning.toLocaleString("en-IN")} Rs
-            </p>
           </div>
         </div>
       </div>

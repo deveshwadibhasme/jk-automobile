@@ -38,7 +38,7 @@ const FormToUpload = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `https://jk-automobile-9xtf.onrender.com/data/post-car-data`,
+        `https://jk-backend.onthewifi.com/api/v1/data/post-car-data`,
         formData,
         {
           headers: {

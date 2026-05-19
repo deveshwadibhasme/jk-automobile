@@ -417,3 +417,19 @@
     gap: 10px;
   }
 }
+/* Smooth transitions */
+footer a {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover effect for social icons */
+footer .social-icon:hover {
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  footer {
+    text-align: center;
+  }
+}

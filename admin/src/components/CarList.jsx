@@ -13,7 +13,7 @@ const CarList = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `https://jk-automobile-9xtf.onrender.com/data/delete-car-data/${id}`,
+        `https://jk-backend.onthewifi.com/api/v1/data/delete-car-data/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -31,7 +31,7 @@ const CarList = () => {
     const fetchCars = async () => {
       try {
         const response = await axios.get(
-          `https://jk-automobile-9xtf.onrender.com/data/get-car-data/id/1/10`,
+          `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/1/10`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

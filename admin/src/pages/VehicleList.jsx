@@ -21,7 +21,7 @@ const VehicleList = () => {
 
     try {
       await axios.delete(
-        `https://jk-automobile-9xtf.onrender.com/data/delete-car-data/${id}`,
+        `https://jk-backend.onthewifi.com/api/v1/data/delete-car-data/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,14 +44,14 @@ const VehicleList = () => {
     const fetchCars = async () => {
       try {
         const response = await axios.get(
-          `https://jk-automobile-9xtf.onrender.com/data/get-car-data/id/1/100`,
+          `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/1/10`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        setCars(response.data.result);
+        setCars(response.data.data.result);
       } catch (err) {
         setError("Failed to fetch car data. Please login again.");
         console.error("Error fetching car data:", err);
@@ -64,7 +64,7 @@ const VehicleList = () => {
   }, [token, navigate]);
 
   const filteredCars = cars.filter((car) =>
-    `${car.brand} ${car.model} ${car.file_type}`
+    `${car.brand} ${car.model} ${car.fileType}`
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
   );
