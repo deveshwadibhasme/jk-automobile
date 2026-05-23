@@ -29,19 +29,20 @@ const ModuleInfo = () => {
         setError(null);
         
         const carResponse = await axios.get(
-          `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/${id}`
+          `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/${id}?includeDeleted=false`
         );
         
         console.log("Car Data Response:", carResponse.data);
         
         const responseData = carResponse.data.data;
-        
+
         // Get car info
         if (responseData.carInfos && responseData.carInfos.length > 0) {
           const carInfoData = responseData.carInfos[0];
           setCarInfo(carInfoData);
-          console.log("Car Info:", carInfoData);
+          console.log("Car Info:", carInfoData.price);
         }
+
         
         // Get file stores (binary file)
         if (responseData.fileStores && responseData.fileStores.length > 0) {
@@ -255,7 +256,7 @@ const ModuleInfo = () => {
                 <div>
                   <span className="text-sm text-gray-600">Price:</span>
                   <span className="text-2xl font-bold text-green-700 ml-2">
-                    ₹{carInfo.price || fileData.filePrice || "0.00"}
+                    ₹{carInfo.price || fileData.filePrice}
                   </span>
                 </div>
                 <PaymentButton module_id={fileData.id} />

@@ -27,6 +27,7 @@ const AddCarInfo = () => {
 
   const [preData, setPreData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState("");
   const [uploadingFiles, setUploadingFiles] = useState({
     module: false,
@@ -76,7 +77,7 @@ const AddCarInfo = () => {
     
     try {
       const response = await axios.post(
-        `https://jk-backend.onthewifi.com/api/v1/file/upload`,
+        `https://jk-backend.onthewifi.com/api/v1/admin/upload`,
         formDataToUpload,
         {
           headers: {
@@ -181,7 +182,7 @@ const AddCarInfo = () => {
       console.log("Posting module data:", moduleData);
       
       const postModuleResponse = await axios.post(
-        `https://jk-backend.onthewifi.com/api/v1/data/post-module-data`,
+        `https://jk-backend.onthewifi.com/api/v1/admin/modules`,
         moduleData,
         {
           headers: {
@@ -260,41 +261,65 @@ const AddCarInfo = () => {
     }
 
     const fetchCars = async () => {
-      try {
-        const response = await axios.get(
-          `https://jk-automobile-9xtf.onrender.com/data/get-module-data/${idToPost}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = response.data.result?.[0];
-        if (data) {
-          setPreData(data);
-        }
-      } catch (err) {
-        console.error("Error fetching car data:", err);
-        // Don't set error for fetch - it might be a new car
+  setIsFetching(true);
+  try {
+    const response = await axios.get(
+      `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/${idToPost}?includeDeleted=false`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    };
+    );
+    
+    console.log("API Response:", response.data);
+    
+    // Fix: Check the response structure
+    if (response.data.statusCode === 200 && response.data.data) {
+      // Data is a single object, not an array
+      const data = response.data.data;
+      setPreData(data);
+    } else if (response.data.result && response.data.result.length > 0) {
+      // Fallback for array format
+      setPreData(response.data.result[0]);
+    }
+  } catch (err) {
+    console.error("Error fetching car data:", err);
+    
+    // Handle 404 specifically - it just means no module data exists yet
+    if (err.response?.status === 404) {
+      console.log("No existing module data found for this car. This is a new module.");
+      // Don't set any error, just leave preData as null
+    } else {
+      // For other errors (500, 403, etc.), show a warning
+      console.warn("Failed to check existing module data:", err.message);
+      setError("Could not check existing module data. You can still create a new module.");
+      setTimeout(() => {
+        setError("");
+      }, 5000);
+    }
+  } finally {
+    setIsFetching(false);
+  }
+};
+    
     fetchCars();
   }, [idToPost, token, navigate]);
 
-  useEffect(() => {
-    if (!preData) return;
+useEffect(() => {
+  if (!preData) return;
 
-    setFormData((prev) => ({
-      ...prev,
-      km_miles: preData.km_miles || preData.km_miles === 0 ? preData.km_miles : "",
-      engine_type: preData.engine_type || "",
-      transmission: preData.transmission || "",
-      price: preData.price || "",
-      sticker_photo: preData.sticker_photo || "",
-      module_photo: preData.module_photo || "",
-      note: preData.notes || preData.note || "",
-    }));
-  }, [preData]);
+  setFormData((prev) => ({
+    ...prev,
+    km_miles: preData.kmMiles || preData.km_miles || "",  // Note: kmMiles from API
+    engine_type: preData.engineType || preData.engine_type || "",  // engineType from API
+    transmission: preData.transmission || "",
+    price: preData.price || "",
+    sticker_photo: preData.stickerPhoto || preData.sticker_photo || "",  // stickerPhoto from API
+    module_photo: preData.modulePhoto || preData.module_photo || "",  // modulePhoto from API
+    note: preData.notes || preData.note || "",  // notes from API
+  }));
+}, [preData]);
 
   const handleLog = () => {
     logOut();
@@ -313,9 +338,32 @@ const AddCarInfo = () => {
           </p>
         </div>
 
-        {error && (
+        {/* Loading indicator for initial fetch */}
+        {isFetching && (
+          <div className="bg-gray-100 border-l-4 border-gray-500 text-gray-700 p-4 mb-6 rounded flex items-center gap-2">
+            <FaSpinner className="animate-spin" /> 
+            Checking for existing module data...
+          </div>
+        )}
+
+        {/* Error display - only for non-404 errors */}
+        {error && !isFetching && (
           <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded">
             {error}
+          </div>
+        )}
+
+        {/* Info message for new module */}
+        {!isFetching && !error && !preData && (
+          <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded">
+            No existing module data found. Fill out the form below to create a new module for car #{idToPost}.
+          </div>
+        )}
+
+        {/* Info message for existing module */}
+        {!isFetching && !error && preData && (
+          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded">
+            Editing existing module data for car #{idToPost}
           </div>
         )}
 

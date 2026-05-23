@@ -21,7 +21,7 @@ const VehicleList = () => {
 
     try {
       await axios.delete(
-        `https://jk-backend.onthewifi.com/api/v1/data/delete-car-data/${id}`,
+        `https://jk-backend.onthewifi.com/api/v1/admin/cars/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -107,6 +107,9 @@ const VehicleList = () => {
           <table className="w-full text-left border-collapse bg-white">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
+                 <th className="py-4 px-6 text-sm font-bold text-gray-600 uppercase tracking-wider">
+                  Create
+                </th>
                 <th className="py-4 px-6 text-sm font-bold text-gray-600 uppercase tracking-wider">
                   Brand
                 </th>
@@ -129,12 +132,23 @@ const VehicleList = () => {
                     className="hover:bg-blue-50/50 transition-colors group"
                   >
                     <td className="py-4 px-6 font-medium text-gray-800">
+  {new Date(car.createdAt).toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  })}
+</td>
+                    <td className="py-4 px-6 font-medium text-gray-800">
                       {car.brand}
                     </td>
-                    <td className="py-4 px-6 text-gray-600">{car.model}</td>
+                    <td className="py-4 px-6 text-gray-800">{car.model}</td>
                     <td className="py-4 px-6">
-                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">
-                        {car.file_type}
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-gray-800">
+                        {car.fileType}
                       </span>
                     </td>
                     <td className="py-4 px-6">

@@ -19,7 +19,7 @@ const Dashboard = () => {
       }
       try {
         const response = await axios.get(
-          `https://jk-backend.onthewifi.com/api/v1/data/admin/dashboard?includeDeleted=true`,
+          `https://jk-backend.onthewifi.com/api/v1/admin/dashboard?includeDeleted=false`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

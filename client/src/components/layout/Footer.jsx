@@ -1,5 +1,5 @@
-// EcomFooter.jsx
-import React from "react";
+// Footer.jsx - Professional Redesign
+import React, { useState } from "react";
 import "./Footer.css";
 import {
   faFacebook,
@@ -8,121 +8,129 @@ import {
   faLinkedin,
   faYoutube,
 } from "@fortawesome/free-brands-svg-icons";
-import { faPhoneAlt, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { 
+  faPhoneAlt, 
+  faMapMarkerAlt, 
+  faEnvelope,
+  faClock,
+  faArrowRight,
+  faCheckCircle
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (email) {
+      // Handle newsletter subscription
+      console.log("Subscribed with email:", email);
+      setSubscribed(true);
+      setTimeout(() => setSubscribed(false), 3000);
+      setEmail("");
+    }
+  };
+
   return (
     <footer className="footer">
+      {/* Newsletter Section */}
+
       {/* Main Footer Content */}
       <div className="footer-main">
         <div className="container">
           <div className="footer-grid">
             {/* Brand Section */}
             <div className="footer-brand">
-              <h5 className="brand-title">J.K. AutoElectronic Works</h5>
+              <div className="brand-logo">
+                <h2 className="brand-title" style={{color:"white"}}>J.K Auto Electronic Works</h2>
+              </div>
               <a
                 href="https://www.resicode.com/"
-                className="brand-description"
-                style={{
-                  fontSize: "20px",
-                  color: "white",
-                  fontFamily: "bold",
-                  paddingBottom: "1px",
-                  textDecoration: "underline",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                }}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="powered-by"
               >
-                <img src="/resicode.jpeg" height={50} width={50} alt="" />{" "}
-                Powered by Resicode Solution
+                <img src="/resicode.jpeg" height={35} width={35} alt="Resicode Solution" />
+                <span style={{color:"white"}}>Powered by Resicode Solution</span>
               </a>
               <p className="brand-description">
-                Your trusted source for premium automotive parts and
-                accessories. Quality guarantees, performance delivered.
+                Your trusted source for premium automotive parts and accessories. 
+                Quality guarantees, performance delivered.
               </p>
-              {/* Social Media Icons */}
-              <div className="social-media">
-                <h3 className="social-title">Follow Us</h3>
-                <div className="">
-                  <a href="#facebook" aria-label="Facebook">
-                    <FontAwesomeIcon size="lg" icon={faFacebook} className="" />
+              
+              {/* Social Media */}
+              <div className="social-section">
+                <h4 className="social-heading">Follow Us</h4>
+                <div className="social-icons-wrapper">
+                  <a href="#facebook" className="social-icon facebook" aria-label="Facebook">
+                    <FontAwesomeIcon icon={faFacebook} />
                   </a>
-                  <a href="#instagram" aria-label="Instagram">
-                    <FontAwesomeIcon
-                      size="lg"
-                      icon={faInstagram}
-                      className=""
-                    />
+                  <a href="#instagram" className="social-icon instagram" aria-label="Instagram">
+                    <FontAwesomeIcon icon={faInstagram} />
                   </a>
-                  <a href="#youtube" aria-label="YouTube">
-                    <FontAwesomeIcon size="lg" icon={faYoutube} className="" />
+                  <a href="#youtube" className="social-icon youtube" aria-label="YouTube">
+                    <FontAwesomeIcon icon={faYoutube} />
+                  </a>
+                  <a href="#twitter" className="social-icon twitter" aria-label="Twitter">
+                    <FontAwesomeIcon icon={faTwitter} />
+                  </a>
+                  <a href="#linkedin" className="social-icon linkedin" aria-label="LinkedIn">
+                    <FontAwesomeIcon icon={faLinkedin} />
                   </a>
                 </div>
               </div>
             </div>
 
-            {/* Quick Links */}
-            {/* <div className="footer-section">
+            {/* Quick Links Section */}
+            <div className="footer-section">
               <h3 className="section-title">Quick Links</h3>
               <ul className="footer-links">
                 <li><a href="#about">About Us</a></li>
-                <li><a href="#shop">Shop</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#services">Services</a></li>
                 <li><a href="#guides">Installation Guides</a></li>
-                <li><a href="#order">Task Order</a></li>
-                <li><a href="#returns">Returns</a></li>
                 <li><a href="#faq">FAQ</a></li>
-                <li><a href="#careers">Careers</a></li>
+                <li><a href="#support">Support</a></li>
               </ul>
-            </div> */}
+            </div>
 
-            {/* Categories */}
-            {/* <div className="footer-section">
-              <h3 className="section-title">Categories</h3>
-              <ul className="footer-links">
-                <li><a href="#engine">Engine Parts</a></li>
-                <li><a href="#performance">Performance Testing</a></li>
-                <li><a href="#wheels">Wheels & Tires</a></li>
-                <li><a href="#electric">Electrical Systems</a></li>
-                <li><a href="#accessories">Interior Accessories</a></li>
-                <li><a href="#exterior">Exterior Accessories</a></li>
-                <li><a href="#tools">Tools & Equipment</a></li>
-              </ul>
-            </div> */}
-
-            {/* Contact & Newsletter */}
+            {/* Contact Section */}
             <div className="footer-section">
-              <div className="contact-section">
-                <h3 className="section-title">Contact Us</h3>
-                <ul className="contact-info">
-                  <li className="contact-item">
-                    <span className="contact-icon">
-                      <FontAwesomeIcon
-                        size="lg"
-                        icon={faPhoneAlt}
-                        className=""
-                      />{" "}
-                      8087612366
-                    </span>
-                  </li>
-                  {/* <li className="contact-item">
-                    <span className="contact-icon">✉️</span>
-                    support@autopartspace.com
-                  </li> */}
-                  <li className="contact-item">
-                    <span className="contact-icon">
-                      <FontAwesomeIcon
-                        size="lg"
-                        icon={faMapMarkerAlt}
-                        className=""
-                      />
-                    </span>
-                    H no. 107/45 , Shantinagar ghat square, OLD KAMTHI, Shanti
-                    Nagar Main Rd, Nagpur, Maharashtra 440002
-                  </li>
-                </ul>
-              </div>
+              <h3 className="section-title">Contact Information</h3>
+              <ul className="contact-info">
+                <li className="contact-item">
+                  <div className="contact-icon">
+                    <FontAwesomeIcon icon={faPhoneAlt} />
+                  </div>
+                  <div className="contact-details">
+                    <span className="contact-label">Phone Number</span>
+                    <a href="tel:8087612366" className="contact-value">+91 8087612366</a>
+                  </div>
+                </li>
+                <li className="contact-item">
+                  <div className="contact-icon">
+                    <FontAwesomeIcon icon={faMapMarkerAlt} />
+                  </div>
+                  <div className="contact-details">
+                    <span className="contact-label">Our Location</span>
+                    <address className="contact-value">
+                      H no. 107/45, Shantinagar ghat square, OLD KAMTHI,<br />
+                      Shanti Nagar Main Rd, Nagpur, Maharashtra 440002
+                    </address>
+                  </div>
+                </li>
+                <li className="contact-item">
+                  <div className="contact-icon">
+                    <FontAwesomeIcon icon={faClock} />
+                  </div>
+                  <div className="contact-details">
+                    <span className="contact-label">Business Hours</span>
+                    <span className="contact-value">Mon - Sat: 9:00 AM - 12:00 PM</span>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
 
@@ -130,15 +138,21 @@ const Footer = () => {
           <div className="footer-bottom">
             <div className="footer-bottom-content">
               <p className="copyright">
-                © 2026 JK Auto Electronics. All rights reserved.
+                © 2026 J K Auto Electronic Works. All rights reserved.
               </p>
+              <div className="footer-legal">
+                <a href="#privacy">Privacy Policy</a>
+                <span className="separator">|</span>
+                <a href="#terms">Terms of Service</a>
+                <span className="separator">|</span>
+                <a href="#returns">Return Policy</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </footer>
   );
-};  
-
+};
 
 export default Footer;

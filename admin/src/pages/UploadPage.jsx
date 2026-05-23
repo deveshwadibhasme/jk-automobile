@@ -48,7 +48,7 @@ const FormToUpload = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `https://jk-backend.onthewifi.com/api/v1/data/post-car-data`,
+        `https://jk-backend.onthewifi.com/api/v1/admin/cars`,
         formData,
         {
           headers: {
@@ -174,14 +174,6 @@ const FormToUpload = () => {
               value={formData.module}
               onChange={handleChange}
               placeholder="e.g. Bosch EDC17"
-            />
-            <Input
-              label="Memory Size"
-              icon={<FaMemory className="inline mr-2" />}
-              name="memory"
-              value={formData.memory}
-              onChange={handleChange}
-              placeholder="e.g. 2MB"
             />
           </div>
 

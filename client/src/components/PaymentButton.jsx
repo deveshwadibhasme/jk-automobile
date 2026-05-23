@@ -36,6 +36,8 @@ export default function PaymentButton({ module_id }) {
         }
       );
 
+      console.log("payment Response" , response)
+
       if (response.data.statusCode === 200) {
         const { order, user } = response.data.data;
 
