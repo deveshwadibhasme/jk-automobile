@@ -63,10 +63,7 @@ export default function TermsAndConditions() {
 
           <div className="bg-gray-100 rounded-lg p-4 space-y-2">
             <p>
-              <span className="font-medium">Email:</span> []
-            </p>
-            <p>
-              <span className="font-medium">WhatsApp:</span> [8087612366]
+              <span className="font-medium">WhatsApp:</span> 8087612366
             </p>
           </div>
         </section>
@@ -82,7 +79,7 @@ export default function TermsAndConditions() {
 
         {/* Footer */}
         <div className="text-center text-gray-500 text-sm mt-8">
-          <p>© 2026 J.K Auto Electronic Work. All rights reserved.</p>
+          <p>© 2026 J.K Auto Electronic Works. All rights reserved.</p>
           <p className="italic mt-1">
             Crafted with precision for automotive excellence
           </p>

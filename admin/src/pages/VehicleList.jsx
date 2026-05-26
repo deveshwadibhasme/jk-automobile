@@ -145,7 +145,7 @@ const VehicleList = () => {
                     <td className="py-4 px-6 font-medium text-gray-800">
                       {car.brand}
                     </td>
-                    <td className="py-4 px-6 text-gray-800">{car.model}</td>
+                    <td className="py-4 px-6 text-gray-800 font-medium">{car.model}</td>
                     <td className="py-4 px-6">
                       <span className="px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-gray-800">
                         {car.fileType}
@@ -153,13 +153,13 @@ const VehicleList = () => {
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex justify-center gap-3">
-                        <Link
+                        {/* <Link
                           to={`/edit-form/${car.id}`}
                           className="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
                           title="Edit Vehicle"
                         >
                           <FaEdit size={18} />
-                        </Link>
+                        </Link> */}
                         <button
                           onClick={() => handleDelete(car.id)}
                           className="p-2 text-red-500 hover:bg-red-100 rounded-lg transition-colors"

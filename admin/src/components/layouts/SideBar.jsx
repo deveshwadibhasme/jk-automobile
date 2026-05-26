@@ -50,10 +50,10 @@ const SideBar = () => {
       >
         <div className="p-6 border-b border-gray-800">
           <h2 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-            JK Automobile
+            JK Auto <br></br> Electronic Works
           </h2>
           <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider font-semibold">
-            Admin Portal
+            Admin Dashboard
           </p>
         </div>
 

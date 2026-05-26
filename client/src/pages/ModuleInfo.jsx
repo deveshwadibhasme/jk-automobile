@@ -137,34 +137,60 @@ const ModuleInfo = () => {
           <p className="text-gray-400 text-sm">Technical Specifications</p>
         </div>
 
-        <div className="p-6 space-y-6">
-          {/* Module Specifications */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">Specifications</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[
-                { label: "Module Type", value: carInfo.moduleType },
-                { label: "KM/Miles", value: carInfo.kmMiles },
-                { label: "Engine Type", value: carInfo.engineType },
-                { label: "Transmission", value: carInfo.transmission },
-                { label: "Module Number", value: carInfo.moduleNumber },
-                { label: "Notes", value: carInfo.notes },
-                { label: "Price", value: carInfo.price ? `₹${carInfo.price}` : null },
-              ].map((item, idx) => (
-                item.value && item.value !== "null" && item.value !== "" && (
-                  <div
-                    key={idx}
-                    className="flex justify-between items-center border-b border-gray-200 pb-2"
-                  >
-                    <span className="text-gray-600 font-medium">{item.label}</span>
-                    <span className="text-gray-900 font-semibold capitalize">
-                      {item.value}
-                    </span>
-                  </div>
-                )
-              ))}
+        <div className="p-6">
+  {/* Module Specifications */}
+  <div className="p-4">
+  {/* Specifications Card */}
+  <div className="bg-white border border-gray-200 rounded-xl shadow-sm">
+    
+    {/* Header */}
+    <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+      <h3 className="text-base font-semibold text-gray-800">
+        Specifications
+      </h3>
+
+      <div className="w-10 h-1 rounded-full bg-blue-600"></div>
+    </div>
+
+    {/* Content */}
+    <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+      {[
+        { label: "Module Type", value: carInfo.moduleType },
+        { label: "KM / Miles", value: carInfo.kmMiles },
+        { label: "Engine Type", value: carInfo.engineType },
+        { label: "Transmission", value: carInfo.transmission },
+        { label: "Module Number", value: carInfo.moduleNumber },
+        { label: "Block Number", value: data.blockNumber },
+        { label: "File Type", value: data.fileType },
+        { label: "Notes", value: carInfo.notes },
+        {
+          label: "Price",
+          value: carInfo.price ? `₹${carInfo.price}` : null,
+        },
+      ].map(
+        (item, idx) =>
+          item.value &&
+          item.value !== "null" &&
+          item.value !== "" && (
+            <div
+              key={idx}
+              className="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-lg px-3 py-2 hover:border-blue-200 hover:bg-blue-50 transition-all duration-200"
+            >
+              {/* Label */}
+              <span className="text-xs font-medium text-gray-800 bg-yellow-300 p-1 rounded">
+                {item.label}
+              </span>
+
+              {/* Value */}
+              <span className="text-sm font-semibold text-gray-800 text-right capitalize">
+                {item.value}
+              </span>
             </div>
-          </div>
+          )
+      )}
+    </div>
+  </div>
+</div>
 
           {/* Module Photo and Sticker Photo - Side by Side */}
           {(modulePhoto || stickerPhoto || carInfo.modulePhoto || carInfo.stickerPhoto) && (
@@ -238,13 +264,13 @@ const ModuleInfo = () => {
                   <span className="text-gray-600 break-all">{fileData.fileName || "N/A"}</span>
                 </div>
                 {fileData.archiveSize && (
-                  <div className="flex flex-col md:flex-row md:items-center md:space-x-2">
-                    <span className="font-medium text-gray-700 min-w-[100px]">File Size:</span>
-                    <span className="text-gray-600">
-                      {(parseInt(fileData.archiveSize) / 1024).toFixed(2)} KB
-                    </span>
-                  </div>
-                )}
+  <div className="flex flex-col md:flex-row md:items-center md:space-x-2">
+    <span className="font-medium text-gray-700 min-w-[100px]">File Size:</span>
+    <span className="text-gray-600">
+      {fileData.archiveSize}  {/* Direct display - already formatted as "1.2 MB" */}
+    </span>
+  </div>
+)}
                 {fileData.fileId && (
                   <div className="flex flex-col md:flex-row md:items-start md:space-x-2">
                     <span className="font-medium text-gray-700 min-w-[100px]">File ID:</span>

@@ -21,7 +21,7 @@ export default function PaymentButton({ module_id }) {
   const { Razorpay } = useRazorpay();
   const navigate = useNavigate();
 
-  const RAZORPAY_KEY_ID = "rzp_test_SMngUYBcHEMnGI";
+  const RAZORPAY_KEY_ID = "rzp_live_SPzDzAzWzDqflz";
 
   const handlePayment = async () => {
     try {
