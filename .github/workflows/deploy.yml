@@ -3,7 +3,7 @@ name: Deploy Vite Apps to Hostinger
 on:
   push:
     branches:
-      - main
+      - aws-intg
 
 jobs:
   build-and-deploy:
