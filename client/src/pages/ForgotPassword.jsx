@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { 
-  Mail, 
-  ArrowLeft, 
-  Send, 
-  CheckCircle, 
+import {
+  Mail,
+  ArrowLeft,
+  Send,
+  CheckCircle,
   AlertCircle,
   Loader2,
-  Shield
+  Shield,
 } from "lucide-react";
 
 const ForgotPassword = () => {
@@ -29,7 +29,7 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setTouched(true);
-    
+
     if (!isValid) {
       return;
     }
@@ -46,12 +46,17 @@ const ForgotPassword = () => {
       if (response.data.success || response.status === 200) {
         setIsSuccess(true);
       } else {
-        setError(response.data.message || "Failed to send reset link. Please try again.");
+        setError(
+          response.data.message ||
+            "Failed to send reset link. Please try again."
+        );
       }
     } catch (err) {
       console.error("Forgot password error:", err);
       if (err.response) {
-        setError(err.response.data.message || "Email not found or invalid request.");
+        setError(
+          err.response.data.message || "Email not found or invalid request."
+        );
       } else if (err.request) {
         setError("Network error. Please check your internet connection.");
       } else {
@@ -95,11 +100,12 @@ const ForgotPassword = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl mb-4 shadow-lg">
               <Shield className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-orange-700 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-linear-to-r from-slate-800 to-orange-700 bg-clip-text text-transparent">
               Forgot Password?
             </h1>
             <p className="text-gray-600 mt-2">
-              No worries! Enter your email address and we'll send you a reset link.
+              No worries! Enter your email address and we'll send you a reset
+              link.
             </p>
           </div>
 
@@ -117,7 +123,8 @@ const ForgotPassword = () => {
                   We've sent a password reset link to <strong>{email}</strong>
                 </p>
                 <p className="text-emerald-600 text-xs mt-3">
-                  Please check your email inbox (and spam folder) and click the link to reset your password.
+                  Please check your email inbox (and spam folder) and click the
+                  link to reset your password.
                 </p>
               </div>
 
@@ -216,7 +223,10 @@ const ForgotPassword = () => {
         <div className="text-center mt-8">
           <p className="text-xs text-gray-500">
             Need help? Contact our support team at{" "}
-            <a href="mailto:support@onthewifi.com" className="text-orange-500 hover:text-orange-600">
+            <a
+              href="mailto:support@onthewifi.com"
+              className="text-orange-500 hover:text-orange-600"
+            >
               support@onthewifi.com
             </a>
           </p>
@@ -226,12 +236,20 @@ const ForgotPassword = () => {
       {/* Animation Styles */}
       <style jsx>{`
         @keyframes blob {
-          0% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-          100% { transform: translate(0px, 0px) scale(1); }
+          0% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+          100% {
+            transform: translate(0px, 0px) scale(1);
+          }
         }
-        
+
         @keyframes fadeIn {
           from {
             opacity: 0;
@@ -242,7 +260,7 @@ const ForgotPassword = () => {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes slideDown {
           from {
             opacity: 0;
@@ -253,23 +271,23 @@ const ForgotPassword = () => {
             transform: translateY(0);
           }
         }
-        
+
         .animate-blob {
           animation: blob 7s infinite;
         }
-        
+
         .animation-delay-2000 {
           animation-delay: 2s;
         }
-        
+
         .animation-delay-4000 {
           animation-delay: 4s;
         }
-        
+
         .animate-fade-in {
           animation: fadeIn 0.5s ease-out;
         }
-        
+
         .animate-slide-down {
           animation: slideDown 0.3s ease-out;
         }

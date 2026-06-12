@@ -2,14 +2,14 @@ import React, { useState, useMemo, useEffect } from "react";
 import Header from "../components/layout/Header";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { 
-  Search, 
-  Filter, 
-  X, 
-  ChevronDown, 
-  Database, 
-  Tag, 
-  Calendar, 
+import {
+  Search,
+  Filter,
+  X,
+  ChevronDown,
+  Database,
+  Tag,
+  Calendar,
   Cpu,
   FileText,
   ExternalLink,
@@ -27,7 +27,7 @@ import {
   Download,
   Eye,
   Zap,
-  Shield
+  Shield,
 } from "lucide-react";
 
 const FirmwareTable = () => {
@@ -48,9 +48,7 @@ const FirmwareTable = () => {
   useEffect(() => {
     function fetchData() {
       axios
-        .get(
-          `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/1/100`
-        )
+        .get(`https://jk-backend.onthewifi.com/api/v1/data/get-car-data/1/100`)
         .then((result) => {
           setData(result.data.data.result);
           setLoading(false);
@@ -74,17 +72,32 @@ const FirmwareTable = () => {
   const [appliedFilters, setAppliedFilters] = useState({ ...tempFilters });
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isStatsHovered, setIsStatsHovered] = useState(false);
-  
+
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [appliedFilters]);
 
   // Safely get unique values from data
-  const brands = useMemo(() => ["All Brands", ...new Set(data?.map((x) => x?.brand) || [])], [data]);
-  const years = useMemo(() => ["All Years", ...new Set(data?.map((x) => x?.year?.toString()) || [])], [data]);
-  const modules = useMemo(() => ["All Modules", ...new Set(data?.map((x) => x?.module) || [])], [data]);
-  const fileTypes = useMemo(() => ["All File Types", ...new Set(data?.map((x) => x?.fileType) || [])], [data]);
+  const brands = useMemo(
+    () => ["All Brands", ...new Set(data?.map((x) => x?.brand) || [])],
+    [data]
+  );
+  const years = useMemo(
+    () => [
+      "All Years",
+      ...new Set(data?.map((x) => x?.year?.toString()) || []),
+    ],
+    [data]
+  );
+  const modules = useMemo(
+    () => ["All Modules", ...new Set(data?.map((x) => x?.module) || [])],
+    [data]
+  );
+  const fileTypes = useMemo(
+    () => ["All File Types", ...new Set(data?.map((x) => x?.fileType) || [])],
+    [data]
+  );
 
   // Sorting function
   const handleSort = (key) => {
@@ -96,7 +109,7 @@ const FirmwareTable = () => {
 
   const filteredData = useMemo(() => {
     if (!data || data.length === 0) return [];
-    
+
     let filtered = data.filter((item) => {
       const matchesSearch =
         appliedFilters.search === "" ||
@@ -161,11 +174,11 @@ const FirmwareTable = () => {
     const maxVisible = 5;
     let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
     let endPage = Math.min(totalPages, startPage + maxVisible - 1);
-    
+
     if (endPage - startPage + 1 < maxVisible) {
       startPage = Math.max(1, endPage - maxVisible + 1);
     }
-    
+
     for (let i = startPage; i <= endPage; i++) {
       pages.push(i);
     }
@@ -235,7 +248,9 @@ const FirmwareTable = () => {
       a.click();
       URL.revokeObjectURL(url);
     } else if (format === "json") {
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+        type: "application/json",
+      });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -248,12 +263,18 @@ const FirmwareTable = () => {
 
   const badgeColor = (type) => {
     const map = {
-      eeprom: "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/20",
-      flash: "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/20",
+      eeprom:
+        "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/20",
+      flash:
+        "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/20",
       full: "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/20",
-      chrome: "bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-lg shadow-rose-500/20",
+      chrome:
+        "bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-lg shadow-rose-500/20",
     };
-    return map[type?.toLowerCase()] || "bg-gradient-to-r from-gray-500 to-slate-500 text-white";
+    return (
+      map[type?.toLowerCase()] ||
+      "bg-gradient-to-r from-gray-500 to-slate-500 text-white"
+    );
   };
 
   const getActiveFilterCount = () => {
@@ -267,22 +288,46 @@ const FirmwareTable = () => {
 
   // Stats with animations
   const stats = [
-    { label: "Total Firmware", value: data?.length || 0, icon: Database, color: "from-blue-500 to-cyan-500", delay: 0 },
-    { label: "Brands", value: Math.max(0, brands.length - 1), icon: Tag, color: "from-purple-500 to-pink-500", delay: 0.1 },
-    { label: "Modules", value: Math.max(0, modules.length - 1), icon: Cpu, color: "from-emerald-500 to-teal-500", delay: 0.2 },
-    { label: "File Types", value: Math.max(0, fileTypes.length - 1), icon: FileText, color: "from-orange-500 to-amber-500", delay: 0.3 },
+    {
+      label: "Total Firmware",
+      value: data?.length || 0,
+      icon: Database,
+      color: "from-blue-500 to-cyan-500",
+      delay: 0,
+    },
+    {
+      label: "Brands",
+      value: Math.max(0, brands.length - 1),
+      icon: Tag,
+      color: "from-purple-500 to-pink-500",
+      delay: 0.1,
+    },
+    {
+      label: "Modules",
+      value: Math.max(0, modules.length - 1),
+      icon: Cpu,
+      color: "from-emerald-500 to-teal-500",
+      delay: 0.2,
+    },
+    {
+      label: "File Types",
+      value: Math.max(0, fileTypes.length - 1),
+      icon: FileText,
+      color: "from-orange-500 to-amber-500",
+      delay: 0.3,
+    },
   ];
 
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-800">
+      <div className="min-h-screen bg-zinc-700">
         {/* Animated Background Pattern */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {/* <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-pulse"></div>
           <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-pulse animation-delay-2000"></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse animation-delay-4000"></div>
-        </div>
+        </div> */}
 
         <div className="relative max-w-[1600px] mx-auto p-4 md:p-6 lg:p-8">
           {/* Enhanced Header Section with Automotive Theme */}
@@ -292,7 +337,6 @@ const FirmwareTable = () => {
                 <div className="flex items-center gap-3 mb-2">
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-xl opacity-70 group-hover:opacity-100 transition-opacity"></div>
-                   
                   </div>
                   <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r text-white">
                     JK AUTO ELECTRONIC WORKS (NAGPUR)
@@ -300,11 +344,14 @@ const FirmwareTable = () => {
                 </div>
                 <p className="text-gray-300 mt-2 flex items-center gap-2 ml-1 group-hover:text-gray-200 transition-colors">
                   <HardDrive className="w-4 h-4 animate-pulse" />
-                  <span className="font-mono">{filteredData?.length || 0} of {data?.length || 0} firmware entries available</span>
+                  <span className="font-mono">
+                    {filteredData?.length || 0} of {data?.length || 0} firmware
+                    entries available
+                  </span>
                   <TrendingUp className="w-4 h-4 text-green-400 ml-2" />
                 </p>
               </div>
-              
+
               {/* View Toggle and Export Button */}
               <div className="flex gap-3 items-center">
                 <div className="bg-gray-800/60 backdrop-blur-md rounded-xl p-1 border border-gray-700/50">
@@ -329,7 +376,6 @@ const FirmwareTable = () => {
                     <Database className="w-4 h-4 inline mr-1" /> Cards
                   </button>
                 </div>
-
               </div>
             </div>
           </div>
@@ -344,18 +390,36 @@ const FirmwareTable = () => {
                 onMouseEnter={() => setIsStatsHovered(true)}
                 onMouseLeave={() => setIsStatsHovered(false)}
               >
-                <div className="absolute inset-0 bg-gradient-to-r rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl" style={{ backgroundImage: `linear-gradient(to right, ${stat.color.split(" ")[1]}, ${stat.color.split(" ")[3]})` }}></div>
+                <div
+                  className="absolute inset-0 bg-gradient-to-r rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"
+                  style={{
+                    backgroundImage: `linear-gradient(to right, ${
+                      stat.color.split(" ")[1]
+                    }, ${stat.color.split(" ")[3]})`,
+                  }}
+                ></div>
                 <div className="relative bg-gray-800/80 backdrop-blur-md rounded-2xl p-4 border border-gray-700/50 hover:border-gray-600 transition-all group-hover:scale-105">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-400 text-sm">{stat.label}</p>
-                      <p className="text-3xl font-bold text-white mt-1">{stat.value}</p>
+                      <p className="text-3xl font-bold text-white mt-1">
+                        {stat.value}
+                      </p>
                     </div>
-                    <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${stat.color} flex items-center justify-center shadow-lg animate-float`}>
+                    <div
+                      className={`w-12 h-12 rounded-full bg-gradient-to-r ${stat.color} flex items-center justify-center shadow-lg animate-float`}
+                    >
                       <stat.icon className="w-6 h-6 text-white" />
                     </div>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r rounded-b-2xl transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" style={{ backgroundImage: `linear-gradient(to right, ${stat.color.split(" ")[1]}, ${stat.color.split(" ")[3]})` }}></div>
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r rounded-b-2xl transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
+                    style={{
+                      backgroundImage: `linear-gradient(to right, ${
+                        stat.color.split(" ")[1]
+                      }, ${stat.color.split(" ")[3]})`,
+                    }}
+                  ></div>
                 </div>
               </div>
             ))}
@@ -374,7 +438,9 @@ const FirmwareTable = () => {
                     onChange={(e) =>
                       setTempFilters({ ...tempFilters, search: e.target.value })
                     }
-                    onKeyPress={(e) => e.key === 'Enter' && handleApplyFilters()}
+                    onKeyPress={(e) =>
+                      e.key === "Enter" && handleApplyFilters()
+                    }
                     placeholder="Search by brand, model, module, or block number..."
                     className="w-full pl-12 pr-4 py-3 bg-gray-900 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-200 placeholder-gray-500"
                   />
@@ -385,8 +451,8 @@ const FirmwareTable = () => {
                   onClick={() => setIsFilterOpen(!isFilterOpen)}
                   className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium transition-all transform hover:scale-105 ${
                     isFilterOpen || getActiveFilterCount() > 0
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20'
-                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20"
+                      : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                   }`}
                 >
                   <Filter className="w-5 h-5" />
@@ -396,7 +462,11 @@ const FirmwareTable = () => {
                       {getActiveFilterCount()}
                     </span>
                   )}
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isFilterOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-300 ${
+                      isFilterOpen ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
 
                 {/* Action Buttons */}
@@ -417,21 +487,52 @@ const FirmwareTable = () => {
               </div>
 
               {/* Expandable Filters Panel */}
-              <div className={`transition-all duration-300 overflow-hidden ${isFilterOpen ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
+              <div
+                className={`transition-all duration-300 overflow-hidden ${
+                  isFilterOpen
+                    ? "max-h-96 opacity-100 mt-4"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="pt-4 border-t border-gray-700">
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     {[
-                      { key: "brand", label: "Brand", icon: Tag, options: brands },
-                      { key: "year", label: "Year", icon: Calendar, options: years },
-                      { key: "module", label: "Module", icon: Cpu, options: modules },
-                      { key: "fileType", label: "File Type", icon: FileText, options: fileTypes },
+                      {
+                        key: "brand",
+                        label: "Brand",
+                        icon: Tag,
+                        options: brands,
+                      },
+                      {
+                        key: "year",
+                        label: "Year",
+                        icon: Calendar,
+                        options: years,
+                      },
+                      {
+                        key: "module",
+                        label: "Module",
+                        icon: Cpu,
+                        options: modules,
+                      },
+                      {
+                        key: "fileType",
+                        label: "File Type",
+                        icon: FileText,
+                        options: fileTypes,
+                      },
                     ].map(({ key, label, icon: Icon, options }) => (
                       <div key={key} className="relative group">
-                        <label className="block text-xs font-medium text-gray-400 mb-1 ml-1 group-hover:text-blue-400 transition-colors">{label}</label>
+                        <label className="block text-xs font-medium text-gray-400 mb-1 ml-1 group-hover:text-blue-400 transition-colors">
+                          {label}
+                        </label>
                         <select
                           value={tempFilters[key]}
                           onChange={(e) =>
-                            setTempFilters({ ...tempFilters, [key]: e.target.value })
+                            setTempFilters({
+                              ...tempFilters,
+                              [key]: e.target.value,
+                            })
                           }
                           className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer text-gray-200"
                         >
@@ -454,7 +555,14 @@ const FirmwareTable = () => {
                   {appliedFilters.brand !== "All Brands" && (
                     <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-900/50 text-blue-300 rounded-full text-xs border border-blue-700 animate-fadeIn">
                       Brand: {appliedFilters.brand}
-                      <button onClick={() => setAppliedFilters({ ...appliedFilters, brand: "All Brands" })}>
+                      <button
+                        onClick={() =>
+                          setAppliedFilters({
+                            ...appliedFilters,
+                            brand: "All Brands",
+                          })
+                        }
+                      >
                         <X className="w-3 h-3 hover:text-blue-100" />
                       </button>
                     </span>
@@ -462,7 +570,14 @@ const FirmwareTable = () => {
                   {appliedFilters.year !== "All Years" && (
                     <span className="inline-flex items-center gap-1 px-2 py-1 bg-indigo-900/50 text-indigo-300 rounded-full text-xs border border-indigo-700 animate-fadeIn animation-delay-100">
                       Year: {appliedFilters.year}
-                      <button onClick={() => setAppliedFilters({ ...appliedFilters, year: "All Years" })}>
+                      <button
+                        onClick={() =>
+                          setAppliedFilters({
+                            ...appliedFilters,
+                            year: "All Years",
+                          })
+                        }
+                      >
                         <X className="w-3 h-3 hover:text-indigo-100" />
                       </button>
                     </span>
@@ -470,7 +585,14 @@ const FirmwareTable = () => {
                   {appliedFilters.module !== "All Modules" && (
                     <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-900/50 text-purple-300 rounded-full text-xs border border-purple-700 animate-fadeIn animation-delay-200">
                       Module: {appliedFilters.module}
-                      <button onClick={() => setAppliedFilters({ ...appliedFilters, module: "All Modules" })}>
+                      <button
+                        onClick={() =>
+                          setAppliedFilters({
+                            ...appliedFilters,
+                            module: "All Modules",
+                          })
+                        }
+                      >
                         <X className="w-3 h-3 hover:text-purple-100" />
                       </button>
                     </span>
@@ -478,7 +600,14 @@ const FirmwareTable = () => {
                   {appliedFilters.fileType !== "All File Types" && (
                     <span className="inline-flex items-center gap-1 px-2 py-1 bg-rose-900/50 text-rose-300 rounded-full text-xs border border-rose-700 animate-fadeIn animation-delay-300">
                       File: {appliedFilters.fileType}
-                      <button onClick={() => setAppliedFilters({ ...appliedFilters, fileType: "All File Types" })}>
+                      <button
+                        onClick={() =>
+                          setAppliedFilters({
+                            ...appliedFilters,
+                            fileType: "All File Types",
+                          })
+                        }
+                      >
                         <X className="w-3 h-3 hover:text-rose-100" />
                       </button>
                     </span>
@@ -498,11 +627,22 @@ const FirmwareTable = () => {
                 </div>
                 <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl animate-pulse"></div>
               </div>
-              <p className="mt-4 text-gray-300 font-medium animate-pulse">Loading firmware data...</p>
+              <p className="mt-4 text-gray-300 font-medium animate-pulse">
+                Loading firmware data...
+              </p>
               <div className="flex gap-1 mt-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0s" }}></div>
-                <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
-                <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{ animationDelay: "0.4s" }}></div>
+                <div
+                  className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "0s" }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-purple-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "0.2s" }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-pink-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "0.4s" }}
+                ></div>
               </div>
             </div>
           )}
@@ -517,19 +657,51 @@ const FirmwareTable = () => {
                       <th className="px-4 md:px-6 py-4 text-left">
                         <input
                           type="checkbox"
-                          checked={selectedRows.length === currentItems.length && currentItems.length > 0}
+                          checked={
+                            selectedRows.length === currentItems.length &&
+                            currentItems.length > 0
+                          }
                           onChange={handleSelectAll}
                           className="rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500"
                         />
                       </th>
                       {[
                         { label: "Sr. No", icon: Layers, sortable: false },
-                        { label: "Brand", icon: Tag, sortable: true, key: "brand" },
-                        { label: "Model", icon: Database, sortable: true, key: "model" },
-                        { label: "Year", icon: Calendar, sortable: true, key: "year" },
-                        { label: "Module", icon: Cpu, sortable: true, key: "module" },
-                        { label: "Block Number", icon: FileText, sortable: false },
-                        { label: "File Type", icon: CheckCircle, sortable: true, key: "fileType" },
+                        {
+                          label: "Brand",
+                          icon: Tag,
+                          sortable: true,
+                          key: "brand",
+                        },
+                        {
+                          label: "Model",
+                          icon: Database,
+                          sortable: true,
+                          key: "model",
+                        },
+                        {
+                          label: "Year",
+                          icon: Calendar,
+                          sortable: true,
+                          key: "year",
+                        },
+                        {
+                          label: "Module",
+                          icon: Cpu,
+                          sortable: true,
+                          key: "module",
+                        },
+                        {
+                          label: "Block Number",
+                          icon: FileText,
+                          sortable: false,
+                        },
+                        {
+                          label: "File Type",
+                          icon: CheckCircle,
+                          sortable: true,
+                          key: "fileType",
+                        },
                       ].map(({ label, icon: Icon, sortable, key }) => (
                         <th
                           key={label}
@@ -554,7 +726,9 @@ const FirmwareTable = () => {
                       <tr
                         key={item.id || i}
                         className={`border-b border-gray-700/50 transition-all duration-300 group ${
-                          hoveredRow === i ? 'bg-gradient-to-r from-blue-900/30 to-purple-900/30 scale-[1.01] shadow-lg' : 'hover:bg-gray-700/20'
+                          hoveredRow === i
+                            ? "bg-gradient-to-r from-blue-900/30 to-purple-900/30 scale-[1.01] shadow-lg"
+                            : "hover:bg-gray-700/20"
                         }`}
                         onMouseEnter={() => setHoveredRow(i)}
                         onMouseLeave={() => setHoveredRow(null)}
@@ -571,25 +745,41 @@ const FirmwareTable = () => {
                           #{startIndex + i + 1}
                         </td>
                         <td className="px-4 md:px-6 py-3 md:py-4">
-                          <span className="capitalize font-medium text-white">{item.brand}</span>
+                          <span className="capitalize font-medium text-white">
+                            {item.brand}
+                          </span>
                         </td>
-                        <td className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-300 font-medium">{item.model}</td>
+                        <td className="px-4 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-300 font-medium">
+                          {item.model}
+                        </td>
                         <td className="px-4 md:px-6 py-3 md:py-4">
-                          <span className="px-2 py-1 bg-gray-700 rounded-lg text-xs md:text-sm font-mono text-gray-300">{item.year}</span>
+                          <span className="px-2 py-1 bg-gray-700 rounded-lg text-xs md:text-sm font-mono text-gray-300">
+                            {item.year}
+                          </span>
                         </td>
                         <td className="px-4 md:px-6 py-3 md:py-4">
                           <div className="flex items-center gap-1">
                             <Cpu className="w-3 h-3 text-gray-500" />
-                            <span className="text-xs md:text-sm text-gray-300">{item.module}</span>
+                            <span className="text-xs md:text-sm text-gray-300">
+                              {item.module}
+                            </span>
                           </div>
                         </td>
                         <td className="px-4 md:px-6 py-3 md:py-4">
                           <div className="space-y-1">
-                            {item.blockNumber?.split("\n").slice(0, 2).map((line, idx) => (
-                              <code key={idx} className="text-[10px] md:text-sm bg-gray-900 px-1 md:px-2 py-0.5 md:py-1 rounded block font-mono text-red-400 text-center">
-                                {line.length > 30 ? line.substring(0, 30) + "..." : line}
-                              </code>
-                            ))}
+                            {item.blockNumber
+                              ?.split("\n")
+                              .slice(0, 2)
+                              .map((line, idx) => (
+                                <code
+                                  key={idx}
+                                  className="text-[10px] md:text-sm bg-gray-900 px-1 md:px-2 py-0.5 md:py-1 rounded block font-mono text-red-400 text-center"
+                                >
+                                  {line.length > 30
+                                    ? line.substring(0, 30) + "..."
+                                    : line}
+                                </code>
+                              ))}
                           </div>
                         </td>
                         <td className="px-4 md:px-6 py-3 md:py-4">
@@ -616,8 +806,12 @@ const FirmwareTable = () => {
                   <div className="w-24 h-24 bg-gray-700 rounded-full flex items-center justify-center mb-4 animate-pulse">
                     <Database className="w-12 h-12 text-gray-500" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-300 mb-2">No results found</h3>
-                  <p className="text-gray-500">Try adjusting your filters or search term</p>
+                  <h3 className="text-xl font-semibold text-gray-300 mb-2">
+                    No results found
+                  </h3>
+                  <p className="text-gray-500">
+                    Try adjusting your filters or search term
+                  </p>
                   <button
                     onClick={handleReset}
                     className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-colors transform hover:scale-105"
@@ -631,7 +825,11 @@ const FirmwareTable = () => {
               {filteredData?.length > 0 && (
                 <div className="px-4 md:px-6 py-4 bg-gray-900/50 border-t border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-400">
                   <div className="flex items-center gap-4">
-                    <span>Showing {startIndex + 1} to {Math.min(endIndex, filteredData.length)} of {filteredData.length} entries</span>
+                    <span>
+                      Showing {startIndex + 1} to{" "}
+                      {Math.min(endIndex, filteredData.length)} of{" "}
+                      {filteredData.length} entries
+                    </span>
                     {filteredData.length !== data.length && (
                       <span className="text-blue-400 text-xs md:text-sm animate-pulse">
                         ({data.length - filteredData.length} filtered out)
@@ -643,7 +841,7 @@ const FirmwareTable = () => {
                       </span>
                     )}
                   </div>
-                  
+
                   {/* Pagination Controls */}
                   <div className="flex items-center gap-1 md:gap-2">
                     <button
@@ -653,7 +851,7 @@ const FirmwareTable = () => {
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
-                    
+
                     <div className="hidden sm:flex gap-1 md:gap-2">
                       {getPageNumbers().map((page) => (
                         <button
@@ -661,19 +859,19 @@ const FirmwareTable = () => {
                           onClick={() => goToPage(page)}
                           className={`px-2 md:px-4 py-1 rounded-lg transition-all transform hover:scale-105 ${
                             currentPage === page
-                              ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md'
-                              : 'bg-gray-700 border border-gray-600 hover:bg-gray-600 text-gray-300'
+                              ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md"
+                              : "bg-gray-700 border border-gray-600 hover:bg-gray-600 text-gray-300"
                           }`}
                         >
                           {page}
                         </button>
                       ))}
                     </div>
-                    
+
                     <span className="sm:hidden px-3 py-1 rounded-lg bg-gray-700 text-gray-200">
                       Page {currentPage} of {totalPages}
                     </span>
-                    
+
                     <button
                       onClick={() => goToPage(currentPage + 1)}
                       disabled={currentPage === totalPages}
@@ -703,7 +901,9 @@ const FirmwareTable = () => {
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <Tag className="w-4 h-4 text-blue-400" />
-                          <span className="text-lg font-bold text-white capitalize">{item.brand}</span>
+                          <span className="text-lg font-bold text-white capitalize">
+                            {item.brand}
+                          </span>
                         </div>
                         <div className="flex items-center gap-2">
                           <Database className="w-4 h-4 text-purple-400" />
@@ -713,7 +913,6 @@ const FirmwareTable = () => {
                       <div>
                         <p class="text-white">File Type : {item.fileType}</p>
                       </div>
-
                     </div>
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
@@ -722,20 +921,29 @@ const FirmwareTable = () => {
                       </div>
                       <div className="flex items-center gap-2">
                         <Cpu className="w-4 h-4 text-gray-500" />
-                        <span className="text-gray-300">Module: {item.module}</span>
+                        <span className="text-gray-300">
+                          Module: {item.module}
+                        </span>
                       </div>
                       <div className="flex items-start gap-2">
                         <FileText className="w-4 h-4 text-gray-500 mt-1" />
                         <div className="flex-1">
-                          {item.blockNumber?.split("\n").slice(0, 2).map((line, idx) => (
-                            <code key={idx} className="text-xs bg-gray-900 px-2 py-1 rounded block font-mono text-red-400 mb-1">
-                              {line.length > 40 ? line.substring(0, 40) + "..." : line}
-                            </code>
-                          ))}
+                          {item.blockNumber
+                            ?.split("\n")
+                            .slice(0, 2)
+                            .map((line, idx) => (
+                              <code
+                                key={idx}
+                                className="text-xs bg-gray-900 px-2 py-1 rounded block font-mono text-red-400 mb-1"
+                              >
+                                {line.length > 40
+                                  ? line.substring(0, 40) + "..."
+                                  : line}
+                              </code>
+                            ))}
                         </div>
                       </div>
                     </div>
-              
                   </div>
                 </div>
               ))}
@@ -750,11 +958,16 @@ const FirmwareTable = () => {
           <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full mx-4 border border-gray-700 shadow-2xl animate-slideUp">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-white">Export Data</h3>
-              <button onClick={() => setShowExportModal(false)} className="text-gray-400 hover:text-white">
+              <button
+                onClick={() => setShowExportModal(false)}
+                className="text-gray-400 hover:text-white"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <p className="text-gray-300 mb-6">Choose export format for {filteredData.length} entries</p>
+            <p className="text-gray-300 mb-6">
+              Choose export format for {filteredData.length} entries
+            </p>
             <div className="flex gap-3">
               <button
                 onClick={() => handleExport("csv")}
@@ -776,10 +989,18 @@ const FirmwareTable = () => {
       {/* Custom animations */}
       <style jsx>{`
         @keyframes blob {
-          0% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-          100% { transform: translate(0px, 0px) scale(1); }
+          0% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+          100% {
+            transform: translate(0px, 0px) scale(1);
+          }
         }
         @keyframes fadeInDown {
           from {
@@ -802,8 +1023,12 @@ const FirmwareTable = () => {
           }
         }
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
         @keyframes slideIn {
           from {
@@ -826,13 +1051,24 @@ const FirmwareTable = () => {
           }
         }
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-5px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
         }
         @keyframes gradient {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
         }
         .animate-blob {
           animation: blob 7s infinite;
