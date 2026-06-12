@@ -9,6 +9,11 @@ import {
   ChevronDown,
   Database,
   Tag,
+  BarChart3,
+  Info,
+  Copy,
+  Bookmark,
+  Share2,
   Calendar,
   Cpu,
   FileText,
@@ -28,15 +33,6 @@ import {
   Eye,
   Zap,
   Shield,
-<<<<<<< HEAD
-=======
-  Info,
-  BarChart3,
-  Copy,
-  Trash2,
-  Share2,
-  Bookmark
->>>>>>> aa8b57a1d6533c7eb54da6561bf9b28e2563fa8a
 } from "lucide-react";
 
 const FirmwareTable = () => {
@@ -59,13 +55,9 @@ const FirmwareTable = () => {
   useEffect(() => {
     function fetchData() {
       axios
-<<<<<<< HEAD
-        .get(`https://jk-backend.onthewifi.com/api/v1/data/get-car-data/1/100`)
-=======
         .get(
           `https://jkauto-backend.onthewifi.com/api/v1/data/get-car-data/1/100`
         )
->>>>>>> aa8b57a1d6533c7eb54da6561bf9b28e2563fa8a
         .then((result) => {
           setData(result.data.data.result);
           setLoading(false);
@@ -285,33 +277,42 @@ const FirmwareTable = () => {
 
   // Bulk Actions
   const handleBulkCopy = () => {
-    const selectedData = selectedRows.map(id => {
-      const item = filteredData.find(d => d.id === id);
-      return `${item.brand} ${item.model} - ${item.module} (${item.year})`;
-    }).join("\n");
+    const selectedData = selectedRows
+      .map((id) => {
+        const item = filteredData.find((d) => d.id === id);
+        return `${item.brand} ${item.model} - ${item.module} (${item.year})`;
+      })
+      .join("\n");
     navigator.clipboard.writeText(selectedData);
     alert(`📋 Copied ${selectedRows.length} entries to clipboard!`);
   };
 
   const handleBulkBookmark = () => {
-    const bookmarks = selectedRows.map(id => {
-      const item = filteredData.find(d => d.id === id);
-      return { id: item.id, brand: item.brand, model: item.model, module: item.module };
+    const bookmarks = selectedRows.map((id) => {
+      const item = filteredData.find((d) => d.id === id);
+      return {
+        id: item.id,
+        brand: item.brand,
+        model: item.model,
+        module: item.module,
+      };
     });
-    localStorage.setItem('firmwareBookmarks', JSON.stringify(bookmarks));
+    localStorage.setItem("firmwareBookmarks", JSON.stringify(bookmarks));
     alert(`🔖 Bookmarked ${selectedRows.length} entries!`);
   };
 
   const handleBulkShare = () => {
-    const shareText = selectedRows.map(id => {
-      const item = filteredData.find(d => d.id === id);
-      return `${item.brand} ${item.model} (${item.year}) - ${item.module}`;
-    }).join("\n");
+    const shareText = selectedRows
+      .map((id) => {
+        const item = filteredData.find((d) => d.id === id);
+        return `${item.brand} ${item.model} (${item.year}) - ${item.module}`;
+      })
+      .join("\n");
     if (navigator.share) {
-      navigator.share({ title: 'Firmware Data', text: shareText });
+      navigator.share({ title: "Firmware Data", text: shareText });
     } else {
       navigator.clipboard.writeText(shareText);
-      alert('Share link copied to clipboard!');
+      alert("Share link copied to clipboard!");
     }
   };
 
@@ -320,17 +321,21 @@ const FirmwareTable = () => {
     const brandCounts = {};
     const moduleCounts = {};
     const yearDistribution = {};
-    
-    filteredData.forEach(item => {
+
+    filteredData.forEach((item) => {
       brandCounts[item.brand] = (brandCounts[item.brand] || 0) + 1;
       moduleCounts[item.module] = (moduleCounts[item.module] || 0) + 1;
       yearDistribution[item.year] = (yearDistribution[item.year] || 0) + 1;
     });
-    
-    const topBrand = Object.entries(brandCounts).sort((a,b) => b[1] - a[1])[0];
-    const topModule = Object.entries(moduleCounts).sort((a,b) => b[1] - a[1])[0];
-    const mostCommonYear = Object.entries(yearDistribution).sort((a,b) => b[1] - a[1])[0];
-    
+
+    const topBrand = Object.entries(brandCounts).sort((a, b) => b[1] - a[1])[0];
+    const topModule = Object.entries(moduleCounts).sort(
+      (a, b) => b[1] - a[1]
+    )[0];
+    const mostCommonYear = Object.entries(yearDistribution).sort(
+      (a, b) => b[1] - a[1]
+    )[0];
+
     return { topBrand, topModule, mostCommonYear, brandCounts, moduleCounts };
   };
 
@@ -363,9 +368,8 @@ const FirmwareTable = () => {
 
   // Stats with animations
   const stats = [
-<<<<<<< HEAD
     {
-      label: "Total Firmware",
+      label: "Total Data",
       value: data?.length || 0,
       icon: Database,
       color: "from-blue-500 to-cyan-500",
@@ -392,26 +396,11 @@ const FirmwareTable = () => {
       color: "from-orange-500 to-amber-500",
       delay: 0.3,
     },
-=======
-    { label: "Total Data", value: data?.length || 0, icon: Database, color: "from-blue-500 to-cyan-500", delay: 0 },
-    { label: "Brands", value: Math.max(0, brands.length - 1), icon: Tag, color: "from-purple-500 to-pink-500", delay: 0.1 },
-    { label: "Modules", value: Math.max(0, modules.length - 1), icon: Cpu, color: "from-emerald-500 to-teal-500", delay: 0.2 },
-    { label: "File Types", value: Math.max(0, fileTypes.length - 1), icon: FileText, color: "from-orange-500 to-amber-500", delay: 0.3 },
->>>>>>> aa8b57a1d6533c7eb54da6561bf9b28e2563fa8a
   ];
 
   return (
     <>
       <Header />
-<<<<<<< HEAD
-      <div className="min-h-screen bg-zinc-700">
-        {/* Animated Background Pattern */}
-        {/* <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-pulse animation-delay-2000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse animation-delay-4000"></div>
-        </div> */}
-=======
       <div className="min-h-screen bg-gray-800">
         {/* Animated Background Pattern */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
@@ -419,7 +408,6 @@ const FirmwareTable = () => {
           <div className="absolute -bottom-1/2 -left-1/2 w-[40rem] h-[40rem] bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse [animation-delay:2s]"></div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[35rem] h-[35rem] bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-pulse [animation-delay:4s]"></div>
         </div>
->>>>>>> aa8b57a1d6533c7eb54da6561bf9b28e2563fa8a
 
         <div className="relative max-w-[1600px] mx-auto p-4 md:p-6 lg:p-8">
           {/* Enhanced Header Section with Automotive Theme */}
@@ -468,8 +456,6 @@ const FirmwareTable = () => {
                     <Database className="w-4 h-4 inline mr-1" /> Cards
                   </button>
                 </div>
-<<<<<<< HEAD
-=======
 
                 <button
                   onClick={() => setShowExportModal(true)}
@@ -477,7 +463,6 @@ const FirmwareTable = () => {
                 >
                   <Download className="w-4 h-4" /> Export
                 </button>
->>>>>>> aa8b57a1d6533c7eb54da6561bf9b28e2563fa8a
               </div>
             </div>
           </div>
@@ -490,38 +475,63 @@ const FirmwareTable = () => {
               className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600/80 to-purple-600/80 backdrop-blur-md rounded-xl border border-indigo-500/50 hover:border-indigo-400 transition-all group"
             >
               <BarChart3 className="w-4 h-4 text-white animate-pulse" />
-              <span className="text-white text-sm font-medium">Quick Stats Insights</span>
+              <span className="text-white text-sm font-medium">
+                Quick Stats Insights
+              </span>
               <Info className="w-3 h-3 text-indigo-300 group-hover:text-white transition-colors" />
             </button>
-            
+
             {showStatsInsight && (
               <div className="absolute top-full left-0 mt-2 w-80 bg-gray-800/95 backdrop-blur-md rounded-xl border border-gray-700 shadow-2xl p-4 z-20 animate-fadeIn">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between pb-2 border-b border-gray-700">
-                    <h4 className="text-white font-semibold text-sm">📊 Current View Insights</h4>
+                    <h4 className="text-white font-semibold text-sm">
+                      📊 Current View Insights
+                    </h4>
                     <Sparkles className="w-3 h-3 text-yellow-400" />
                   </div>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-400">Top Brand:</span>
-                      <span className="text-white font-bold">{statsInsights.topBrand?.[0] || 'N/A'} <span className="text-emerald-400">({statsInsights.topBrand?.[1] || 0})</span></span>
+                      <span className="text-white font-bold">
+                        {statsInsights.topBrand?.[0] || "N/A"}{" "}
+                        <span className="text-emerald-400">
+                          ({statsInsights.topBrand?.[1] || 0})
+                        </span>
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-400">Top Module:</span>
-                      <span className="text-white font-bold">{statsInsights.topModule?.[0] || 'N/A'} <span className="text-emerald-400">({statsInsights.topModule?.[1] || 0})</span></span>
+                      <span className="text-white font-bold">
+                        {statsInsights.topModule?.[0] || "N/A"}{" "}
+                        <span className="text-emerald-400">
+                          ({statsInsights.topModule?.[1] || 0})
+                        </span>
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-400">Most Common Year:</span>
-                      <span className="text-white font-bold">{statsInsights.mostCommonYear?.[0] || 'N/A'} <span className="text-emerald-400">({statsInsights.mostCommonYear?.[1] || 0})</span></span>
+                      <span className="text-white font-bold">
+                        {statsInsights.mostCommonYear?.[0] || "N/A"}{" "}
+                        <span className="text-emerald-400">
+                          ({statsInsights.mostCommonYear?.[1] || 0})
+                        </span>
+                      </span>
                     </div>
                     <div className="pt-2 mt-1 border-t border-gray-700/50">
                       <div className="flex items-center gap-1 text-xs text-gray-400">
                         <TrendingUp className="w-3 h-3" />
-                        <span>Unique Brands: {Object.keys(statsInsights.brandCounts).length}</span>
+                        <span>
+                          Unique Brands:{" "}
+                          {Object.keys(statsInsights.brandCounts).length}
+                        </span>
                       </div>
                       <div className="flex items-center gap-1 text-xs text-gray-400 mt-1">
                         <Cpu className="w-3 h-3" />
-                        <span>Active Modules: {Object.keys(statsInsights.moduleCounts).length}</span>
+                        <span>
+                          Active Modules:{" "}
+                          {Object.keys(statsInsights.moduleCounts).length}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -773,7 +783,9 @@ const FirmwareTable = () => {
               <div className="bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-blue-500/30 p-3 flex items-center gap-4">
                 <div className="flex items-center gap-2 px-3 py-1 bg-blue-500/20 rounded-full">
                   <CheckCircle className="w-4 h-4 text-blue-400" />
-                  <span className="text-white text-sm font-medium">{selectedRows.length} selected</span>
+                  <span className="text-white text-sm font-medium">
+                    {selectedRows.length} selected
+                  </span>
                 </div>
                 <div className="h-8 w-px bg-gray-700"></div>
                 <button
@@ -845,7 +857,6 @@ const FirmwareTable = () => {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-<<<<<<< HEAD
                     <tr className="bg-gradient-to-r from-gray-900 to-gray-800 border-b border-gray-700">
                       <th className="px-4 md:px-6 py-4 text-left">
                         <input
@@ -914,58 +925,17 @@ const FirmwareTable = () => {
                       ))}
                     </tr>
                   </thead>
-=======
-  <tr className="bg-gradient-to-r from-gray-900 to-gray-800 border-b border-gray-700">
-    <th className="px-4 md:px-6 py-4 text-left">
-      <input
-        type="checkbox"
-        checked={selectedRows.length === currentItems.length && currentItems.length > 0}
-        onChange={handleSelectAll}
-        className="rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500"
-      />
-    </th>
-    {[
-      { label: "Sr. No", icon: Layers, sortable: false },
-      { label: "Brand", icon: Tag, sortable: true, key: "brand" },
-      { label: "Model", icon: Database, sortable: true, key: "model" },
-      { label: "Year", icon: Calendar, sortable: true, key: "year" },
-      { label: "Module", icon: Cpu, sortable: true, key: "module" },
-      { label: "Block Number", icon: FileText, sortable: false },
-      { label: "File Type", icon: CheckCircle, sortable: true, key: "fileType" },
-    ].map(({ label, icon: Icon, sortable, key }) => (
-      <th
-        key={label}
-        className="px-4 md:px-6 py-4 text-left text-xs md:text-sm font-semibold text-gray-300 cursor-pointer group"
-        onClick={() => sortable && handleSort(key)}
-      >
-        <div className="flex items-center gap-2">
-          <Icon className="w-3 h-3 md:w-4 md:h-4 text-blue-400 group-hover:text-blue-300 transition-colors" />
-          {label}
-          {sortable && sortConfig.key === key && (
-            <span className="text-blue-400 text-xs">
-              {sortConfig.direction === "asc" ? "↑" : "↓"}
-            </span>
-          )}
-        </div>
-      </th>
-    ))}
-  </tr>
-</thead>
->>>>>>> aa8b57a1d6533c7eb54da6561bf9b28e2563fa8a
                   <tbody>
                     {currentItems?.map((item, i) => (
                       <tr
                         key={item.id || i}
                         className={`border-b border-gray-700/50 transition-all duration-300 group ${
-<<<<<<< HEAD
                           hoveredRow === i
                             ? "bg-gradient-to-r from-blue-900/30 to-purple-900/30 scale-[1.01] shadow-lg"
                             : "hover:bg-gray-700/20"
+                        } ${
+                          selectedRows.includes(item.id) ? "bg-blue-900/20" : ""
                         }`}
-=======
-                          hoveredRow === i ? 'bg-gradient-to-r from-blue-900/30 to-purple-900/30 scale-[1.01] shadow-lg' : 'hover:bg-gray-700/20'
-                        } ${selectedRows.includes(item.id) ? 'bg-blue-900/20' : ''}`}
->>>>>>> aa8b57a1d6533c7eb54da6561bf9b28e2563fa8a
                         onMouseEnter={() => setHoveredRow(i)}
                         onMouseLeave={() => setHoveredRow(null)}
                       >
@@ -1128,7 +1098,9 @@ const FirmwareTable = () => {
                 <div
                   key={item.id || i}
                   className={`group relative bg-gray-800/80 backdrop-blur-md rounded-2xl border border-gray-700/50 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer ${
-                    selectedRows.includes(item.id) ? 'ring-2 ring-blue-500 bg-blue-900/20' : ''
+                    selectedRows.includes(item.id)
+                      ? "ring-2 ring-blue-500 bg-blue-900/20"
+                      : ""
                   }`}
                   onMouseEnter={() => setHoveredRow(i)}
                   onMouseLeave={() => setHoveredRow(null)}
@@ -1189,62 +1161,59 @@ const FirmwareTable = () => {
                         </div>
                       </div>
                     </div>
-<<<<<<< HEAD
-=======
                     <div className="mt-4 pt-3 border-t border-gray-700">
                       <Link
                         to={`/module-info/${item.id}`}
                         state={item.block_number}
-                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${badgeColor(item.fileType || item.file_type)}`}
-                        onClick={(e) => e.stopPropagation()}
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${badgeColor(
+                          item.fileType || item.file_type
+                        )}`}
                       >
                         {item.fileType || item.file_type}
                         <ExternalLink className="w-3 h-3" />
                       </Link>
                     </div>
->>>>>>> aa8b57a1d6533c7eb54da6561bf9b28e2563fa8a
                   </div>
                 </div>
               ))}
             </div>
           )}
         </div>
-      </div>
 
-      {/* Export Modal */}
-      {showExportModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
-          <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full mx-4 border border-gray-700 shadow-2xl animate-slideUp">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-white">Export Data</h3>
-              <button
-                onClick={() => setShowExportModal(false)}
-                className="text-gray-400 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <p className="text-gray-300 mb-6">
-              Choose export format for {filteredData.length} entries
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => handleExport("csv")}
-                className="flex-1 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl text-white font-medium hover:scale-105 transition-all"
-              >
-                CSV
-              </button>
-              <button
-                onClick={() => handleExport("json")}
-                className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white font-medium hover:scale-105 transition-all"
-              >
-                JSON
-              </button>
+        {/* Export Modal */}
+        {showExportModal && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
+            <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full mx-4 border border-gray-700 shadow-2xl animate-slideUp">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-white">Export Data</h3>
+                <button
+                  onClick={() => setShowExportModal(false)}
+                  className="text-gray-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <p className="text-gray-300 mb-6">
+                Choose export format for {filteredData.length} entries
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleExport("csv")}
+                  className="flex-1 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl text-white font-medium hover:scale-105 transition-all"
+                >
+                  CSV
+                </button>
+                <button
+                  onClick={() => handleExport("json")}
+                  className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white font-medium hover:scale-105 transition-all"
+                >
+                  JSON
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-
+        )}
+      </div>
       {/* Custom animations */}
       <style jsx>{`
         @keyframes blob {
