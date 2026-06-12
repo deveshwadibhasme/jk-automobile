@@ -80,7 +80,7 @@ const AddCarInfo = () => {
     
     try {
       const response = await axios.post(
-        `https://jk-backend.onthewifi.com/api/v1/admin/upload`,
+        `https://jkauto-backend.onthewifi.com/api/v1/admin/upload`,
         formDataToUpload,
         {
           headers: {
@@ -123,7 +123,7 @@ const AddCarInfo = () => {
     console.log("Saving module data:", moduleData);
     
     const response = await axios.post(
-      `https://jk-backend.onthewifi.com/api/v1/admin/modules`,
+      `https://jkauto-backend.onthewifi.com/api/v1/admin/modules`,
       moduleData,
       {
         headers: {
@@ -216,7 +216,7 @@ const AddCarInfo = () => {
       console.log("Posting module data:", moduleData);
       
       const postModuleResponse = await axios.post(
-        `https://jk-backend.onthewifi.com/api/v1/admin/modules`,
+        `https://jkauto-backend.onthewifi.com/api/v1/admin/modules`,
         moduleData,
         {
           headers: {
@@ -326,7 +326,7 @@ const AddCarInfo = () => {
       setIsFetching(true);
       try {
         const response = await axios.get(
-          `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/${idToPost}?includeDeleted=false`,
+          `https://jkauto-backend.onthewifi.com/api/v1/data/get-car-data/${idToPost}?includeDeleted=false`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

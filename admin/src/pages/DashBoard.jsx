@@ -19,7 +19,7 @@ const SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1NoiFIZKxu6BvzQr
       }
       try {
         const response = await axios.get(
-          `https://jk-backend.onthewifi.com/api/v1/admin/dashboard?includeDeleted=false`,
+          `https://jkauto-backend.onthewifi.com/api/v1/admin/dashboard?includeDeleted=false`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

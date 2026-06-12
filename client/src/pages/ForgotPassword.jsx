@@ -39,7 +39,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios.post(
-        "https://jk-backend.onthewifi.com/api/v1/auth/forgot-password",
+        "https://jkauto-backend.onthewifi.com/api/v1/auth/forgot-password",
         { email }
       );
 

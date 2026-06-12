@@ -21,7 +21,7 @@ const VehicleList = () => {
 
     try {
       await axios.delete(
-        `https://jk-backend.onthewifi.com/api/v1/admin/cars/${id}`,
+        `https://jkauto-backend.onthewifi.com/api/v1/admin/cars/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ const VehicleList = () => {
     const fetchCars = async () => {
       try {
         const response = await axios.get(
-          `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/1/10`,
+          `https://jkauto-backend.onthewifi.com/api/v1/data/get-car-data/1/10`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -153,13 +153,13 @@ const VehicleList = () => {
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex justify-center gap-3">
-                        {/* <Link
+                        <Link
                           to={`/edit-form/${car.id}`}
                           className="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
                           title="Edit Vehicle"
                         >
                           <FaEdit size={18} />
-                        </Link> */}
+                        </Link>
                         <button
                           onClick={() => handleDelete(car.id)}
                           className="p-2 text-red-500 hover:bg-red-100 rounded-lg transition-colors"

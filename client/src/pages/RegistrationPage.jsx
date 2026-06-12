@@ -17,7 +17,7 @@ const RegistrationPage = () => {
   const navigate = useNavigate();
 
   const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-backend.onthewifi.com";
+  const PUBLIC_URL = "https://jkauto-backend.onthewifi.com";
 
   const url = location.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
 
@@ -32,7 +32,7 @@ const RegistrationPage = () => {
   const handleOTP = () => {
     axios
       .post(
-        `https://jk-backend.onthewifi.com/api/v1/auth/send-otp`,
+        `https://jkauto-backend.onthewifi.com/api/v1/auth/send-otp`,
         { email: formData.email },
         {
           headers: {
@@ -59,7 +59,7 @@ const RegistrationPage = () => {
     e.preventDefault();
     axios
       .post(
-        `https://jk-backend.onthewifi.com/api/v1/auth/verify-and-register`,
+        `https://jkauto-backend.onthewifi.com/api/v1/auth/verify-and-register`,
         formData,
         {
           headers: {

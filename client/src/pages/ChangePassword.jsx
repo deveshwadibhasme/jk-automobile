@@ -128,7 +128,7 @@ const ChangePassword = () => {
     try {
       console.log("Sending password change request...");
       const response = await axios.post(
-        "https://jk-backend.onthewifi.com/api/v1/auth/change-password",
+        "https://jkauto-backend.onthewifi.com/api/v1/auth/change-password",
         {
           currentPassword: formData.currentPassword,
           newPassword: formData.newPassword,

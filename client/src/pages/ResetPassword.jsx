@@ -95,7 +95,7 @@ const ResetPassword = () => {
     try {
       // Updated to match the exact API format from your cURL command
       const response = await axios.post(
-        "https://jk-backend.onthewifi.com/api/v1/auth/reset-password",
+        "https://jkauto-backend.onthewifi.com/api/v1/auth/reset-password",
         {
           token: token,
           newPassword: formData.newPassword,

@@ -33,7 +33,7 @@ const Footer = () => {
                 className="powered-by"
               >
                 <img src="/resicode.jpeg" height={28} width={28} alt="Resicode Solution" style={{ borderRadius: '6px' }} />
-                <span>Powered by Resicode Solution</span>
+                <span>Powered by Resicode Solutions</span>
               </a>
               <p className="brand-description">
                 
