@@ -57,7 +57,7 @@ const EditForm = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/${idToEdit}`,
+          `https://jkauto-backend.onthewifi.com/api/v1/data/get-car-data/${idToEdit}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -129,7 +129,7 @@ const EditForm = () => {
       console.log("Submitting data:", submitData);
       
       const response = await axios.put(
-        `https://jk-backend.onthewifi.com/api/v1/data/edit-car-data/${idToEdit}`,
+        `https://jkauto-backend.onthewifi.com/api/v1/data/edit-car-data/${idToEdit}`,
         submitData,
         {
           headers: {

@@ -14,7 +14,7 @@ const LogInPage = () => {
   });
 
   const LOCAL_URL = "http://localhost:3000";
-  const PUBLIC_URL = "https://jk-backend.onthewifi.com";
+  const PUBLIC_URL = "https://jkauto-backend.onthewifi.com";
 
   const url = typeof window !== 'undefined' && window.location?.hostname === "localhost" ? LOCAL_URL : PUBLIC_URL;
   const state = useLocation().state;
@@ -39,7 +39,7 @@ const LogInPage = () => {
     
     axios
       .post(
-        `https://jk-backend.onthewifi.com/api/v1/auth/login`,
+        `https://jkauto-backend.onthewifi.com/api/v1/auth/login`,
         {
           email: formData.email,
           password: formData.password

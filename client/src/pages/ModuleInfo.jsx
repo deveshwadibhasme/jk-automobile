@@ -29,7 +29,7 @@ const ModuleInfo = () => {
         setError(null);
         
         const carResponse = await axios.get(
-          `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/${id}?includeDeleted=false`
+          `https://jkauto-backend.onthewifi.com/api/v1/data/get-car-data/${id}?includeDeleted=false`
         );
         
         console.log("Car Data Response:", carResponse.data);
@@ -208,10 +208,6 @@ const ModuleInfo = () => {
                         className="w-full h-80 object-contain rounded-xl border border-gray-200 shadow-md bg-gray-50"
                         src={modulePhoto || carInfo.modulePhoto}
                         alt="Module"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = "https://via.placeholder.com/400x300?text=Module+Photo+Not+Available";
-                        }}
                       />
                       <button
                         onClick={() => window.open(modulePhoto || carInfo.modulePhoto, '_blank')}
@@ -234,10 +230,7 @@ const ModuleInfo = () => {
                         className="w-full h-80 object-contain rounded-xl border border-gray-200 shadow-md bg-gray-50"
                         src={stickerPhoto || carInfo.stickerPhoto}
                         alt="Sticker"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = "https://via.placeholder.com/400x300?text=Sticker+Photo+Not+Available";
-                        }}
+                        
                       />
                       <button
                         onClick={() => window.open(stickerPhoto || carInfo.stickerPhoto, '_blank')}

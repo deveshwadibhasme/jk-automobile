@@ -26,7 +26,7 @@ export default function PaymentButton({ module_id }) {
   const handlePayment = async () => {
     try {
       const response = await axios.post(
-        `https://jk-backend.onthewifi.com/api/v1/payment/check-out`,
+        `https://jkauto-backend.onthewifi.com/api/v1/payment/check-out`,
         { id: module_id },
         {
           headers: {
@@ -57,7 +57,7 @@ export default function PaymentButton({ module_id }) {
 
             try {
               const verifyResponse = await axios.post(
-                `https://jk-backend.onthewifi.com/api/v1/payment/verify-payment`,
+                `https://jkauto-backend.onthewifi.com/api/v1/payment/verify-payment`,
                 body,
                 {
                   headers: {
@@ -72,7 +72,7 @@ export default function PaymentButton({ module_id }) {
 
                 // Updated download API endpoint
                 const downloadResponse = await axios.get(
-                  `https://jk-backend.onthewifi.com/api/v1/bin/download-bin/${module_id}/${orderId}`,
+                  `https://jkauto-backend.onthewifi.com/api/v1/bin/download-bin/${module_id}/${orderId}`,
                   {
                     headers: {
                       "Content-Type": "application/json",

@@ -21,7 +21,7 @@ const VehicleList = () => {
 
     try {
       await axios.delete(
-        `https://jk-backend.onthewifi.com/api/v1/admin/cars/${id}`,
+        `https://jkauto-backend.onthewifi.com/api/v1/admin/cars/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ const VehicleList = () => {
     const fetchCars = async () => {
       try {
         const response = await axios.get(
-          `https://jk-backend.onthewifi.com/api/v1/data/get-car-data/1/10`,
+          `https://jkauto-backend.onthewifi.com/api/v1/data/get-car-data/1/10`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

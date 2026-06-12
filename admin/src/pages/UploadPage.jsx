@@ -48,7 +48,7 @@ const FormToUpload = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `https://jk-backend.onthewifi.com/api/v1/admin/cars`,
+        `https://jkauto-backend.onthewifi.com/api/v1/admin/cars`,
         formData,
         {
           headers: {
