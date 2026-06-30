@@ -55,12 +55,7 @@ const Header = () => {
   const navItems = [
     { path: "/", label: "Home", icon: faHouse },
     { path: "/terms", label: "Terms & Conditions", icon: faInfo },
-    {
-      external: true,
-      href: "https://tnm.jkautoelectronicworks.com/",
-      label: "Buy TNM7000",
-      icon: faBucket,
-    },
+    
   ];
 
   return (
@@ -100,18 +95,18 @@ const Header = () => {
             <nav className="hidden md:flex items-center gap-1 lg:gap-2">
               {navItems.map((item, idx) => (
                 <div key={idx}>
-                  {item.external ? (
+                  {item?.external ? (
                     <a
-                      href={item.href}
+                      href={item?.href}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="group relative px-4 lg:px-5 py-2 rounded-full flex items-center gap-2 text-sm lg:text-base font-medium text-gray-300 hover:text-blue-400 transition-all duration-300"
                     >
                       <FontAwesomeIcon
-                        icon={item.icon}
+                        icon={item?.icon}
                         className="text-gray-500 group-hover:text-blue-400 transition-all duration-300 text-sm lg:text-base"
                       />
-                      <span>{item.label}</span>
+                      <span>{item?.label}</span>
                       <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-500 rounded-full transition-all duration-300 group-hover:w-4/12 group-hover:left-1/2 group-hover:-translate-x-1/2"></span>
                     </a>
                   ) : (
@@ -243,19 +238,19 @@ const Header = () => {
           <nav className="flex-1 p-5 space-y-2">
             {navItems.map((item, idx) => (
               <div key={idx}>
-                {item.external ? (
+                {item?.external ? (
                   <a
-                    href={item.href}
+                    href={item?.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 p-4 rounded-xl bg-[#1A2333] text-gray-300 font-medium hover:bg-[#2A3444] hover:text-blue-400 transition-all duration-200 group"
                     onClick={closeMobileMenu}
                   >
                     <FontAwesomeIcon
-                      icon={item.icon}
+                      icon={item?.icon}
                       className="text-gray-500 group-hover:text-blue-400 transition-colors w-5"
                     />
-                    <span>{item.label}</span>
+                    <span>{item?.label}</span>
                   </a>
                 ) : (
                   <Link
