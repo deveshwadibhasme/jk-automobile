@@ -64,17 +64,7 @@ const Header = () => {
                 Terms and conditions
               </Link>
 
-              <span className="text-gray-500">|</span>
-
-              <a
-                target="_blank"
-                href="https://tnm.jkautoelectronicworks.com/"
-                className="flex items-center gap-3 text-gray-300 px-4 py-3 rounded-md hover:bg-[#2d2d2d] hover:text-white transition"
-                onClick={closeMobileMenu}
-              >
-                <FontAwesomeIcon icon={faBucket} />
-                Buy TNM7000
-              </a>
+            
             </div>
           </nav>
 
